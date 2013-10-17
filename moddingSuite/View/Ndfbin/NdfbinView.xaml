@@ -1,0 +1,352 @@
+﻿<Window x:Class="moddingSuite.View.Ndfbin.NdfbinView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Viewer="clr-namespace:moddingSuite.View.Ndfbin.Viewer" Title="{Binding Path=Title}" Height="500" Width="1000" Icon="{StaticResource ScriptIcon}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ToolBar>
+            <Button ToolTip="Save changes back" Command="{Binding Path=SaveNdfbinCommand}">
+                <Image Source="{StaticResource SaveIcon}"  />
+            </Button>
+            <ToggleButton x:Name="changesButton" ToolTip="View pending changes">
+                <Image Source="{StaticResource ViewChanges}"  />
+            </ToggleButton>
+
+
+        </ToolBar>
+        <Popup IsOpen="{Binding ElementName=changesButton, Path=IsChecked}" 
+                               PlacementTarget="{Binding ElementName=changesButton}"
+                               PopupAnimation="Slide" 
+                               Placement="Bottom" 
+                                
+                               AllowsTransparency="True" StaysOpen="False">
+            <DataGrid ItemsSource="{Binding Path=NdfbinManager.ChangeManager.Changes}"
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem  Header="Revert" Command="{Binding Path=.NdfbinManager.ChangeManager.RevertChange}" />
+                        <MenuItem  Header="Follow" Command="{Binding Path=NdfbinManager.ChangeManager.FollowChange}" Visibility="Hidden" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=ChangedValue.Property.Class.Name}" Header="Class" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Path=ChangedValue.Property.Name}" Header="Property" IsReadOnly="True" />
+                    <DataGridTextColumn Binding="{Binding Path=ChangedValue.Instance.Id}" Header="Instance" IsReadOnly="True" />
+                    <DataGridTextColumn Binding="{Binding Path=ChangedValue.Value.Type}" Header="Type" IsReadOnly="True" />
+
+                    <DataGridTextColumn Binding="{Binding Path=OldValueDisplay}" Header="Old" IsReadOnly="True" />
+                    <DataGridTextColumn Binding="{Binding Path=ChangedValue.Value}" Header="New" IsReadOnly="True" />
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Popup>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="Classes">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="6*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8*" />
+                        <RowDefinition Height="2*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label>Classes</Label>
+                        <ToolBar Grid.Column="2" SnapsToDevicePixels="True">
+                            <TextBox  VerticalAlignment="Top" Width="150" Margin="5" Text="{Binding Path=ClassesFilterExpression, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button ToolTip="Add property value" Command="{Binding SelectedValue.AddInstanceCommand, ElementName=classGrid}" SnapsToDevicePixels="True">
+                                <Image Source="{StaticResource AddPropIcon}" SnapsToDevicePixels="True" />
+                            </Button>
+                            <Button ToolTip="Set property to null" Command="{Binding SelectedValue.RemoveInstanceCommand, ElementName=classGrid}" SnapsToDevicePixels="True">
+                                <Image Source="{StaticResource DeletePropIcon}" SnapsToDevicePixels="True"  />
+                            </Button>
+                        </ToolBar>
+                    </Grid>
+
+                    <Grid  Grid.Row="1" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="classGrid" Margin="5,5,0,5" ItemsSource="{Binding Path=ClassesCollectionView}" 
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Extended"
+                      SelectionUnit="FullRow">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" IsReadOnly="True" Width="40" />
+                                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" IsReadOnly="True" Width="*" />
+                                <DataGridTextColumn Binding="{Binding Path=Instances.Count}" Header="Instances" IsReadOnly="True" Width="60" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <DataGrid x:Name="instanceGrid" Grid.Column="1" Margin="0,5,5,5" ItemsSource="{Binding SelectedValue.InstancesCollectionView, ElementName=classGrid}" 
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      RowHeaderWidth="0"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+                            <DataGrid.InputBindings>
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenInstanceCommand}" CommandParameter="{Binding ElementName=instanceGrid, Path=SelectedItem}" />
+                            </DataGrid.InputBindings>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Instance" IsReadOnly="True" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <GridSplitter ResizeDirection="Columns" Width="5" Grid.RowSpan="3" />
+
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label VerticalAlignment="Top" >Properties</Label>
+                        <ToolBar Grid.Column="2">
+                            <Button ToolTip="Add property value" Command="{Binding SelectedValue.AddPropertyCommand, ElementName=instanceGrid}">
+                                <Image Source="{StaticResource AddPropIcon}"  />
+                            </Button>
+                            <Button ToolTip="Set property to null" Command="{Binding SelectedValue.RemovePropertyCommand, ElementName=instanceGrid}">
+                                <Image Source="{StaticResource DeletePropIcon}"  />
+                            </Button>
+                            <ToggleButton x:Name="filterButton">
+                                <Image Source="{StaticResource EmptyFilter}" >
+                                    <Image.Style>
+                                        <Style TargetType="{x:Type Image}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=filterButton, Path=IsChecked}" Value="True">
+                                                    <Setter Property="Source" Value="{StaticResource FilledFilter}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                            </ToggleButton >
+                        </ToolBar>
+                        <Popup IsOpen="{Binding ElementName=filterButton, Path=IsChecked}" 
+                               PlacementTarget="{Binding ElementName=filterButton}"
+                               PopupAnimation="Slide" 
+                               Placement="Bottom" 
+                               AllowsTransparency="True"
+                               StaysOpen="False">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <DataGrid 
+                                IsSynchronizedWithCurrentItem="True"
+                                CanUserResizeRows="False"
+                                CanUserAddRows="True"  
+                                CanUserDeleteRows="True" 
+                                AutoGenerateColumns="False"
+                                SelectionMode="Single"
+                                SelectionUnit="FullRow"
+                                ItemsSource="{Binding SelectedValue.PropertyFilterExpressions,  ElementName=classGrid}">
+                                    <DataGrid.Columns>
+                                        <DataGridComboBoxColumn Header="Property" 
+                                                    SelectedValuePath="Name" 
+                                                    SelectedValueBinding="{Binding Path=PropertyName}" 
+                                                    DisplayMemberPath="Name" >
+                                            <DataGridComboBoxColumn.ElementStyle>
+                                                <Style TargetType="ComboBox">
+                                                    <Setter Property="ItemsSource" Value="{Binding SelectedValue.Properties, ElementName=classGrid}" />
+                                                </Style>
+                                            </DataGridComboBoxColumn.ElementStyle>
+                                            <DataGridComboBoxColumn.EditingElementStyle>
+                                                <Style TargetType="ComboBox">
+                                                    <Setter Property="ItemsSource" Value="{Binding SelectedValue.Properties, ElementName=classGrid}" />
+                                                </Style>
+                                            </DataGridComboBoxColumn.EditingElementStyle>
+                                        </DataGridComboBoxColumn>
+                                        <DataGridTextColumn  Header="Value" Binding="{Binding Path=Value}" Width="60" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <Button Grid.Column="1" VerticalAlignment="Bottom" Command="{Binding SelectedValue.ApplyPropertyFilter,  ElementName=classGrid}" Margin="3">Apply</Button>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <Viewer:InstanceView DataContext="{Binding SelectedValue, ElementName=instanceGrid}"  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="5"  />
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Strings/Trans">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label>Strings</Label>
+                        <TextBox Grid.Column="2" Width="150" Margin="5" Text="{Binding Path=StringFilterExpression, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+
+                    <DataGrid Margin="5" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=StringCollectionView}"                      
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" IsReadOnly="True" Width="50" />
+                            <DataGridTextColumn Binding="{Binding Path=Value}" Header="Name" IsReadOnly="True" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <GridSplitter ResizeDirection="Columns" Width="5" Grid.RowSpan="2" />
+
+                    <Grid Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label>TRANS</Label>
+                        <TextBox Grid.Column="2" Width="150" Margin="5" Text="{Binding Path=TransFilterExpression, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+
+                    <DataGrid Margin="5" Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Path=TransCollectionView}"                      
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" IsReadOnly="True" Width="50" />
+                            <DataGridTextColumn Binding="{Binding Path=Value}" Header="Name" IsReadOnly="True" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Topo">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10*" />
+                        <ColumnDefinition Width="10*" />
+                        <ColumnDefinition Width="10*" />
+                    
+                        <ColumnDefinition Width="50*" />
+
+
+                    </Grid.ColumnDefinitions>
+                    <DataGrid  ItemsSource="{Binding NdfbinManager.Topo}" 
+                                                 IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                           >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Topo" Binding="{Binding}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid  ItemsSource="{Binding NdfbinManager.Impr}" Grid.Column="1"
+                                                 IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                           >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Impr" Binding="{Binding}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid  ItemsSource="{Binding NdfbinManager.Expr}" Grid.Column="2"
+                                                 IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                           >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Expr" Binding="{Binding}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                    <DataGrid  ItemsSource="{Binding NdfbinManager.AllInstances}" Grid.Column="3"   
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Instance Id" Binding="{Binding Id}" IsReadOnly="True" Width="*" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Class.Name}" IsReadOnly="True" Width="*" />
+                            <DataGridTextColumn Header="Top Object" Binding="{Binding IsTopObject}" IsReadOnly="True" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!--<DataGrid  ItemsSource="{Binding NdfbinManager.NotInTopo}" Grid.Column="2"   
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" Width="*" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>-->
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StatusBar Grid.Row="2" >
+            <TextBlock Text="{Binding Path=StatusText }" />
+        </StatusBar>
+    </Grid>
+</Window>

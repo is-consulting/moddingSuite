@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ED8773BC-C0F3-45E2-A182-07A06260F1F7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>moddingSuite</RootNamespace>
+    <AssemblyName>moddingSuite</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>moddingSuite.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EdataFileManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\EdataFileManager.Test\bin\Release\EdataFileManager.exe</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zlib">
+      <HintPath>..\References\Ionic.Zlib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="BL\SavManager.cs" />
+    <Compile Include="BL\TgvManager.cs" />
+    <Compile Include="Model\Edata\EdataDir.cs" />
+    <Compile Include="Model\Edata\EdataEntity.cs" />
+    <Compile Include="Model\Edata\EdataContentFile.cs" />
+    <Compile Include="Model\Edata\EdataFileType.cs" />
+    <Compile Include="Model\Ndfbin\ChangeManager\ChangeEntry.cs" />
+    <Compile Include="Model\Ndfbin\ChangeManager\ChangeManager.cs" />
+    <Compile Include="Model\Ndfbin\CollectionItemValueHolder.cs" />
+    <Compile Include="Model\Ndfbin\INdfScriptSerializable.cs" />
+    <Compile Include="Model\Ndfbin\IValueHolder.cs" />
+    <Compile Include="Model\Ndfbin\MapValueHolder.cs" />
+    <Compile Include="Model\Ndfbin\NdfHeader.cs" />
+    <Compile Include="Model\Ndfbin\NdfClass.cs" />
+    <Compile Include="Model\Ndfbin\NdfFooter.cs" />
+    <Compile Include="Model\Ndfbin\NdfFooterEntry.cs" />
+    <Compile Include="Model\Ndfbin\NdfObject.cs" />
+    <Compile Include="Model\Ndfbin\NdfProperty.cs" />
+    <Compile Include="Model\Ndfbin\NdfPropertyValue.cs" />
+    <Compile Include="Model\Ndfbin\NdfStringReference.cs" />
+    <Compile Include="Model\Ndfbin\NdfTran.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfColor128.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfBoolean.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfCollection.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfColor32.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfDouble.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfDouble_2.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFileNameString.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfGuid.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfInt16.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfInt32.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfInt8.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfLocalisationHash.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfMap.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfMapList.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfNull.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfObjectReference.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfString.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfTrans.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfUInt32.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfSingle.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfUnkown.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfVector.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfWideString.cs" />
+    <Compile Include="Model\Ndfbin\Types\NdfType.cs" />
+    <Compile Include="Model\Ndfbin\Types\NdfTypeManager.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFlatValueWrapper.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfValueWrapper.cs" />
+    <Compile Include="Model\Textures\TgvFile.cs" />
+    <Compile Include="Model\Trad\TradEntry.cs" />
+    <Compile Include="BL\TradManager.cs" />
+    <Compile Include="BL\NdfbinManager.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Util\Utils.cs" />
+    <Compile Include="ViewModel\Base\ObjectWrapperViewModel.cs" />
+    <Compile Include="ViewModel\Filter\FilterDiscriminator.cs" />
+    <Compile Include="ViewModel\Filter\PropertyFilterExpression.cs" />
+    <Compile Include="ViewModel\MoviePlaybackViewModel.cs" />
+    <Compile Include="ViewModel\Edata\EdataFileViewModel.cs" />
+    <Compile Include="ViewModel\Edata\ManagerMainViewModel.cs" />
+    <Compile Include="ViewModel\Base\ActionCommand.cs" />
+    <Compile Include="ViewModel\Base\ViewModelBase.cs" />
+    <Compile Include="ViewModel\Ndf\AddCollectionItemViewModel.cs" />
+    <Compile Include="ViewModel\Ndf\NdfEditorMainViewModel.cs" />
+    <Compile Include="ViewModel\Ndf\NdfClassViewModel.cs" />
+    <Compile Include="ViewModel\Ndf\NdfObjectViewModel.cs" />
+    <Compile Include="ViewModel\TradFileViewModel.cs" />
+    <Compile Include="View\Common\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\EdataFileView.xaml.cs">
+      <DependentUpon>EdataFileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Extension\EdataFileTypeToImageConverter.cs" />
+    <Compile Include="View\Extension\EditingControlDataTemplateSelector.cs" />
+    <Compile Include="View\Extension\LocalisationHashValueConverter.cs" />
+    <Compile Include="View\Extension\Masking.cs" />
+    <Compile Include="View\Common\MoviePlaybackView.xaml.cs">
+      <DependentUpon>MoviePlaybackView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\LocaleHashEditingTemplate.xaml.cs">
+      <DependentUpon>LocaleHashEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\StringTableEditingTemplate.xaml.cs">
+      <DependentUpon>StringTableEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\TransTableReferenceEditingTemplate.xaml.cs">
+      <DependentUpon>TransTableReferenceEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\Viewer\AddCollectionItemView.xaml.cs">
+      <DependentUpon>AddCollectionItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\Viewer\InstanceWindowView.xaml.cs">
+      <DependentUpon>InstanceWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\Viewer\InstanceView.xaml.cs">
+      <DependentUpon>InstanceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\Viewer\ListEditorWindow.xaml.cs">
+      <DependentUpon>ListEditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\Viewer\ListViewer.xaml.cs">
+      <DependentUpon>ListViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\NdfbinView.xaml.cs">
+      <DependentUpon>NdfbinView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\BooleanEditingTemplate.xaml.cs">
+      <DependentUpon>BooleanEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\ColorPickerEditingTemplate.xaml.cs">
+      <DependentUpon>ColorPickerEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\FloatEditingTemplate.xaml.cs">
+      <DependentUpon>FloatEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\GuidEditingTemplate.xaml.cs">
+      <DependentUpon>GuidEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\Int32EditingTemplate.xaml.cs">
+      <DependentUpon>Int32EditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\MapEditingTemplate.xaml.cs">
+      <DependentUpon>MapEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\ObjectReferenceEditingTemplate.xaml.cs">
+      <DependentUpon>ObjectReferenceEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\UInt32EditingTemaplte.xaml.cs">
+      <DependentUpon>UInt32EditingTemaplte.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\TradFileView.xaml.cs">
+      <DependentUpon>TradFileView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Common\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Common\EdataFileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ManagerMainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Compressing\Compressing.cs" />
+    <Compile Include="View\ManagerMainView.xaml.cs">
+      <DependentUpon>ManagerMainView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\Common\MoviePlaybackView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\LocaleHashEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\StringTableEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\TransTableReferenceEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\Viewer\AddCollectionItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\Viewer\InstanceWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\Viewer\InstanceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\Viewer\ListEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\Viewer\ListViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\NdfbinView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\BooleanEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\ColorPickerEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\FloatEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\GuidEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\Int32EditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\MapEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\ObjectReferenceEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\UInt32EditingTemaplte.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Common\TradFileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\Edata\EdataHeader.cs" />
+    <Compile Include="BL\EdataManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Model\Ndfbin\classes.cd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\open_in_browser-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\reuse-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\add_file-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\play-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\about-26.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\zip-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\text-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\save-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\empty_filter-26.png" />
+    <Resource Include="View\Images\filled_filter-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\View_Details-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\google_code-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\picture-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\question-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\package-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\add_property-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\delete_property-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Add_Row-26.png" />
+    <Resource Include="View\Images\Delete_Row-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\refresh_shield-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\gplv3-127x51.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

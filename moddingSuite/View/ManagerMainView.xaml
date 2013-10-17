@@ -1,0 +1,82 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ViewModel="clr-namespace:moddingSuite.ViewModel" xmlns:View="clr-namespace:moddingSuite.View"
+        xmlns:Common="clr-namespace:moddingSuite.View.Common" x:Class="moddingSuite.View.MainWindow"
+        Height="468" Width="902" Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="22" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" Grid.ColumnSpan="2" IsMainMenu="True">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Command="{Binding Path=OpenFileCommand}" />
+                <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
+                <Separator />
+                <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
+
+            </MenuItem>
+            <MenuItem Header="_Settings">
+                <MenuItem Header="Change export _path" Command="{Binding Path=ChangeExportPathCommand}" />
+            </MenuItem>
+        </Menu>
+
+        <ToolBar Grid.Row="1">
+            <Button ToolTip="Export raw data" Command="{Binding Path=ExportRawCommand}">
+                <Image Source="{StaticResource ExtractRawIcon}"  />
+            </Button>
+            <Button ToolTip="Export Uncompressed NDF content" Command="{Binding Path=ExportNdfCommand}">
+                <Image Source="{StaticResource ExtractZipedPartIcon}"  />
+            </Button>
+            <Separator />
+            <Button ToolTip="View Ndf file" Command="{Binding ViewContentCommand}" >
+                <Image Source="{StaticResource OpenDetailsIcon}" />
+            </Button>
+            <Button ToolTip="View dictionary" Command="{Binding ViewTradFileCommand}" >
+                <Image Source="{StaticResource OpenDictionayIcon}" />
+            </Button>
+            <Button ToolTip="View Wmv file" Command="{Binding PlayMovieCommand}" >
+                <Image Source="{StaticResource OpenMovieIcon}" />
+            </Button>
+            <Separator />
+            <Button ToolTip="About" Command="{Binding AboutUsCommand}" >
+                <Image Source="{StaticResource AboutIcon}" />
+            </Button>
+        </ToolBar>
+
+        <TabControl Grid.Row="2" ItemsSource="{Binding Path=OpenFiles}" IsSynchronizedWithCurrentItem="True">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=HeaderText}" ToolTip="{Binding Path=LoadedFile}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Common:EdataFileView />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+        <!--<TabControl Grid.Row="1" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
+            <TabItem Header="Actions">
+                <Grid VerticalAlignment="Bottom">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Content="NDF Content" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Bottom" Width="127" Command="{Binding Path=ViewNdfContentCommand}" CommandParameter="{Binding SelectedItem, ElementName=dataGrid}"/>
+                    <Button Grid.Row="1" Content="Export NDF" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Bottom" Width="127" Command="{Binding Path=ExportNdfCommand}" CommandParameter="{Binding SelectedItem, ElementName=dataGrid}"/>
+                    <Button Grid.Row="2" Content="Export Raw/Texture" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Bottom" Width="127" Command="{Binding ExportTextureCommand}" CommandParameter="{Binding SelectedItem, ElementName=dataGrid}"/>
+                </Grid>
+            </TabItem>
+ 
+        </TabControl>-->
+    </Grid>
+</Window>

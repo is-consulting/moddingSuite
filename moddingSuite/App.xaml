@@ -1,0 +1,89 @@
+﻿<Application x:Class="moddingSuite.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:Extension="clr-namespace:moddingSuite.View.Extension"
+             xmlns:ValueEditing="clr-namespace:moddingSuite.View.Ndfbin.ValueEditing" StartupUri="View/ManagerMainView.xaml">
+    <Application.Resources>
+        <BitmapImage UriSource="View\Images\about-26.png" x:Key="AboutIcon" />
+        <BitmapImage UriSource="View\Images\reuse-26.png" x:Key="ExtractRawIcon" />
+        <BitmapImage UriSource="View\Images\zip-26.png" x:Key="ExtractZipedPartIcon" />
+        <BitmapImage UriSource="View\Images\open_in_browser-26.png" x:Key="OpenDetailsIcon" />
+        <BitmapImage UriSource="View\Images\play-26.png" x:Key="OpenMovieIcon" />
+        <BitmapImage UriSource="View\Images\text-26.png" x:Key="OpenDictionayIcon" />
+
+        <BitmapImage UriSource="View\Images\save-26.png" x:Key="SaveIcon" />
+
+        <BitmapImage UriSource="View\Images\empty_filter-26.png" x:Key="EmptyFilter" />
+        <BitmapImage UriSource="View\Images\filled_filter-26.png" x:Key="FilledFilter" />
+
+        <BitmapImage UriSource="View\Images\View_Details-26.png" x:Key="ViewChanges" />
+
+        <BitmapImage UriSource="View\Images\google_code-26.png" x:Key="ScriptIcon" />
+        <BitmapImage UriSource="View\Images\question-26.png" x:Key="UnknownFileIcon" />
+        <BitmapImage UriSource="View\Images\package-16.png" x:Key="PackageFileIcon" />
+
+        <BitmapImage UriSource="View\Images\refresh_shield-26.png" x:Key="CreateHashIcon" />
+
+        <BitmapImage UriSource="View\Images\Add_Row-26.png" x:Key="AddRowIcon" />
+        <BitmapImage UriSource="View\Images\Delete_Row-26.png" x:Key="DeleteRowIcon" />
+        <BitmapImage UriSource="View\Images\add_property-26.png" x:Key="AddPropIcon" />
+        <BitmapImage UriSource="View\Images\delete_property-26.png" x:Key="DeletePropIcon" />
+
+        <BitmapImage UriSource="View\Images\gplv3-127x51.png" x:Key="GplIcon" />
+
+
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Extension:LocalisationHashValueConverter x:Key="LocalisationHashValueConverter" />
+
+
+        <Extension:EdataFileTypeToImageConverter x:Key="EdataFileTypeToImageConverter" />
+
+        <Extension:EditingControlDataTemplateSelector x:Key="editingControlTemplateSelector" />
+
+        <DataTemplate x:Key="FloatEditingTemplate">
+            <ValueEditing:FloatEditingTemplate />
+        </DataTemplate>
+        <DataTemplate x:Key="UInt32EditingTemplate">
+            <ValueEditing:UInt32EditingTemaplte />
+        </DataTemplate>
+        <DataTemplate x:Key="Int32EditingTemplate">
+            <ValueEditing:Int32EditingTemplate />
+        </DataTemplate>
+        <DataTemplate x:Key="GuidEditingTemplate">
+            <ValueEditing:GuidEditingTemplate />
+        </DataTemplate>
+        <DataTemplate x:Key="BooleanEditingTemplate">
+            <ValueEditing:BooleanEditingTemplate />
+        </DataTemplate>
+
+        <DataTemplate x:Key="ObjectReferenceEditingTemplate">
+            <ValueEditing:ObjectReferenceEditingTemplate />
+        </DataTemplate>
+
+        <DataTemplate x:Key="MapEditingTemplate">
+            <ValueEditing:MapEditingTemplate />
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="StringTableEditingTemplate">
+            <ValueEditing:StringTableEditingTemplate />
+        </DataTemplate>
+
+        <DataTemplate x:Key="TransTableReferenceEditingTemplate">
+            <ValueEditing:TransTableReferenceEditingTemplate />
+        </DataTemplate>
+
+        <DataTemplate x:Key="LocaleHashEditingTemplate">
+            <ValueEditing:LocaleHashEditingTemplate />
+        </DataTemplate>
+
+
+        <Style TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Application.Resources>
+</Application>

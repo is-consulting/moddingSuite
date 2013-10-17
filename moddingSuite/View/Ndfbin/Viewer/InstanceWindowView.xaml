@@ -1,0 +1,25 @@
+﻿<Window x:Class="moddingSuite.View.Ndfbin.Viewer.InstanceWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Viewer="clr-namespace:moddingSuite.View.Ndfbin.Viewer" Title="{Binding Path=Name}" Height="300" Width="800" Icon="{StaticResource ScriptIcon}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ToolBar>
+            <Button ToolTip="Add property value" Command="{Binding InstancesCollectionView.CurrentItem.AddPropertyCommand}">
+                <Image Source="{StaticResource AddPropIcon}"  />
+            </Button>
+            <Button ToolTip="Set property to null" Command="{Binding InstancesCollectionView.CurrentItem.RemovePropertyCommand}">
+                <Image Source="{StaticResource DeletePropIcon}"  />
+            </Button>
+            <StackPanel Orientation="Horizontal" Margin="5">
+            <TextBlock Text="{Binding Path=Name}"  />
+            <TextBlock Text=" : " />
+            <TextBlock Text="{Binding InstancesCollectionView.CurrentItem.Id}" />
+        </StackPanel>
+        </ToolBar>
+        <Viewer:InstanceView DataContext="{Binding Path=InstancesCollectionView.CurrentItem}" Grid.Row="1" />
+    </Grid>
+</Window>
