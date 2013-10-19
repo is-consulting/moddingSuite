@@ -73,6 +73,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BL\DDS\DdsCaps.cs" />
+    <Compile Include="BL\DDS\DdsFlags.cs" />
+    <Compile Include="BL\DDS\DdsHeader.cs" />
+    <Compile Include="BL\DDS\DdsPixelFormat.cs" />
+    <Compile Include="BL\DDS\DdsPixelFormatFlags.cs" />
+    <Compile Include="BL\DDS\DdsWriter.cs" />
+    <Compile Include="BL\DDS\DxGiPixelFormat.cs" />
     <Compile Include="BL\SavManager.cs" />
     <Compile Include="BL\TgvManager.cs" />
     <Compile Include="Model\Edata\EdataDir.cs" />
