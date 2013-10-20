@@ -9,19 +9,23 @@ using moddingSuite.BL;
 using moddingSuite.Model.Edata;
 using moddingSuite.Settings;
 using moddingSuite.View.Common;
+using moddingSuite.View.DialogProvider;
 using moddingSuite.View.Ndfbin;
+using moddingSuite.ViewModel.About;
 using moddingSuite.ViewModel.Base;
+using moddingSuite.ViewModel.Media;
 using moddingSuite.ViewModel.Ndf;
+using moddingSuite.ViewModel.Trad;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace moddingSuite.ViewModel.Edata
 {
-    public class ManagerMainViewModel : ViewModelBase
+    public class EdataManagerViewModel : ViewModelBase
     {
         private readonly ObservableCollection<EdataFileViewModel> _openFiles =
             new ObservableCollection<EdataFileViewModel>();
 
-        public ManagerMainViewModel()
+        public EdataManagerViewModel()
         {
             InitializeCommands();
 
@@ -35,6 +39,9 @@ namespace moddingSuite.ViewModel.Edata
                     AddFile(fileInfo.FullName);
             }
 
+            //if (settings.LastHighlightedFileIndex <= OpenFiles.Count)
+            //    CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentTo(OpenFiles.ElementAt(settings.LastHighlightedFileIndex));
+            //else
             CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentToFirst();
 
             OpenFiles.CollectionChanged += OpenFilesCollectionChanged;
@@ -131,9 +138,7 @@ namespace moddingSuite.ViewModel.Edata
 
             var tradVm = new TradFileViewModel(ndf, vm);
 
-            var view = new TradFileView {DataContext = tradVm};
-
-            view.Show();
+            DialogProvider.ProvideView(tradVm, this);
         }
 
         protected void ViewContentExecute(object obj)
@@ -150,9 +155,7 @@ namespace moddingSuite.ViewModel.Edata
 
             var detailsVm = new NdfEditorMainViewModel(ndf, vm);
 
-            var view = new NdfbinView {DataContext = detailsVm};
-
-            view.Show();
+            DialogProvider.ProvideView(detailsVm, this);
         }
 
         protected void ExportNdfExecute(object obj)
@@ -293,7 +296,7 @@ namespace moddingSuite.ViewModel.Edata
 
                     var detailsVm = new NdfEditorMainViewModel(buffer);
 
-                    var view = new NdfbinView {DataContext = detailsVm};
+                    var view = new NdfbinView { DataContext = detailsVm };
 
                     view.Show();
                 }
@@ -335,16 +338,14 @@ namespace moddingSuite.ViewModel.Edata
 
             var detailsVm = new MoviePlaybackViewModel(Path.Combine(settings.SavePath, name));
 
-            var view = new MoviePlaybackView {DataContext = detailsVm};
+            var view = new MoviePlaybackView { DataContext = detailsVm };
 
             view.Show();
         }
 
         protected void AboutUsExecute(object obj)
         {
-            var view = new AboutView();
-
-            view.Show();
+            DialogProvider.ProvideView(new AboutViewModel(), this);
         }
     }
 }

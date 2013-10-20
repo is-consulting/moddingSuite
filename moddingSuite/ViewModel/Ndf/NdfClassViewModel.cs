@@ -13,20 +13,15 @@ namespace moddingSuite.ViewModel.Ndf
 {
     public class NdfClassViewModel : ObjectWrapperViewModel<NdfClass>
     {
-        private readonly ObservableCollection<NdfObjectViewModel> _instances =
-            new ObservableCollection<NdfObjectViewModel>();
-
-        private readonly ObservableCollection<PropertyFilterExpression> _propertyFilterExpressions =
-            new ObservableCollection<PropertyFilterExpression>();
-
         private ICollectionView _instancesCollectionView;
+        private readonly ObservableCollection<NdfObjectViewModel> _instances = new ObservableCollection<NdfObjectViewModel>();
+        private readonly ObservableCollection<PropertyFilterExpression> _propertyFilterExpressions = new ObservableCollection<PropertyFilterExpression>();
 
-        public NdfClassViewModel(NdfClass obj)
-            : base(obj)
+        public NdfClassViewModel(NdfClass obj, ViewModelBase parentVm)
+            : base(obj, parentVm)
         {
             foreach (NdfObject instance in obj.Instances)
-                Instances.Add(new NdfObjectViewModel(instance));
-
+                Instances.Add(new NdfObjectViewModel(instance, parentVm));
 
             ApplyPropertyFilter = new ActionCommand(ApplyPropertyFilterExecute);
             AddInstanceCommand = new ActionCommand(AddInstanceExecute);
@@ -67,7 +62,6 @@ namespace moddingSuite.ViewModel.Ndf
         }
 
         public ICommand ApplyPropertyFilter { get; set; }
-
 
         public ObservableCollection<PropertyFilterExpression> PropertyFilterExpressions
         {
@@ -110,7 +104,7 @@ namespace moddingSuite.ViewModel.Ndf
             NdfObject inst = Object.Manager.CreateInstanceOf(Object, mb == MessageBoxResult.Yes);
 
             Object.Instances.Add(inst);
-            Instances.Add(new NdfObjectViewModel(inst));
+            Instances.Add(new NdfObjectViewModel(inst, ParentVm));
         }
 
         public bool FilterInstances(object o)
@@ -157,8 +151,6 @@ namespace moddingSuite.ViewModel.Ndf
             foreach (NdfProperty property in Object.Properties)
             {
                 property.OnPropertyChanged("Value");
-                //property.OnPropertyChanged("ValueData");
-                //property.OnPropertyChanged("ValueType");
             }
         }
 

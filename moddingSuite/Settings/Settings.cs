@@ -8,6 +8,7 @@ namespace moddingSuite.Settings
         private string _lastOpenFolder = @"C:\";
         private List<string> _lastOpenedFile = new List<string>();
         private string _savePath = @"C:\";
+        private int _lastHighlightedFileIndex;
 
         public string SavePath
         {
@@ -32,7 +33,13 @@ namespace moddingSuite.Settings
         public string LastOpenFolder
         {
             get { return _lastOpenFolder; }
-            set { _lastOpenFolder = value; }
+            set { _lastOpenFolder = value; OnPropertyChanged(() => LastOpenedFiles); }
+        }
+
+        public int LastHighlightedFileIndex
+        {
+            get { return _lastHighlightedFileIndex; }
+            set { _lastHighlightedFileIndex = value; OnPropertyChanged(() => LastOpenedFiles); }
         }
     }
 }

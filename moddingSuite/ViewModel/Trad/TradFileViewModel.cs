@@ -11,7 +11,7 @@ using moddingSuite.Util;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
 
-namespace moddingSuite.ViewModel
+namespace moddingSuite.ViewModel.Trad
 {
     public class TradFileViewModel : ViewModelBase
     {

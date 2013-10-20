@@ -1,7 +1,7 @@
 ﻿<Application x:Class="moddingSuite.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              xmlns:Extension="clr-namespace:moddingSuite.View.Extension"
-             xmlns:ValueEditing="clr-namespace:moddingSuite.View.Ndfbin.ValueEditing" StartupUri="View/ManagerMainView.xaml">
+             xmlns:ValueEditing="clr-namespace:moddingSuite.View.Ndfbin.ValueEditing" ><!--StartupUri="View/ManagerMainView.xaml"-->
     <Application.Resources>
         <BitmapImage UriSource="View\Images\about-26.png" x:Key="AboutIcon" />
         <BitmapImage UriSource="View\Images\reuse-26.png" x:Key="ExtractRawIcon" />

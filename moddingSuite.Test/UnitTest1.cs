@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using moddingSuite.BL;
+using moddingSuite.BL.DDS;
 
 namespace moddingSuite.Test
 {
@@ -16,14 +17,16 @@ namespace moddingSuite.Test
         [TestMethod]
         public void RepackIt()
         {
-            var path = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\t72m1_tsccombds_combineddstexture01.tgv";
-            var path2 = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\t72m1_tsccombds_combineddstexture01.dds";
+            var path = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01.tgv";
+            var path2 = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01.dds";
 
 
             var mgr = new TgvManager(File.ReadAllBytes(path));
 
+            var wr = new DdsWriter(mgr);
 
-            var buffer = mgr.CreateDds();
+
+            var buffer = wr.CreateDDSFile(mgr.CurrentFile);
 
             using (var fs = File.Create(path2))
                 fs.Write(buffer, 0, buffer.Length);

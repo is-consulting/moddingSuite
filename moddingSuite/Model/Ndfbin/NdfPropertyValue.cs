@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using moddingSuite.BL;
@@ -7,6 +9,7 @@ using moddingSuite.Model.Ndfbin.ChangeManager;
 using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
 using moddingSuite.Util;
+using moddingSuite.View.DialogProvider;
 using moddingSuite.View.Ndfbin.Viewer;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Ndf;
@@ -25,7 +28,7 @@ namespace moddingSuite.Model.Ndfbin
         {
             _instance = instance;
 
-            DetailsCommand = new ActionCommand(NdfObjectViewModel.DetailsCommandExecute);
+            DetailsCommand = new ActionCommand(DetailsCommandExecute);
             AddRowCommand = new ActionCommand(AddRowExecute);
             AddRowOfCommonTypeCommand = new ActionCommand(AddRowOfCommonTypeExecute, AddRowOfCommonTypeCanExecute);
             DeleteRowCommand = new ActionCommand(DeleteRowExecute, DeleteRowCanExecute);
@@ -36,15 +39,14 @@ namespace moddingSuite.Model.Ndfbin
         public ICommand AddRowOfCommonTypeCommand { get; protected set; }
         public ICommand DeleteRowCommand { get; protected set; }
 
-
         public NdfType Type
         {
             get
             {
                 if (Value == null)
                     return NdfType.Unset;
-                else
-                    return Value.Type;
+
+                return Value.Type;
             }
         }
 
@@ -134,7 +136,7 @@ namespace moddingSuite.Model.Ndfbin
             if (val == null)
                 return;
 
-            ((NdfCollection) Value).Remove(cv.CurrentItem);
+            ((NdfCollection)Value).Remove(cv.CurrentItem);
         }
 
         private void AddRowOfCommonTypeExecute(object obj)
@@ -170,7 +172,7 @@ namespace moddingSuite.Model.Ndfbin
             bool? ret = view.ShowDialog();
 
             if (ret.HasValue && ret.Value)
-                ((NdfCollection) Value).Add(vm.Wrapper);
+                ((NdfCollection)Value).Add(vm.Wrapper);
         }
 
         public override void BeginEdit()
@@ -200,6 +202,81 @@ namespace moddingSuite.Model.Ndfbin
             }
 
             base.EndEdit();
+        }
+
+
+
+
+        public void DetailsCommandExecute(object obj)
+        {
+            var item = obj as IEnumerable<DataGridCellInfo>;
+
+            if (item == null)
+                return;
+
+            var prop = item.First().Item as IValueHolder;
+
+            FollowDetails(prop);
+        }
+
+        private void FollowDetails(IValueHolder prop)
+        {
+            if (prop == null || prop.Value == null)
+                return;
+
+            switch (prop.Value.Type)
+            {
+                case NdfType.MapList:
+                case NdfType.List:
+                    FollowList(prop);
+                    break;
+                case NdfType.ObjectReference:
+                    FollowObjectReference(prop);
+                    break;
+                case NdfType.Map:
+                    var map = prop.Value as NdfMap;
+
+                    if (map != null)
+                    {
+                        FollowDetails(map.Key);
+                        FollowDetails(map.Value as IValueHolder);
+                    }
+
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        private void FollowObjectReference(IValueHolder prop)
+        {
+            var refe = prop.Value as NdfObjectReference;
+
+            if (refe == null)
+                return;
+
+            var vm = new NdfClassViewModel(refe.Class, null);
+
+            NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == refe.InstanceId);
+
+            if (inst == null)
+                return;
+
+            vm.InstancesCollectionView.MoveCurrentTo(inst);
+
+            DialogProvider.ProvideView(vm);
+        }
+
+        private void FollowList(IValueHolder prop)
+        {
+            var refe = prop.Value as NdfCollection;
+
+            if (refe == null)
+                return;
+
+            DialogProvider.ProvideView(prop as ViewModelBase);
+            var view = new ListEditorWindow { DataContext = prop };
+            view.Show();
         }
     }
 }

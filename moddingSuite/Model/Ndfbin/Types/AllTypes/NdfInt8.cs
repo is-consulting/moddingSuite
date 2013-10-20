@@ -18,7 +18,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             {
                 return new byte[1] {(byte) Value};
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 valid = false;
                 return new byte[0];

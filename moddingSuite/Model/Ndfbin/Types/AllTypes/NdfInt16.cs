@@ -18,7 +18,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             {
                 return BitConverter.GetBytes(Convert.ToInt16(Value));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 valid = false;
                 return new byte[0];

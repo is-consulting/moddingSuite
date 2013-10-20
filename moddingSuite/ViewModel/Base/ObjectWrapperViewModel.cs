@@ -2,16 +2,28 @@
 
 namespace moddingSuite.ViewModel.Base
 {
-    public class ObjectWrapperViewModel<T> : ViewModelBase where T : ViewModelBase
+    public class ObjectWrapperViewModel<T> : ViewModelBase 
+        where T : ViewModelBase
     {
-        public ObjectWrapperViewModel(T obj)
+        private ViewModelBase _parentVm;
+
+        public ObjectWrapperViewModel(T obj, ViewModelBase parentVm)
         {
             if (obj == null)
                 throw new ArgumentException("obj");
+            //if (parentVm == null)
+            //    throw new ArgumentException("parentVm");
 
             Object = obj;
+            ParentVm = parentVm;
         }
 
         public T Object { get; protected set; }
+
+        public ViewModelBase ParentVm
+        {
+            get { return _parentVm; }
+            set { _parentVm = value; OnPropertyChanged("ParentVm"); }
+        }
     }
 }

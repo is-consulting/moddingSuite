@@ -85,6 +85,8 @@ namespace moddingSuite.BL
                 }
             }
 
+            file.Format = GetPixelFormatFromTgv(file.PixelFormatStr);
+
             return file;
         }
 
@@ -139,6 +141,7 @@ namespace moddingSuite.BL
         /// <returns></returns>
         public byte[] CreateDds()
         {
+
             var ddsMagic = new byte[] { 0x44, 0x44, 0x53, 0x20 };
 
             int flags = 0x1 | 0x2 | 0x4 | 0x1000 | 0x8;
@@ -245,7 +248,7 @@ namespace moddingSuite.BL
             }
         }
 
-        public DxGiPixelFormat GetPixelFormatFromTgv(string pixelFormat)
+        public  PixelFormats GetPixelFormatFromTgv(string pixelFormat)
         {
             switch (pixelFormat)
             {
@@ -253,69 +256,69 @@ namespace moddingSuite.BL
                 case "A8R8G8B8_LIN":
                 case "A8R8G8B8_LIN_HDR":
                 case "A8R8G8B8":
-                    return DxGiPixelFormat.DXGI_FORMAT_R8G8B8A8_UNORM;
+                    return PixelFormats.R8G8B8A8_UNORM;
                 case "X8R8G8B8":
                 case "X8R8G8B8_LE":
-                    return DxGiPixelFormat.DXGI_FORMAT_B8G8R8X8_UNORM;
+                    return PixelFormats.B8G8R8X8_UNORM;
                 case "X8R8G8B8_SRGB":
-                    return DxGiPixelFormat.DXGI_FORMAT_B8G8R8X8_UNORM_SRGB;
+                    return PixelFormats.B8G8R8X8_UNORM_SRGB;
 
                 case "A8R8G8B8_SRGB":
                 case "A8R8G8B8_SRGB_HDR":
-                    return DxGiPixelFormat.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                    return PixelFormats.R8G8B8A8_UNORM_SRGB;
 
                 case "A16B16G16R16":
                 case "A16B16G16R16_EDRAM":
-                    return DxGiPixelFormat.DXGI_FORMAT_R16G16B16A16_UNORM;
+                    return PixelFormats.R16G16B16A16_UNORM;
 
                 case "A16B16G16R16F":
                 case "A16B16G16R16F_LIN":
-                    return DxGiPixelFormat.DXGI_FORMAT_R16G16B16A16_FLOAT;
+                    return PixelFormats.R16G16B16A16_FLOAT;
 
                 case "A32B32G32R32F":
                 case "A32B32G32R32F_LIN":
-                    return DxGiPixelFormat.DXGI_FORMAT_R32G32B32A32_FLOAT;
+                    return PixelFormats.R32G32B32A32_FLOAT;
 
                 case "A8":
                 case "A8_LIN":
-                    return DxGiPixelFormat.DXGI_FORMAT_A8_UNORM;
+                    return PixelFormats.A8_UNORM;
                 case "A8P8":
-                    return DxGiPixelFormat.DXGI_FORMAT_A8P8;
+                    return PixelFormats.A8P8;
                 case "P8":
-                    return DxGiPixelFormat.DXGI_FORMAT_P8;
+                    return PixelFormats.P8;
                 case "L8":
                 case "L8_LIN":
-                    return DxGiPixelFormat.DXGI_FORMAT_R8_UNORM;
+                    return PixelFormats.R8_UNORM;
                 case "L16":
                 case "L16_LIN":
-                    return DxGiPixelFormat.DXGI_FORMAT_R16_UNORM;
+                    return PixelFormats.R16_UNORM;
                 case "D16_LOCKABLE":
                 case "D16":
                 case "D16F":
-                    return DxGiPixelFormat.DXGI_FORMAT_D16_UNORM;
+                    return PixelFormats.D16_UNORM;
                 case "V8U8":
-                    return DxGiPixelFormat.DXGI_FORMAT_R8G8_SNORM;
+                    return PixelFormats.R8G8_SNORM;
                 case "V16U16":
-                    return DxGiPixelFormat.DXGI_FORMAT_R16G16_SNORM;
+                    return PixelFormats.R16G16_SNORM;
 
                 case "DXT1":
                 case "DXT1_LIN":
-                    return DxGiPixelFormat.DXGI_FORMAT_BC1_UNORM;
+                    return PixelFormats.BC1_UNORM;
                 case "DXT1_SRGB":
-                    return DxGiPixelFormat.DXGI_FORMAT_BC1_UNORM_SRGB;
+                    return PixelFormats.BC1_UNORM_SRGB;
                 case "DXT2":
                 case "DXT3":
                 case "DXT3_LIN":
-                    return DxGiPixelFormat.DXGI_FORMAT_BC2_UNORM;
+                    return PixelFormats.BC2_UNORM;
                 case "DXT3_SRGB":
-                    return DxGiPixelFormat.DXGI_FORMAT_BC2_UNORM_SRGB;
+                    return PixelFormats.BC2_UNORM_SRGB;
                 case "DXT4":
                 case "DXT5":
                 case "DXT5_LIN":
                 case "DXT5_FROM_ENCODE":
-                    return DxGiPixelFormat.DXGI_FORMAT_BC3_UNORM;
+                    return PixelFormats.BC3_UNORM;
                 case "DXT5_SRGB":
-                    return DxGiPixelFormat.DXGI_FORMAT_BC3_UNORM_SRGB;
+                    return PixelFormats.BC3_UNORM_SRGB;
 
                 case "R5G6B5_LIN":
                 case "R5G6B5":
@@ -362,7 +365,7 @@ namespace moddingSuite.BL
                 case "DF24":
                 case "PIXNULL":
                 default:
-                    return DxGiPixelFormat.DXGI_FORMAT_UNKNOWN;
+                    return PixelFormats.UNKNOWN;
             }
         }
     }

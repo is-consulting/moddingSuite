@@ -28,7 +28,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             {
                 return BitConverter.GetBytes(Convert.ToDouble(Value));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 valid = false;
                 return new byte[0];

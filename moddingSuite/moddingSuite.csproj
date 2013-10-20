@@ -46,10 +46,6 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EdataFileManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\EdataFileManager.Test\bin\Release\EdataFileManager.exe</HintPath>
-    </Reference>
     <Reference Include="Ionic.Zlib">
       <HintPath>..\References\Ionic.Zlib.dll</HintPath>
     </Reference>
@@ -73,13 +69,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BL\DDS\DdsCaps.cs" />
-    <Compile Include="BL\DDS\DdsFlags.cs" />
-    <Compile Include="BL\DDS\DdsHeader.cs" />
-    <Compile Include="BL\DDS\DdsPixelFormat.cs" />
-    <Compile Include="BL\DDS\DdsPixelFormatFlags.cs" />
+    <Compile Include="BL\DDS\DDS.cs" />
     <Compile Include="BL\DDS\DdsWriter.cs" />
-    <Compile Include="BL\DDS\DxGiPixelFormat.cs" />
+    <Compile Include="BL\DDS\PixelFormats.cs" />
+    <Compile Include="BL\DDS\FourCC.cs" />
     <Compile Include="BL\SavManager.cs" />
     <Compile Include="BL\TgvManager.cs" />
     <Compile Include="Model\Edata\EdataDir.cs" />
@@ -135,25 +128,30 @@
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Util\Utils.cs" />
+    <Compile Include="ViewModel\About\AboutViewModel.cs" />
     <Compile Include="ViewModel\Base\ObjectWrapperViewModel.cs" />
     <Compile Include="ViewModel\Filter\FilterDiscriminator.cs" />
     <Compile Include="ViewModel\Filter\PropertyFilterExpression.cs" />
-    <Compile Include="ViewModel\MoviePlaybackViewModel.cs" />
+    <Compile Include="ViewModel\Media\MoviePlaybackViewModel.cs" />
     <Compile Include="ViewModel\Edata\EdataFileViewModel.cs" />
-    <Compile Include="ViewModel\Edata\ManagerMainViewModel.cs" />
+    <Compile Include="ViewModel\Edata\EdataManagerViewModel.cs" />
     <Compile Include="ViewModel\Base\ActionCommand.cs" />
     <Compile Include="ViewModel\Base\ViewModelBase.cs" />
     <Compile Include="ViewModel\Ndf\AddCollectionItemViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfEditorMainViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfClassViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfObjectViewModel.cs" />
-    <Compile Include="ViewModel\TradFileViewModel.cs" />
+    <Compile Include="ViewModel\Trad\TradFileViewModel.cs" />
     <Compile Include="View\Common\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Common\EdataFileView.xaml.cs">
+    <Compile Include="View\Edata\EdataFileView.xaml.cs">
       <DependentUpon>EdataFileView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\DialogProvider\DialogProvider.cs" />
+    <Compile Include="View\DialogProvider\IViewMap.cs" />
+    <Compile Include="View\DialogProvider\ViewInstance.cs" />
+    <Compile Include="View\DialogProvider\ViewMap.cs" />
     <Compile Include="View\Extension\EdataFileTypeToImageConverter.cs" />
     <Compile Include="View\Extension\EditingControlDataTemplateSelector.cs" />
     <Compile Include="View\Extension\LocalisationHashValueConverter.cs" />
@@ -219,11 +217,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Common\EdataFileView.xaml">
+    <Page Include="View\Edata\EdataFileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ManagerMainView.xaml">
+    <Page Include="View\Edata\EdataManagerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -232,8 +230,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Compressing\Compressing.cs" />
-    <Compile Include="View\ManagerMainView.xaml.cs">
-      <DependentUpon>ManagerMainView.xaml</DependentUpon>
+    <Compile Include="View\Edata\EdataManagerView.xaml.cs">
+      <DependentUpon>EdataManagerView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\Common\MoviePlaybackView.xaml">

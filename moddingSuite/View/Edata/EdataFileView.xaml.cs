@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace moddingSuite.View.Common
+namespace moddingSuite.View.Edata
 {
     /// <summary>
     /// Interaction logic for EdataFileView.xaml

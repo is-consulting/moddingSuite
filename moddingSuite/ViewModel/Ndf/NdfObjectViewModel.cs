@@ -9,7 +9,7 @@ using System.Windows.Input;
 using moddingSuite.Model.Ndfbin;
 using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
-using moddingSuite.View.Ndfbin.Viewer;
+using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 
 namespace moddingSuite.ViewModel.Ndf
@@ -19,8 +19,8 @@ namespace moddingSuite.ViewModel.Ndf
         private readonly ObservableCollection<NdfPropertyValue> _propertyValues =
             new ObservableCollection<NdfPropertyValue>();
 
-        public NdfObjectViewModel(NdfObject obj)
-            : base(obj)
+        public NdfObjectViewModel(NdfObject obj, ViewModelBase parentVm)
+            : base(obj, parentVm)
         {
             var propVals = new List<NdfPropertyValue>();
 
@@ -120,7 +120,7 @@ namespace moddingSuite.ViewModel.Ndf
             return item.Type != NdfType.Unset;
         }
 
-        public static void DetailsCommandExecute(object obj)
+        public void DetailsCommandExecute(object obj)
         {
             var item = obj as IEnumerable<DataGridCellInfo>;
 
@@ -129,11 +129,10 @@ namespace moddingSuite.ViewModel.Ndf
 
             var prop = item.First().Item as IValueHolder;
 
-
             FollowDetails(prop);
         }
 
-        private static void FollowDetails(IValueHolder prop)
+        private void FollowDetails(IValueHolder prop)
         {
             if (prop == null || prop.Value == null)
                 return;
@@ -162,14 +161,14 @@ namespace moddingSuite.ViewModel.Ndf
             }
         }
 
-        private static void FollowObjectReference(IValueHolder prop)
+        private void FollowObjectReference(IValueHolder prop)
         {
             var refe = prop.Value as NdfObjectReference;
 
             if (refe == null)
                 return;
 
-            var vm = new NdfClassViewModel(refe.Class);
+            var vm = new NdfClassViewModel(refe.Class, ParentVm);
 
             NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == refe.InstanceId);
 
@@ -178,21 +177,19 @@ namespace moddingSuite.ViewModel.Ndf
 
             vm.InstancesCollectionView.MoveCurrentTo(inst);
 
-            var view = new InstanceWindowView {DataContext = vm};
-
-            view.Show();
+            DialogProvider.ProvideView(vm, ParentVm);
         }
 
-        private static void FollowList(IValueHolder prop)
+        private void FollowList(IValueHolder prop)
         {
             var refe = prop.Value as NdfCollection;
 
             if (refe == null)
                 return;
 
-            var view = new ListEditorWindow {DataContext = prop};
-
-            view.Show();
+            DialogProvider.ProvideView(prop as ViewModelBase, ParentVm);
+            //var view = new ListEditorWindow {DataContext = prop};
+            //view.Show();
         }
     }
 }

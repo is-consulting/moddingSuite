@@ -24,7 +24,7 @@ namespace moddingSuite.ViewModel.Filter
         public FilterDiscriminator Discriminator
         {
             get { return _discriminator; }
-            //set { _discriminator = value; OnPropertyChanged(() => Discriminator); }
+            set { _discriminator = value; OnPropertyChanged(() => Discriminator); }
         }
     }
 }

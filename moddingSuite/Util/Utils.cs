@@ -128,7 +128,7 @@ namespace moddingSuite.Util
 
         public static byte[] CreateLocalisationHash(string text, int maxSize = 8)
         {
-            long fValue = 0;
+            long hash = 0;
             for (int i = 0; i < maxSize; ++i)
             {
                 int value;
@@ -148,10 +148,10 @@ namespace moddingSuite.Util
                 else
                     throw new InvalidDataException("");
 
-                fValue = (fValue << 6) | value;
+                hash = (hash << 6) | value;
             }
 
-            return BitConverter.GetBytes(fValue);
+            return BitConverter.GetBytes(hash);
         }
 
         public static int RoundToNextDivBy4(int number)

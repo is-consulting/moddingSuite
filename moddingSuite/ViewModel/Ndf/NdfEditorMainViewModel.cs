@@ -9,7 +9,7 @@ using System.Windows.Input;
 using moddingSuite.BL;
 using moddingSuite.Model.Edata;
 using moddingSuite.Model.Ndfbin;
-using moddingSuite.View.Ndfbin.Viewer;
+using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
 
@@ -43,7 +43,7 @@ namespace moddingSuite.ViewModel.Ndf
             ndfbinManager.Initialize();
 
             foreach (NdfClass cls in ndfbinManager.Classes)
-                Classes.Add(new NdfClassViewModel(cls));
+                Classes.Add(new NdfClassViewModel(cls, this));
 
             Strings = ndfbinManager.Strings;
             Trans = ndfbinManager.Trans;
@@ -51,7 +51,6 @@ namespace moddingSuite.ViewModel.Ndf
             SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute); //, () => NdfbinManager.ChangeManager.HasChanges);
             OpenInstanceCommand = new ActionCommand(OpenInstanceExecute);
         }
-
 
         /// <summary>
         /// Virtual call
@@ -68,7 +67,7 @@ namespace moddingSuite.ViewModel.Ndf
             ndfbinManager.Initialize();
 
             foreach (NdfClass cls in ndfbinManager.Classes)
-                Classes.Add(new NdfClassViewModel(cls));
+                Classes.Add(new NdfClassViewModel(cls, this));
 
             Strings = ndfbinManager.Strings;
             Trans = ndfbinManager.Trans;
@@ -82,7 +81,6 @@ namespace moddingSuite.ViewModel.Ndf
 
         public ICommand SaveNdfbinCommand { get; set; }
         public ICommand OpenInstanceCommand { get; set; }
-
 
         public string Title
         {
@@ -252,7 +250,6 @@ namespace moddingSuite.ViewModel.Ndf
                 }
             }
 
-
             return clas.Name.ToLower().Contains(parts[0].ToLower()) ||
                    clas.Id.ToString(CultureInfo.CurrentCulture).Contains(parts[0]) ||
                    clas.Instances.Any(x => x.Id.ToString(CultureInfo.InvariantCulture) == parts[0]);
@@ -318,7 +315,7 @@ namespace moddingSuite.ViewModel.Ndf
             if (cls == null)
                 return;
 
-            var vm = new NdfClassViewModel(cls.Object.Class);
+            var vm = new NdfClassViewModel(cls.Object.Class, this);
 
             NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == cls.Id);
 
@@ -327,9 +324,7 @@ namespace moddingSuite.ViewModel.Ndf
 
             vm.InstancesCollectionView.MoveCurrentTo(inst);
 
-            var view = new InstanceWindowView {DataContext = vm};
-
-            view.Show();
+            DialogProvider.ProvideView(vm, this);
         }
     }
 }

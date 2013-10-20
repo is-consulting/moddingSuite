@@ -1,22 +1,22 @@
 ﻿using moddingSuite.ViewModel.Base;
 
-namespace moddingSuite.ViewModel
+namespace moddingSuite.ViewModel.Media
 {
     public class MoviePlaybackViewModel : ViewModelBase
     {
-        private string _derp;
+        private string _file;
 
         public MoviePlaybackViewModel(string file)
         {
-            _derp = file;
+            _file = file;
         }
 
         public string File
         {
-            get { return _derp; }
+            get { return _file; }
             set
             {
-                _derp = value;
+                _file = value;
                 OnPropertyChanged(() => File);
             }
         }

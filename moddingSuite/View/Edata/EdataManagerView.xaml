@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ViewModel="clr-namespace:moddingSuite.ViewModel" xmlns:View="clr-namespace:moddingSuite.View"
-        xmlns:Common="clr-namespace:moddingSuite.View.Common" x:Class="moddingSuite.View.MainWindow"
+        xmlns:Common="clr-namespace:moddingSuite.View.Common" xmlns:Edata="clr-namespace:moddingSuite.View.Edata"
+        x:Class="moddingSuite.View.Edata.EdataManagerView"
         Height="468" Width="902" Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -58,7 +59,7 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <Common:EdataFileView />
+                    <Edata:EdataFileView />
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

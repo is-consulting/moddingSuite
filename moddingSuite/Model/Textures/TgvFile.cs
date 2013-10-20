@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media;
+using moddingSuite.BL.DDS;
 using moddingSuite.ViewModel.Base;
+using PixelFormats = moddingSuite.BL.DDS.PixelFormats;
 
 namespace moddingSuite.Model.Textures
 {
     public class TgvFile : ViewModelBase
     {
-        private PixelFormat _format;
+        private PixelFormats _format;
         private uint _height;
         private uint _imageHeight;
         private uint _imageWidth;
@@ -91,7 +93,7 @@ namespace moddingSuite.Model.Textures
             }
         }
 
-        public PixelFormat Format
+        public PixelFormats Format
         {
             get { return _format; }
             set

@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using moddingSuite.View.DialogProvider;
+using moddingSuite.ViewModel.Edata;
 
 namespace moddingSuite
 {
@@ -21,6 +23,16 @@ namespace moddingSuite
 
             Trace.Listeners.Add(new TextWriterTraceListener(file));
             Trace.AutoFlush = true;
+
+
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            var mainVm = new EdataManagerViewModel();
+            DialogProvider.ProvideView(mainVm);
         }
 
         void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
