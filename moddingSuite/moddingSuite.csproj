@@ -70,7 +70,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BL\DDS\DDS.cs" />
-    <Compile Include="BL\DDS\DdsWriter.cs" />
+    <Compile Include="BL\DDS\DDSHelper.cs" />
+    <Compile Include="BL\DDS\DDSReader.cs" />
+    <Compile Include="BL\DDS\DDSWriter.cs" />
     <Compile Include="BL\DDS\PixelFormats.cs" />
     <Compile Include="BL\DDS\FourCC.cs" />
     <Compile Include="BL\SavManager.cs" />

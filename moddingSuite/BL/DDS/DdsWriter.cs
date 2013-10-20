@@ -12,11 +12,11 @@ namespace moddingSuite.BL.DDS
     /// <summary>
     /// Writes a DDS File     
     /// </summary>
-    public class DdsWriter
+    public class DDSWriter
     {
         public TgvManager Manager { get; protected set; }
 
-        public DdsWriter(TgvManager mgr)
+        public DDSWriter(TgvManager mgr)
         {
             Manager = mgr;
         }

@@ -23,6 +23,8 @@ namespace moddingSuite.Model.Textures
         private uint _version;
         private uint _width;
 
+        private readonly List<byte[]> _mipMaps = new List<byte[]>();
+
         public uint Version
         {
             get { return _version; }
@@ -141,6 +143,11 @@ namespace moddingSuite.Model.Textures
                 _pixelFormatStr = value;
                 OnPropertyChanged("PixelFormatStr");
             }
+        }
+
+        public List<byte[]> MipMaps
+        {
+            get { return _mipMaps; }
         }
     }
 }

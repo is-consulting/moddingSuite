@@ -12,6 +12,8 @@ namespace moddingSuite.BL
 {
     public class TgvManager
     {
+        public const uint VersionMagic = 0x00000002;
+
         public TgvManager(byte[] fileData)
         {
             Data = fileData;
@@ -135,120 +137,78 @@ namespace moddingSuite.BL
             return ret.OrderByDescending(ret.IndexOf).ToList();
         }
 
-        /// <summary>
-        ///  http://msdn.microsoft.com/en-us/library/windows/desktop/bb943991(v=vs.85).aspx
-        /// </summary>
-        /// <returns></returns>
-        public byte[] CreateDds()
+        public byte[] CreateTgv(TgvFile file, byte[] sourceChecksum, bool compress = true)
         {
+            if (sourceChecksum.Length > 16)
+                throw new ArgumentException("sourceChecksum");
 
-            var ddsMagic = new byte[] { 0x44, 0x44, 0x53, 0x20 };
-
-            int flags = 0x1 | 0x2 | 0x4 | 0x1000 | 0x8;
-
-            //if (CurrentFile.MipMapCount > 1)
-            //    flags |= 0x20000;
-
-            uint pitch = Math.Max(1, ((CurrentFile.Width + 3) / 4)) * 16; // (((int)CurrentFile.Width + 1) >> 1) * 4;
-            int depth = 0;
-
-            int caps = 0x1000;
-
-            int pfFlags = 0x1 | 0x4 | 0x40;
-            string pfFourCc = "DXT5";
-            int pfBitsPerPixel = 8;
-            uint pfRBitMask = 0xff000000;
-            uint pfGBitMask = 0x00ff0000;
-            uint pfBBitMask = 0x0000ff00;
-            uint pfABitMask = 0x000000ff;
-
+            file.PixelFormatStr = GetTgvFromPixelFormat(file.Format);
+            var zipoMagic = Encoding.ASCII.GetBytes("ZIPO");
 
             using (var ms = new MemoryStream())
             {
-                // MAGIC
-                ms.Write(ddsMagic, 0, ddsMagic.Length);
-
-                // HEADER
-                byte[] buffer = BitConverter.GetBytes(124);
+                var buffer = BitConverter.GetBytes(VersionMagic);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = BitConverter.GetBytes(flags);
+                buffer = BitConverter.GetBytes(compress ? 1 : 0);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = BitConverter.GetBytes(CurrentFile.ImageHeight);
+                buffer = BitConverter.GetBytes(file.Width);
+                ms.Write(buffer, 0, buffer.Length);
+                buffer = BitConverter.GetBytes(file.Height);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = BitConverter.GetBytes(CurrentFile.ImageWidth);
+                buffer = BitConverter.GetBytes(file.Width);
+                ms.Write(buffer, 0, buffer.Length);
+                buffer = BitConverter.GetBytes(file.Height);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = BitConverter.GetBytes(pitch);
+                buffer = BitConverter.GetBytes((short)file.MipMapCount);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = BitConverter.GetBytes(depth);
+                buffer = BitConverter.GetBytes(file.PixelFormatStr.Length);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = BitConverter.GetBytes(CurrentFile.MipMapCount - 1);
+                buffer = Encoding.ASCII.GetBytes(file.PixelFormatStr);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = new byte[11 * 4];
-                ms.Write(buffer, 0, buffer.Length);
-
-                // Pixel Format
-                buffer = BitConverter.GetBytes(32);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(pfFlags);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = Encoding.ASCII.GetBytes(pfFourCc);
-                if (buffer.Length > 4)
-                    throw new InvalidDataException("Invalid Four CC in PixelFormat");
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(pfBitsPerPixel);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(pfRBitMask);
-                ms.Write(buffer, 0, buffer.Length);
-                buffer = BitConverter.GetBytes(pfGBitMask);
-                ms.Write(buffer, 0, buffer.Length);
-                buffer = BitConverter.GetBytes(pfBBitMask);
-                ms.Write(buffer, 0, buffer.Length);
-                buffer = BitConverter.GetBytes(pfABitMask);
-                ms.Write(buffer, 0, buffer.Length);
-                // Pixel Format
-
-                buffer = BitConverter.GetBytes(caps);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(0);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(0);
-                ms.Write(buffer, 0, buffer.Length);
-                buffer = BitConverter.GetBytes(0);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(0);
-                ms.Write(buffer, 0, buffer.Length);
-                // Header
+                ms.Write(sourceChecksum, 0, sourceChecksum.Length);
 
 
-                var miMap = ReadMipMap((uint)CurrentFile.MipMapCount - 1);
+                for (int i = 0; i < file.MipMapCount; i++)
+                {
+                    ms.Seek(8, SeekOrigin.Current);
+                }
 
-                ms.Write(miMap, 0, miMap.Length);
 
+                var sizes = new List<int>();
+                var tileSize = file.Width - file.Width / file.MipMapCount;
 
-                //foreach (var mipMap in GetMipMaps())
-                //{
-                //    ms.Write(mipMap, 0, mipMap.Length);
-                //}
+                for (int i = 0; i < file.MipMapCount; i++)
+                {
+                    sizes.Add((int)tileSize);
+                    tileSize /= 4;
+                }
+
+                var sortedMipMaps = file.MipMaps.OrderBy(x => x.Length).ToList();
+                sizes = sizes.OrderBy(x => x).ToList();
+
+                foreach (var sortedMipMap in sortedMipMaps)
+                {
+                    ms.Write(zipoMagic, 0, zipoMagic.Length);
+
+                    buffer = BitConverter.GetBytes(sizes[sortedMipMaps.IndexOf(sortedMipMap)]);
+                    ms.Write(buffer, 0, buffer.Length);
+
+                    buffer = Compressor.Comp(sortedMipMap);
+                    ms.Write(buffer, 0, buffer.Length);
+                }
 
                 return ms.ToArray();
             }
         }
 
-        public  PixelFormats GetPixelFormatFromTgv(string pixelFormat)
+        public static PixelFormats GetPixelFormatFromTgv(string pixelFormat)
         {
             switch (pixelFormat)
             {
@@ -368,5 +328,65 @@ namespace moddingSuite.BL
                     return PixelFormats.UNKNOWN;
             }
         }
+
+        public static string GetTgvFromPixelFormat(PixelFormats pixelFormat)
+        {
+            switch (pixelFormat)
+            {
+                case PixelFormats.R8G8B8A8_UNORM:
+                    return "A8R8G8B8";
+                case PixelFormats.B8G8R8X8_UNORM:
+                    return "X8R8G8B8";
+                case PixelFormats.B8G8R8X8_UNORM_SRGB:
+                    return "X8R8G8B8_SRGB";
+
+                case PixelFormats.R8G8B8A8_UNORM_SRGB:
+                    return "A8R8G8B8_SRGB";
+
+                case PixelFormats.R16G16B16A16_UNORM:
+                    return "A16B16G16R16";
+
+                case PixelFormats.R16G16B16A16_FLOAT:
+                    return "A16B16G16R16F";
+
+                case PixelFormats.R32G32B32A32_FLOAT:
+                    return "A32B32G32R32F";
+
+                case PixelFormats.A8_UNORM:
+                    return "A8";
+                case PixelFormats.A8P8:
+                    return "A8P8";
+                case PixelFormats.P8:
+                    return "P8";
+                case PixelFormats.R8_UNORM:
+                    return "L8";
+                case PixelFormats.R16_UNORM:
+                    return "L16";
+                case PixelFormats.D16_UNORM:
+                    return "D16";
+                case PixelFormats.R8G8_SNORM:
+                    return "V8U8";
+                case PixelFormats.R16G16_SNORM:
+                    return "V16U16";
+
+                case PixelFormats.BC1_UNORM:
+                    return "DXT1";
+                case PixelFormats.BC1_UNORM_SRGB:
+                    return "DXT1_SRGB";
+                case PixelFormats.BC2_UNORM:
+                    return "DXT3";
+                case PixelFormats.BC2_UNORM_SRGB:
+                    return "DXT3_SRGB";
+                case PixelFormats.BC3_UNORM:
+                    return "DXT5";
+                case PixelFormats.BC3_UNORM_SRGB:
+                    return "DXT5_SRGB";
+
+
+                default:
+                    throw new NotImplementedException("unsupported pixelformat");
+            }
+        }
+
     }
 }

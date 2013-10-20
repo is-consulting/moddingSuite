@@ -11,6 +11,16 @@ namespace moddingSuite.Test
         [TestMethod]
         public void TestMethod1()
         {
+            var path = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01-2.dds";
+
+            var wr = new DDSReader();
+
+            var data = File.ReadAllBytes(path);
+
+            var file = wr.ReadDDS(data);
+
+            TgvManager mgr = new TgvManager();
+
 
         }
 
@@ -23,7 +33,7 @@ namespace moddingSuite.Test
 
             var mgr = new TgvManager(File.ReadAllBytes(path));
 
-            var wr = new DdsWriter(mgr);
+            var wr = new DDSWriter(mgr);
 
 
             var buffer = wr.CreateDDSFile(mgr.CurrentFile);
