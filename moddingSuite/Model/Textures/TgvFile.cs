@@ -23,7 +23,7 @@ namespace moddingSuite.Model.Textures
         private uint _version;
         private uint _width;
 
-        private readonly List<byte[]> _mipMaps = new List<byte[]>();
+        private readonly List<TgvMipMap> _mipMaps = new List<TgvMipMap>();
 
         public uint Version
         {
@@ -145,7 +145,7 @@ namespace moddingSuite.Model.Textures
             }
         }
 
-        public List<byte[]> MipMaps
+        public List<TgvMipMap> MipMaps
         {
             get { return _mipMaps; }
         }

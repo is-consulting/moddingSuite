@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using moddingSuite.Model.Textures;
+using moddingSuite.Util;
 
 namespace moddingSuite.BL.DDS
 {
@@ -28,16 +25,18 @@ namespace moddingSuite.BL.DDS
                 buffer = new byte[Marshal.SizeOf(typeof(DDS.Header))];
                 ms.Read(buffer, 0, buffer.Length);
 
-                var header = ByteArrayToStructure<DDS.Header>(buffer);
+                var header = Utils.ByteArrayToStructure<DDS.Header>(buffer);
 
-                var mipSize = contentSize - contentSize / header.MipMapCount;
+                int mipSize = contentSize - contentSize / header.MipMapCount;
 
                 for (ushort i = 0; i < header.MipMapCount; i++)
                 {
                     buffer = new byte[mipSize];
                     ms.Read(buffer, 0, buffer.Length);
 
-                    file.MipMaps.Add(buffer);
+                    var mip = new TgvMipMap { Content = buffer };
+
+                    file.MipMaps.Add(mip);
 
                     mipSize /= 4;
                 }
@@ -55,15 +54,6 @@ namespace moddingSuite.BL.DDS
             }
 
             return file;
-        }
-
-        T ByteArrayToStructure<T>(byte[] bytes) where T : struct
-        {
-            GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-            var stuff = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
-            handle.Free();
-
-            return stuff;
         }
     }
 }

@@ -74,7 +74,6 @@ namespace moddingSuite.BL
                 {
                     ms.Read(buffer, 0, buffer.Length);
                     uint offset = BitConverter.ToUInt32(buffer, 0);
-
                     file.Offsets.Add(offset);
                 }
 
@@ -82,8 +81,12 @@ namespace moddingSuite.BL
                 {
                     ms.Read(buffer, 0, buffer.Length);
                     uint offset = BitConverter.ToUInt32(buffer, 0);
-
                     file.Sizes.Add(offset);
+                }
+
+                for (int i = 0; i < file.MipMapCount; i++)
+                {
+                    file.MipMaps.Add(ReadMipMap(i));
                 }
             }
 
@@ -92,26 +95,27 @@ namespace moddingSuite.BL
             return file;
         }
 
-        public byte[] ReadMipMap(uint id)
+        public TgvMipMap ReadMipMap(int id)
         {
             if (id > CurrentFile.MipMapCount)
                 throw new ArgumentException("id");
 
             var zipo = new byte[] { 0x5A, 0x49, 0x50, 0x4F };
 
-            using (var ms = new MemoryStream(Data, (int)CurrentFile.Offsets[(int)id], (int)CurrentFile.Sizes[(int)id]))
+            var mipMap = new TgvMipMap(CurrentFile.Offsets[id], CurrentFile.Sizes[id], 0);
+
+            using (var ms = new MemoryStream(Data, (int)mipMap.Offset, (int)mipMap.Size))
             {
                 var buffer = new byte[4];
-                var mipSize = (int)CurrentFile.Sizes[(int)id];
 
                 if (CurrentFile.IsCompressed)
                 {
                     ms.Read(buffer, 0, buffer.Length);
-
                     if (!Utils.ByteArrayCompare(buffer, zipo))
                         throw new InvalidDataException("Mipmap has to start with \"ZIPO\"!");
 
-                    mipSize = ms.Read(buffer, 0, buffer.Length);
+                    ms.Read(buffer, 0, buffer.Length);
+                    mipMap.MipWidth = BitConverter.ToInt32(buffer, 0);
                 }
 
                 buffer = new byte[ms.Length - ms.Position];
@@ -120,21 +124,10 @@ namespace moddingSuite.BL
                 if (CurrentFile.IsCompressed)
                     buffer = Compressor.Decomp(buffer);
 
-                //if (mipSize != buffer.Length)
-                //    throw new InvalidDataException("Wrong sizes for mipmap given!");
+                mipMap.Content = buffer;
 
-                return buffer;
+                return mipMap;
             }
-        }
-
-        public List<byte[]> GetMipMaps()
-        {
-            var ret = new List<byte[]>();
-
-            for (int i = 0; i < CurrentFile.MipMapCount; i++)
-                ret.Add(ReadMipMap((uint)i));
-
-            return ret.OrderByDescending(ret.IndexOf).ToList();
         }
 
         public byte[] CreateTgv(TgvFile file, byte[] sourceChecksum, bool compress = true)
@@ -174,33 +167,59 @@ namespace moddingSuite.BL
 
                 ms.Write(sourceChecksum, 0, sourceChecksum.Length);
 
+                var mipdefOffset = (uint)(ms.Position + 8 * file.MipMapCount);
 
-                for (int i = 0; i < file.MipMapCount; i++)
-                {
-                    ms.Seek(8, SeekOrigin.Current);
-                }
-
-
-                var sizes = new List<int>();
+                var mipImgsizes = new List<int>();
                 var tileSize = file.Width - file.Width / file.MipMapCount;
 
                 for (int i = 0; i < file.MipMapCount; i++)
                 {
-                    sizes.Add((int)tileSize);
+                    mipImgsizes.Add((int)tileSize);
                     tileSize /= 4;
                 }
 
-                var sortedMipMaps = file.MipMaps.OrderBy(x => x.Length).ToList();
-                sizes = sizes.OrderBy(x => x).ToList();
+                var sortedMipMaps = file.MipMaps.OrderBy(x => x.Content.Length).ToList();
 
+                mipImgsizes = mipImgsizes.OrderBy(x => x).ToList();
+
+                // Create the content and write all MipMaps, 
+                // since we compress on this part its the first part where we know the size of a MipMap
                 foreach (var sortedMipMap in sortedMipMaps)
                 {
-                    ms.Write(zipoMagic, 0, zipoMagic.Length);
+                    if (compress)
+                    {
+                        ms.Write(zipoMagic, 0, zipoMagic.Length);
 
-                    buffer = BitConverter.GetBytes(sizes[sortedMipMaps.IndexOf(sortedMipMap)]);
-                    ms.Write(buffer, 0, buffer.Length);
+                        buffer = BitConverter.GetBytes(mipImgsizes[sortedMipMaps.IndexOf(sortedMipMap)]);
+                        ms.Write(buffer, 0, buffer.Length);
 
-                    buffer = Compressor.Comp(sortedMipMap);
+                        buffer = Compressor.Comp(sortedMipMap.Content);
+                        ms.Write(buffer, 0, buffer.Length);
+                        sortedMipMap.Size = (uint)buffer.Length;
+                    }
+                    else
+                    {
+                        ms.Write(sortedMipMap.Content, 0, sortedMipMap.Content.Length);
+                        sortedMipMap.Size = (uint)sortedMipMap.Content.Length;
+                    }
+                }
+
+                ms.Seek(mipdefOffset, SeekOrigin.Begin);
+
+                // Calculate offset since we know the size now and write it in the header.
+                for (int i = 0; i < file.MipMapCount; i++)
+                {
+                    file.MipMaps[i].Offset = mipdefOffset;
+                    mipdefOffset += file.MipMaps[i].Size;
+
+                    buffer = BitConverter.GetBytes(file.MipMaps[i].Offset);
+                    ms.Write(buffer,0,buffer.Length);
+                }
+
+                // Write the size collection into the header.
+                for (int i = 0; i < file.MipMapCount; i++)
+                {
+                    buffer = BitConverter.GetBytes(file.MipMaps[i].Size);
                     ms.Write(buffer, 0, buffer.Length);
                 }
 
@@ -324,8 +343,10 @@ namespace moddingSuite.BL
                 case "RAWZ":
                 case "DF24":
                 case "PIXNULL":
+                    throw new NotSupportedException(string.Format("Pixelformat {0} not supported", pixelFormat));
+
                 default:
-                    return PixelFormats.UNKNOWN;
+                    throw new NotSupportedException(string.Format("Unknown Pixelformat {0} ", pixelFormat));
             }
         }
 
@@ -382,9 +403,8 @@ namespace moddingSuite.BL
                 case PixelFormats.BC3_UNORM_SRGB:
                     return "DXT5_SRGB";
 
-
                 default:
-                    throw new NotImplementedException("unsupported pixelformat");
+                    throw new NotSupportedException(string.Format("Unsupported PixelFormat {0}", pixelFormat));
             }
         }
 

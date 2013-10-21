@@ -19,7 +19,7 @@ namespace moddingSuite.Test
 
             var file = wr.ReadDDS(data);
 
-            TgvManager mgr = new TgvManager();
+            //TgvManager mgr = new TgvManager();
 
 
         }
@@ -33,7 +33,7 @@ namespace moddingSuite.Test
 
             var mgr = new TgvManager(File.ReadAllBytes(path));
 
-            var wr = new DDSWriter(mgr);
+            var wr = new DDSWriter();
 
 
             var buffer = wr.CreateDDSFile(mgr.CurrentFile);

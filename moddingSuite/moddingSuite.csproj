@@ -124,6 +124,7 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFlatValueWrapper.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfValueWrapper.cs" />
     <Compile Include="Model\Textures\TgvFile.cs" />
+    <Compile Include="Model\Textures\TgvMipMap.cs" />
     <Compile Include="Model\Trad\TradEntry.cs" />
     <Compile Include="BL\TradManager.cs" />
     <Compile Include="BL\NdfbinManager.cs" />
