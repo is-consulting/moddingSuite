@@ -34,6 +34,7 @@
                 <ListBoxItem>Also big thanks to the Wargame community and all my users and modders!</ListBoxItem>
                 <ListBoxItem>Uses icons from the Icons8 project - http://icons8.com.</ListBoxItem>
                 <ListBoxItem>Uses the Iconic DotNetZip Libary released under the Ms-PL license.</ListBoxItem>
+                <ListBoxItem>Fragments of the DDS implementation are from SharpDX, have a look at this awesome project: http://sharpdx.org/</ListBoxItem>
                 <ListBoxItem>Thanks to the Wargame:EE DAT Unpacker by Giovanni Condello.</ListBoxItem>
 
                 <ListBoxItem>I don't like you too, Opus, and Topsin :)</ListBoxItem>
