@@ -35,7 +35,19 @@
             <Button ToolTip="Export Uncompressed NDF content" Command="{Binding Path=ExportNdfCommand}">
                 <Image Source="{StaticResource ExtractZipedPartIcon}"  />
             </Button>
+            
+            <Menu>
+                <MenuItem ToolTip="Textures" >
+                    <MenuItem.Header>
+                        <Image Source="{StaticResource TextureIcon}" />
+                    </MenuItem.Header>
+                    <MenuItem Header="Export" Command="{Binding ExportTextureCommand}" />
+                    <MenuItem Header="Replace" Command="{Binding ReplaceTextureCommand}" />
+                </MenuItem>
+            </Menu>
+
             <Separator />
+            
             <Button ToolTip="View Ndf file" Command="{Binding ViewContentCommand}" >
                 <Image Source="{StaticResource OpenDetailsIcon}" />
             </Button>
@@ -49,6 +61,7 @@
             <Button ToolTip="About" Command="{Binding AboutUsCommand}" >
                 <Image Source="{StaticResource AboutIcon}" />
             </Button>
+
         </ToolBar>
 
         <TabControl Grid.Row="2" ItemsSource="{Binding Path=OpenFiles}" IsSynchronizedWithCurrentItem="True">

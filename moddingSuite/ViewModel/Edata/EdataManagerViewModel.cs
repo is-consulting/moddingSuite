@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using moddingSuite.BL;
+using moddingSuite.BL.DDS;
 using moddingSuite.Model.Edata;
 using moddingSuite.Settings;
 using moddingSuite.View.Common;
@@ -49,6 +50,8 @@ namespace moddingSuite.ViewModel.Edata
 
         public ICommand ExportNdfCommand { get; set; }
         public ICommand ExportRawCommand { get; set; }
+        public ICommand ExportTextureCommand { get; set; }
+        public ICommand ReplaceTextureCommand { get; set; }
         public ICommand OpenFileCommand { get; set; }
         public ICommand CloseFileCommand { get; set; }
         public ICommand ChangeExportPathCommand { get; set; }
@@ -93,23 +96,97 @@ namespace moddingSuite.ViewModel.Edata
             OpenFileCommand = new ActionCommand(OpenFileExecute);
             CloseFileCommand = new ActionCommand(CloseFileExecute);
 
-
             ChangeExportPathCommand = new ActionCommand(ChangeExportPathExecute);
-
 
             ExportNdfCommand = new ActionCommand(ExportNdfExecute, () => IsOfType(EdataFileType.Ndfbin));
             ExportRawCommand = new ActionCommand(ExportRawExecute);
+            ExportTextureCommand = new ActionCommand(ExportTextureExecute);
+            ReplaceTextureCommand = new ActionCommand(ReplaceTextureExecute);
             PlayMovieCommand = new ActionCommand(PlayMovieExecute);
 
             AboutUsCommand = new ActionCommand(AboutUsExecute);
 
-
             ViewTradFileCommand = new ActionCommand(ViewTradFileExecute, () => IsOfType(EdataFileType.Dictionary));
-
             ViewContentCommand = new ActionCommand(ViewContentExecute, () => IsOfType(EdataFileType.Ndfbin));
         }
 
-        private bool IsOfType(EdataFileType type)
+        protected void ReplaceTextureExecute(object obj)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+
+            if (vm == null)
+                return;
+
+            var tgvFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+
+            if (tgvFile == null)
+                return;
+
+            var mgr = new TgvManager();
+            var tgv = mgr.ReadFile(tgvFile.Manager.GetRawData(tgvFile));
+
+
+            Settings.Settings settings = SettingsManager.Load();
+
+            var openfDlg = new OpenFileDialog
+            {
+                DefaultExt = ".dds",
+                Multiselect = false,
+                Filter = "DDS files (.dds)|*.dds"
+            };
+
+            if (File.Exists(settings.LastOpenFolder))
+                openfDlg.InitialDirectory = settings.LastOpenFolder;
+
+
+            if (openfDlg.ShowDialog().Value)
+            {
+                settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
+                SettingsManager.Save(settings);
+
+                byte[] oldDds = File.ReadAllBytes(openfDlg.FileName);
+
+                var reader = new DDSReader();
+                var newDds = reader.ReadDDS(oldDds);
+
+                var newTgv = mgr.CreateTgv(newDds, tgv.SourceChecksum, tgv.IsCompressed);
+
+                vm.EdataManager.ReplaceFile(tgvFile, newTgv);
+                vm.LoadFile(vm.LoadedFile);
+            }
+        }
+
+        protected void ExportTextureExecute(object obj)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+
+            if (vm == null)
+                return;
+
+            var tgvFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+
+            if (tgvFile == null)
+                return;
+
+            Settings.Settings settings = SettingsManager.Load();
+
+            var mgr = new TgvManager();
+            var tgv = mgr.ReadFile(tgvFile.Manager.GetRawData(tgvFile));
+
+            var writer = new DDSWriter();
+
+            byte[] content = writer.CreateDDSFile(tgv);
+
+            var f = new FileInfo(tgvFile.Path);
+
+            using (var fs = new FileStream(Path.Combine(settings.SavePath, f.Name + ".dds"), FileMode.OpenOrCreate))
+            {
+                fs.Write(content, 0, content.Length);
+                fs.Flush();
+            }
+        }
+
+        protected bool IsOfType(EdataFileType type)
         {
             var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
 
@@ -124,7 +201,7 @@ namespace moddingSuite.ViewModel.Edata
             return ndf.FileType == type;
         }
 
-        private void ViewTradFileExecute(object obj)
+        protected void ViewTradFileExecute(object obj)
         {
             var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
 
@@ -313,7 +390,7 @@ namespace moddingSuite.ViewModel.Edata
 
         protected void PlayMovieExecute(object obj)
         {
-            string name = "temp.wmv";
+            const string name = "temp.wmv";
             var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
 
             if (vm == null)
@@ -328,7 +405,7 @@ namespace moddingSuite.ViewModel.Edata
 
             byte[] buffer = vm.EdataManager.GetRawData(ndf);
 
-            var f = new FileInfo(ndf.Path);
+            //var f = new FileInfo(ndf.Path);
 
             using (var fs = new FileStream(Path.Combine(settings.SavePath, name), FileMode.OpenOrCreate))
             {

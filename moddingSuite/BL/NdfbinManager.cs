@@ -826,9 +826,9 @@ namespace moddingSuite.BL
             }
         }
 
-
         public byte[] CreateNdfScript()
         {
+            throw new NotImplementedException("not yet implemented");
             using (var ms = new MemoryStream())
             {
                 byte[] buffer = NdfTextEncoding.GetBytes(string.Format("// Handwritten by enohka \n // For real\n\n\n"));

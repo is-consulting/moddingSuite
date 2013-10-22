@@ -20,8 +20,6 @@ namespace moddingSuite.Test
             var file = wr.ReadDDS(data);
 
             //TgvManager mgr = new TgvManager();
-
-
         }
 
         [TestMethod]

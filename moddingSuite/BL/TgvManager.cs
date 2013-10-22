@@ -14,18 +14,7 @@ namespace moddingSuite.BL
     {
         public const uint VersionMagic = 0x00000002;
 
-        public TgvManager(byte[] fileData)
-        {
-            Data = fileData;
-
-            CurrentFile = ReadFile(Data);
-        }
-
-        public byte[] Data { get; protected set; }
-
-        public TgvFile CurrentFile { get; protected set; }
-
-        private TgvFile ReadFile(byte[] data)
+        public TgvFile ReadFile(byte[] data)
         {
             var file = new TgvFile();
 
@@ -85,9 +74,7 @@ namespace moddingSuite.BL
                 }
 
                 for (int i = 0; i < file.MipMapCount; i++)
-                {
-                    file.MipMaps.Add(ReadMipMap(i));
-                }
+                    file.MipMaps.Add(ReadMipMap(i, data, file));
             }
 
             file.Format = GetPixelFormatFromTgv(file.PixelFormatStr);
@@ -95,20 +82,20 @@ namespace moddingSuite.BL
             return file;
         }
 
-        public TgvMipMap ReadMipMap(int id)
+        protected TgvMipMap ReadMipMap(int id, byte[] data, TgvFile file)
         {
-            if (id > CurrentFile.MipMapCount)
+            if (id > file.MipMapCount)
                 throw new ArgumentException("id");
 
             var zipo = new byte[] { 0x5A, 0x49, 0x50, 0x4F };
 
-            var mipMap = new TgvMipMap(CurrentFile.Offsets[id], CurrentFile.Sizes[id], 0);
+            var mipMap = new TgvMipMap(file.Offsets[id], file.Sizes[id], 0);
 
-            using (var ms = new MemoryStream(Data, (int)mipMap.Offset, (int)mipMap.Size))
+            using (var ms = new MemoryStream(data, (int)mipMap.Offset, (int)mipMap.Size))
             {
                 var buffer = new byte[4];
 
-                if (CurrentFile.IsCompressed)
+                if (file.IsCompressed)
                 {
                     ms.Read(buffer, 0, buffer.Length);
                     if (!Utils.ByteArrayCompare(buffer, zipo))
@@ -121,7 +108,7 @@ namespace moddingSuite.BL
                 buffer = new byte[ms.Length - ms.Position];
                 ms.Read(buffer, 0, buffer.Length);
 
-                if (CurrentFile.IsCompressed)
+                if (file.IsCompressed)
                     buffer = Compressor.Decomp(buffer);
 
                 mipMap.Content = buffer;
@@ -213,7 +200,7 @@ namespace moddingSuite.BL
                     mipdefOffset += file.MipMaps[i].Size;
 
                     buffer = BitConverter.GetBytes(file.MipMaps[i].Offset);
-                    ms.Write(buffer,0,buffer.Length);
+                    ms.Write(buffer, 0, buffer.Length);
                 }
 
                 // Write the size collection into the header.

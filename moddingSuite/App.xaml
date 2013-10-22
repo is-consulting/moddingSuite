@@ -30,6 +30,9 @@
 
         <BitmapImage UriSource="View\Images\gplv3-127x51.png" x:Key="GplIcon" />
 
+        <BitmapImage UriSource="View\Images\picture-26.png" x:Key="TextureIcon" />
+
+
 
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <Extension:LocalisationHashValueConverter x:Key="LocalisationHashValueConverter" />

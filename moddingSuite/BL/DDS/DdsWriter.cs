@@ -21,14 +21,14 @@ namespace moddingSuite.BL.DDS
                 buffer = CreateDDSHeader(file);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = file.MipMaps.OrderByDescending(x => x.MipWidth).Single().Content;
+                buffer = file.MipMaps.OrderByDescending(x => x.MipWidth).First().Content;
                 ms.Write(buffer, 0, buffer.Length);
 
                 return ms.ToArray();
             }
         }
 
-        public byte[] CreateDDSHeader(TgvFile file)
+        protected byte[] CreateDDSHeader(TgvFile file)
         {
             var hd = new DDS.Header
                          {
