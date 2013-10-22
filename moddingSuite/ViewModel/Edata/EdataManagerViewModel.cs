@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -123,7 +124,12 @@ namespace moddingSuite.ViewModel.Edata
                 return;
 
             var mgr = new TgvManager();
-            var tgv = mgr.ReadFile(tgvFile.Manager.GetRawData(tgvFile));
+
+            var data = tgvFile.Manager.GetRawData(tgvFile);
+
+            //Util.Utils.SaveDebug("testooooor", data);
+
+            var tgv = mgr.ReadFile(data);
 
 
             Settings.Settings settings = SettingsManager.Load();
@@ -150,6 +156,8 @@ namespace moddingSuite.ViewModel.Edata
                 var newDds = reader.ReadDDS(oldDds);
 
                 var newTgv = mgr.CreateTgv(newDds, tgv.SourceChecksum, tgv.IsCompressed);
+
+                Util.Utils.SaveDebug(string.Format("created_tgv_{0}", DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ff")), newTgv);
 
                 vm.EdataManager.ReplaceFile(tgvFile, newTgv);
                 vm.LoadFile(vm.LoadedFile);

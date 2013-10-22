@@ -97,10 +97,10 @@ namespace moddingSuite.BL
 
             var knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>();
 
-            byte[] ndfbinheader = {0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46};
-            byte[] edataHeader = {0x65, 0x64, 0x61, 0x74, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-            byte[] tradHeader = {0x54, 0x52, 0x41, 0x44};
-            byte[] savHeader = {0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00};
+            byte[] ndfbinheader = { 0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46 };
+            byte[] edataHeader = { 0x65, 0x64, 0x61, 0x74, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] tradHeader = { 0x54, 0x52, 0x41, 0x44 };
+            byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
 
             knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Ndfbin, ndfbinheader));
             knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Package, edataHeader));
@@ -192,7 +192,7 @@ namespace moddingSuite.BL
                         file.Name = Utils.ReadString(fileStream);
                         file.Path = MergePath(dirs, file.Name);
 
-                        if ((file.Name.Length + 1)%2 == 1)
+                        if ((file.Name.Length + 1) % 2 == 1)
                             fileStream.Seek(1, SeekOrigin.Current);
 
                         file.Id = id;
@@ -222,7 +222,7 @@ namespace moddingSuite.BL
 
                         dir.Name = Utils.ReadString(fileStream);
 
-                        if ((dir.Name.Length + 1)%2 == 1)
+                        if ((dir.Name.Length + 1) % 2 == 1)
                             fileStream.Seek(1, SeekOrigin.Current);
 
                         dirs.Add(dir);
@@ -256,13 +256,20 @@ namespace moddingSuite.BL
         /// <param name="oldFile">The EdataFile object which is to be replaced.</param>
         /// <param name="newContent">The data of the new File including Header and content.</param>
         /// <returns>The data of the completly rebuilt EdataFile. This has to be saved back to the file.</returns>
-        public byte[] ReplaceRebuild(EdataContentFile oldFile, byte[] newContent)
+        public string ReplaceRebuild(EdataContentFile oldFile, byte[] newContent)
         {
             var reserveBuffer = new byte[200];
 
+            var tmp = new FileInfo(FilePath);
+
+            var tmpPath = Path.Combine(tmp.DirectoryName, string.Format("{0}_{1}", tmp.FullName, "temp"));
+
+            if (!File.Exists(tmpPath))
+                using (File.Create(tmpPath)) { }
+
             using (var fs = new FileStream(FilePath, FileMode.Open))
             {
-                using (var newFile = new MemoryStream())
+                using (var newFile = new FileStream(tmpPath, FileMode.Truncate))
                 {
                     var headerPart = new byte[Header.FileOffset];
                     fs.Read(headerPart, 0, headerPart.Length);
@@ -296,7 +303,7 @@ namespace moddingSuite.BL
                         newFile.Write(fileBuffer, 0, fileBuffer.Length);
                         newFile.Write(reserveBuffer, 0, reserveBuffer.Length);
 
-                        filesContentLength += (uint) fileBuffer.Length + (uint) reserveBuffer.Length;
+                        filesContentLength += (uint)fileBuffer.Length + (uint)reserveBuffer.Length;
                     }
 
                     newFile.Seek(0x25, SeekOrigin.Begin);
@@ -331,7 +338,7 @@ namespace moddingSuite.BL
 
                             string name = Utils.ReadString(newFile);
 
-                            if ((name.Length + 1)%2 == 1)
+                            if ((name.Length + 1) % 2 == 1)
                                 newFile.Seek(1, SeekOrigin.Current);
 
                             id++;
@@ -341,7 +348,7 @@ namespace moddingSuite.BL
                             newFile.Seek(4, SeekOrigin.Current);
                             string name = Utils.ReadString(newFile);
 
-                            if ((name.Length + 1)%2 == 1)
+                            if ((name.Length + 1) % 2 == 1)
                                 newFile.Seek(1, SeekOrigin.Current);
                         }
                     }
@@ -356,9 +363,11 @@ namespace moddingSuite.BL
 
                     newFile.Write(dirCheckSum, 0, dirCheckSum.Length);
 
-                    return newFile.ToArray();
+                    //return newFile.ToArray();
                 }
             }
+
+            return tmpPath;
         }
 
         /// <summary>
@@ -368,15 +377,20 @@ namespace moddingSuite.BL
         /// <param name="newContent">The data of the new File including Header and content.</param>
         public void ReplaceFile(EdataContentFile oldFile, byte[] newContent)
         {
-            byte[] newCont = ReplaceRebuild(oldFile, newContent);
-
             if (!File.Exists(FilePath))
                 throw new InvalidOperationException("The Edata file does not exist anymore.");
 
-            using (var fs = new FileStream(FilePath, FileMode.Truncate))
-            {
-                fs.Write(newCont, 0, newCont.Length);
-            }
+            var newFile = ReplaceRebuild(oldFile, newContent);
+
+            var oldFileInfo = new FileInfo(FilePath);
+
+            File.Move(FilePath, Path.Combine(oldFileInfo.DirectoryName, "to_delete.dat"));
+            File.Move(newFile, FilePath);
+
+            //using (var fs = new FileStream(FilePath, FileMode.Truncate))
+            //{
+            //    fs.Write(newCont, 0, newCont.Length);
+            //}
         }
     }
 }

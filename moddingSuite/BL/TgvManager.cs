@@ -146,21 +146,24 @@ namespace moddingSuite.BL
                 buffer = BitConverter.GetBytes((short)file.MipMapCount);
                 ms.Write(buffer, 0, buffer.Length);
 
-                buffer = BitConverter.GetBytes(file.PixelFormatStr.Length);
+                var fmtLen = (short)file.PixelFormatStr.Length;
+                buffer = BitConverter.GetBytes(fmtLen);
                 ms.Write(buffer, 0, buffer.Length);
 
                 buffer = Encoding.ASCII.GetBytes(file.PixelFormatStr);
                 ms.Write(buffer, 0, buffer.Length);
+                ms.Seek(Utils.RoundToNextDivBy4(fmtLen) - fmtLen, SeekOrigin.Current);
 
                 ms.Write(sourceChecksum, 0, sourceChecksum.Length);
 
-                var mipdefOffset = (uint)(ms.Position + 8 * file.MipMapCount);
+                var mipdefOffset = (uint)(ms.Position);
 
                 var mipImgsizes = new List<int>();
                 var tileSize = file.Width - file.Width / file.MipMapCount;
 
                 for (int i = 0; i < file.MipMapCount; i++)
                 {
+                    ms.Seek(8, SeekOrigin.Current);
                     mipImgsizes.Add((int)tileSize);
                     tileSize /= 4;
                 }
@@ -173,6 +176,7 @@ namespace moddingSuite.BL
                 // since we compress on this part its the first part where we know the size of a MipMap
                 foreach (var sortedMipMap in sortedMipMaps)
                 {
+                    sortedMipMap.Offset = (uint)ms.Position;
                     if (compress)
                     {
                         ms.Write(zipoMagic, 0, zipoMagic.Length);
@@ -193,20 +197,17 @@ namespace moddingSuite.BL
 
                 ms.Seek(mipdefOffset, SeekOrigin.Begin);
 
-                // Calculate offset since we know the size now and write it in the header.
+                // Write the offset collection in the header.
                 for (int i = 0; i < file.MipMapCount; i++)
                 {
-                    file.MipMaps[i].Offset = mipdefOffset;
-                    mipdefOffset += file.MipMaps[i].Size;
-
-                    buffer = BitConverter.GetBytes(file.MipMaps[i].Offset);
+                    buffer = BitConverter.GetBytes(sortedMipMaps[i].Offset);
                     ms.Write(buffer, 0, buffer.Length);
                 }
 
                 // Write the size collection into the header.
                 for (int i = 0; i < file.MipMapCount; i++)
                 {
-                    buffer = BitConverter.GetBytes(file.MipMaps[i].Size);
+                    buffer = BitConverter.GetBytes(sortedMipMaps[i].Size);
                     ms.Write(buffer, 0, buffer.Length);
                 }
 
