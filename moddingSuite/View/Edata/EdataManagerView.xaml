@@ -29,9 +29,18 @@
         </Menu>
 
         <ToolBar Grid.Row="1">
-            <Button ToolTip="Export raw data" Command="{Binding Path=ExportRawCommand}">
+            <Menu>
+                <MenuItem ToolTip="Raw data" >
+                    <MenuItem.Header>
+                        <Image Source="{StaticResource ExtractRawIcon}"  />
+                    </MenuItem.Header>
+                    <MenuItem Header="Export" Command="{Binding ExportRawCommand}" />
+                    <MenuItem Header="Replace" Command="{Binding ReplaceRawCommand}" />
+                </MenuItem>
+            </Menu>
+            <!--<Button ToolTip="Export raw data" Command="{Binding Path=ExportRawCommand}">
                 <Image Source="{StaticResource ExtractRawIcon}"  />
-            </Button>
+            </Button>-->
             <Button ToolTip="Export Uncompressed NDF content" Command="{Binding Path=ExportNdfCommand}">
                 <Image Source="{StaticResource ExtractZipedPartIcon}"  />
             </Button>

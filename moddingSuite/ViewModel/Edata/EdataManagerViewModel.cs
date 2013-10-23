@@ -51,6 +51,7 @@ namespace moddingSuite.ViewModel.Edata
 
         public ICommand ExportNdfCommand { get; set; }
         public ICommand ExportRawCommand { get; set; }
+        public ICommand ReplaceRawCommand { get; set; }
         public ICommand ExportTextureCommand { get; set; }
         public ICommand ReplaceTextureCommand { get; set; }
         public ICommand OpenFileCommand { get; set; }
@@ -101,6 +102,7 @@ namespace moddingSuite.ViewModel.Edata
 
             ExportNdfCommand = new ActionCommand(ExportNdfExecute, () => IsOfType(EdataFileType.Ndfbin));
             ExportRawCommand = new ActionCommand(ExportRawExecute);
+            ReplaceRawCommand = new ActionCommand(ReplaceRawExecute);
             ExportTextureCommand = new ActionCommand(ExportTextureExecute);
             ReplaceTextureCommand = new ActionCommand(ReplaceTextureExecute);
             PlayMovieCommand = new ActionCommand(PlayMovieExecute);
@@ -109,6 +111,42 @@ namespace moddingSuite.ViewModel.Edata
 
             ViewTradFileCommand = new ActionCommand(ViewTradFileExecute, () => IsOfType(EdataFileType.Dictionary));
             ViewContentCommand = new ActionCommand(ViewContentExecute, () => IsOfType(EdataFileType.Ndfbin));
+        }
+
+        private void ReplaceRawExecute(object obj)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+
+            if (vm == null)
+                return;
+
+            var file = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+
+            if (file == null)
+                return;
+            
+            Settings.Settings settings = SettingsManager.Load();
+
+            var openfDlg = new OpenFileDialog
+            {
+                //DefaultExt = ".*",
+                Multiselect = false,
+                Filter = "All files (*.*)|*.*"
+            };
+
+            if (File.Exists(settings.LastOpenFolder))
+                openfDlg.InitialDirectory = settings.LastOpenFolder;
+
+            if (openfDlg.ShowDialog().Value)
+            {
+                settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
+                SettingsManager.Save(settings);
+
+                byte[] replacefile = File.ReadAllBytes(openfDlg.FileName);
+
+                vm.EdataManager.ReplaceFile(file, replacefile);
+                vm.LoadFile(vm.LoadedFile);
+            }
         }
 
         protected void ReplaceTextureExecute(object obj)
