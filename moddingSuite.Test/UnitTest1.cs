@@ -11,13 +11,13 @@ namespace moddingSuite.Test
         [TestMethod]
         public void TestMethod1()
         {
-            var path = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01-2.dds";
+            //var path = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01-2.dds";
 
-            var wr = new DDSReader();
+            //var wr = new DDSReader();
 
-            var data = File.ReadAllBytes(path);
+            //var data = File.ReadAllBytes(path);
 
-            var file = wr.ReadDDS(data);
+            //var file = wr.ReadDDS(data);
 
             //TgvManager mgr = new TgvManager();
         }
@@ -25,19 +25,19 @@ namespace moddingSuite.Test
         [TestMethod]
         public void RepackIt()
         {
-            var path = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01.tgv";
-            var path2 = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01.dds";
+            //var path = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01.tgv";
+            //var path2 = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01.dds";
 
 
-            var mgr = new TgvManager(File.ReadAllBytes(path));
+            //var mgr = new TgvManager(File.ReadAllBytes(path));
 
-            var wr = new DDSWriter();
+            //var wr = new DDSWriter();
 
 
-            var buffer = wr.CreateDDSFile(mgr.CurrentFile);
+            //var buffer = wr.CreateDDSFile(mgr.CurrentFile);
 
-            using (var fs = File.Create(path2))
-                fs.Write(buffer, 0, buffer.Length);
+            //using (var fs = File.Create(path2))
+            //    fs.Write(buffer, 0, buffer.Length);
 
 
         }

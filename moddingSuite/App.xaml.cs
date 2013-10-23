@@ -23,8 +23,6 @@ namespace moddingSuite
 
             Trace.Listeners.Add(new TextWriterTraceListener(file));
             Trace.AutoFlush = true;
-
-
         }
 
         protected override void OnStartup(StartupEventArgs e)

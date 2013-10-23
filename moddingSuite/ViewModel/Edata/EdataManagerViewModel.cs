@@ -157,7 +157,7 @@ namespace moddingSuite.ViewModel.Edata
 
                 var newTgv = mgr.CreateTgv(newDds, tgv.SourceChecksum, tgv.IsCompressed);
 
-                Util.Utils.SaveDebug(string.Format("created_tgv_{0}", DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ff")), newTgv);
+                //Util.Utils.SaveDebug(string.Format("created_tgv_{0}", DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ff")), newTgv);
 
                 vm.EdataManager.ReplaceFile(tgvFile, newTgv);
                 vm.LoadFile(vm.LoadedFile);

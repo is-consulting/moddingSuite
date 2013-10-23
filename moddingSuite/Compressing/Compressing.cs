@@ -9,11 +9,12 @@ namespace moddingSuite.Compressing
         {
             using (var output = new MemoryStream())
             {
-                using (var zipStream = new ZlibStream(output, Ionic.Zlib.CompressionMode.Decompress))
+                using (var zipStream = new ZlibStream(output, CompressionMode.Decompress))
                 {
                     using (var inputStream = new MemoryStream(input))
                     {
-                        var buffer = new byte[4096];
+                        byte[] buffer = input.Length > 4096 ? new byte[4096] : new byte[input.Length];
+
                         int size = 1;
 
                         while (size > 0)
@@ -33,7 +34,7 @@ namespace moddingSuite.Compressing
             {
                 using (var compressed = new MemoryStream())
                 {
-                    using (var zipSteam = new ZlibStream(compressed, Ionic.Zlib.CompressionMode.Compress, CompressionLevel.Level9, true))
+                    using (var zipSteam = new ZlibStream(compressed, CompressionMode.Compress, CompressionLevel.Level9, true))
                     {
                         zipSteam.FlushMode = FlushType.Full;
 

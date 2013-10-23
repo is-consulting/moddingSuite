@@ -27,7 +27,12 @@ namespace moddingSuite.BL.DDS
 
                 var header = Utils.ByteArrayToStructure<DDS.Header>(buffer);
 
-                int mipSize = contentSize - contentSize / header.MipMapCount;
+                int mipSize = contentSize;
+
+                if (header.MipMapCount == 0)
+                    header.MipMapCount = 1;        
+                else
+                    mipSize -= contentSize / header.MipMapCount;
 
                 for (ushort i = 0; i < header.MipMapCount; i++)
                 {

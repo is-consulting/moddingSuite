@@ -181,7 +181,8 @@ namespace moddingSuite.BL
                     {
                         ms.Write(zipoMagic, 0, zipoMagic.Length);
 
-                        buffer = BitConverter.GetBytes(mipImgsizes[sortedMipMaps.IndexOf(sortedMipMap)]);
+                        //buffer = BitConverter.GetBytes(mipImgsizes[sortedMipMaps.IndexOf(sortedMipMap)]);
+                        buffer = BitConverter.GetBytes((int)Math.Pow(4, sortedMipMaps.IndexOf(sortedMipMap)));
                         ms.Write(buffer, 0, buffer.Length);
 
                         buffer = Compressor.Comp(sortedMipMap.Content);
@@ -207,7 +208,7 @@ namespace moddingSuite.BL
                 // Write the size collection into the header.
                 for (int i = 0; i < file.MipMapCount; i++)
                 {
-                    buffer = BitConverter.GetBytes(sortedMipMaps[i].Size);
+                    buffer = BitConverter.GetBytes(sortedMipMaps[i].Size + 8);
                     ms.Write(buffer, 0, buffer.Length);
                 }
 
