@@ -384,8 +384,12 @@ namespace moddingSuite.BL
 
             var oldFileInfo = new FileInfo(FilePath);
 
-            File.Move(FilePath, Path.Combine(oldFileInfo.DirectoryName, "to_delete.dat"));
+            var backupFile = Path.Combine(oldFileInfo.DirectoryName, "to_delete.dat");
+
+            File.Move(FilePath, backupFile);
             File.Move(newFile, FilePath);
+
+            File.Delete(backupFile);
 
             //using (var fs = new FileStream(FilePath, FileMode.Truncate))
             //{
