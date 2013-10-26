@@ -4,7 +4,7 @@
         xmlns:ViewModel="clr-namespace:moddingSuite.ViewModel" xmlns:View="clr-namespace:moddingSuite.View"
         xmlns:Common="clr-namespace:moddingSuite.View.Common" xmlns:Edata="clr-namespace:moddingSuite.View.Edata"
         x:Class="moddingSuite.View.Edata.EdataManagerView"
-        Height="468" Width="902" Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}">
+        Height="468" Width="902"  Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

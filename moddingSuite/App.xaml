@@ -32,6 +32,8 @@
 
         <BitmapImage UriSource="View\Images\picture-26.png" x:Key="TextureIcon" />
 
+        <!--Thanks to Mitchellnolte!!!-->
+        <ImageBrush ImageSource="View\Images\SplashScreen.jpg" x:Key="SplashScreenArt" />
 
 
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
