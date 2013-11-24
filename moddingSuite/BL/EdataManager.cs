@@ -276,7 +276,7 @@ namespace moddingSuite.BL
                         file.Id = id;
                         id++;
 
-                        //ResolveFileType(fileStream, file);  
+                        ResolveFileType(fileStream, file);  
 
                         files.Add(file);
 
