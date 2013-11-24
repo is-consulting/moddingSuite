@@ -18,11 +18,15 @@ namespace moddingSuite.Model.Edata
     {
         public EdataHeader(EdataManager mgr) : base(mgr)
         {
+
         }
 
+        public int Version { get; set; }
+        public byte[] Checksum { get; set; }
         public int DirOffset { get; set; }
         public int DirLengh { get; set; }
         public int FileOffset { get; set; }
         public int FileLengh { get; set; }
+        
     }
 }

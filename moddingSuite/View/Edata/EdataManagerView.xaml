@@ -25,6 +25,7 @@
             </MenuItem>
             <MenuItem Header="_Settings">
                 <MenuItem Header="Change export _path" Command="{Binding Path=ChangeExportPathCommand}" />
+                <MenuItem Header="Change _Wargame path" Command="{Binding Path=ChangeWargamePathCommand}" />
             </MenuItem>
         </Menu>
 

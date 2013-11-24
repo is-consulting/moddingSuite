@@ -16,6 +16,8 @@ namespace moddingSuite.BL
     /// </summary>
     public class EdataManager
     {
+        public static byte[] EdataMagic = { 0x65, 0x64, 0x61, 0x74 };
+
         /// <summary>
         /// Creates a new Instance of a EdataManager.
         /// </summary>
@@ -70,54 +72,18 @@ namespace moddingSuite.BL
         public void ParseEdataFile()
         {
             Header = ReadEdataHeader();
-            Files = ReadEdatDictionary();
 
-            //ResolveFileTypes();
-        }
-
-        protected void ResolveFileType(FileStream fs, EdataContentFile file)
-        {
-            // save original offset
-            long origOffset = fs.Position;
-
-            fs.Seek(file.Offset + Header.FileOffset, SeekOrigin.Begin);
-
-            var headerBuffer = new byte[12];
-            fs.Read(headerBuffer, 0, headerBuffer.Length);
-
-            file.FileType = GetFileTypeFromHeaderData(headerBuffer);
-
-            // set offset back to original
-            fs.Seek(origOffset, SeekOrigin.Begin);
-        }
-
-        public static EdataFileType GetFileTypeFromHeaderData(byte[] headerData)
-        {
-            // TODO get headers from managers;
-
-            var knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>();
-
-            byte[] ndfbinheader = { 0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46 };
-            byte[] edataHeader = { 0x65, 0x64, 0x61, 0x74, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            byte[] tradHeader = { 0x54, 0x52, 0x41, 0x44 };
-            byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
-
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Ndfbin, ndfbinheader));
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Package, edataHeader));
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Dictionary, tradHeader));
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Save, savHeader));
-
-
-            foreach (var knownHeader in knownHeaders)
+            switch (Header.Version)
             {
-                if (knownHeader.Value.Length < headerData.Length)
-                    headerData = headerData.Take(knownHeader.Value.Length).ToArray();
-
-                if (Utils.ByteArrayCompare(headerData, knownHeader.Value))
-                    return knownHeader.Key;
+                case 1:
+                    Files = ReadEdatV1Dictionary();
+                    break;
+                case 2:
+                    Files = ReadEdatV2Dictionary();
+                    break;
+                default:
+                    throw new NotSupportedException(string.Format("Edata Version {0} is currently not supported", Header.Version));
             }
-
-            return EdataFileType.Unknown;
         }
 
         /// <summary>
@@ -132,7 +98,31 @@ namespace moddingSuite.BL
             {
                 var buffer = new byte[4];
 
-                fileStream.Seek(0x19, SeekOrigin.Begin);
+                fileStream.Read(buffer, 0, buffer.Length);
+                if (!Utils.ByteArrayCompare(buffer, EdataMagic))
+                    throw new InvalidDataException("The file is not edata conform or edata magic is missing.");
+
+                fileStream.Read(buffer, 0, buffer.Length);
+                header.Version = BitConverter.ToInt32(buffer, 0);
+
+                if (header.Version == 1)
+                {
+                    buffer = new byte[16];
+                    fileStream.Read(buffer, 0, buffer.Length);
+                    header.Checksum = buffer;
+                    buffer = new byte[4];
+                }
+                else if (header.Version == 2)
+                {
+                    // Checksum is not here in V2
+                    fileStream.Seek(16, SeekOrigin.Current);
+                }
+                else
+                    throw new NotSupportedException(string.Format("Edata Version {0} is currently not supported", Header.Version));
+
+                fileStream.Seek(1, SeekOrigin.Current);
+
+
                 fileStream.Read(buffer, 0, 4);
                 header.DirOffset = BitConverter.ToInt32(buffer, 0);
 
@@ -144,6 +134,14 @@ namespace moddingSuite.BL
 
                 fileStream.Read(buffer, 0, 4);
                 header.FileLengh = BitConverter.ToInt32(buffer, 0);
+
+                if (header.Version == 2)
+                {
+                    fileStream.Seek(8, SeekOrigin.Current);
+                    buffer = new byte[16];
+                    fileStream.Read(buffer, 0, buffer.Length);
+                    header.Checksum = buffer;
+                }
             }
 
             return header;
@@ -153,7 +151,7 @@ namespace moddingSuite.BL
         /// The only tricky part about that algorythm is that you have to skip one byte if the length of the File/Dir name PLUS nullbyte is an odd number.
         /// </summary>
         /// <returns>A Collection of the Files found in the Dictionary</returns>
-        protected ObservableCollection<EdataContentFile> ReadEdatDictionary()
+        protected ObservableCollection<EdataContentFile> ReadEdatV2Dictionary()
         {
             var files = new ObservableCollection<EdataContentFile>();
             var dirs = new List<EdataDir>();
@@ -192,13 +190,93 @@ namespace moddingSuite.BL
                         file.Name = Utils.ReadString(fileStream);
                         file.Path = MergePath(dirs, file.Name);
 
-                        if ((file.Name.Length + 1) % 2 == 1)
+                        if (file.Name.Length % 2 == 0)
                             fileStream.Seek(1, SeekOrigin.Current);
 
                         file.Id = id;
                         id++;
 
                         ResolveFileType(fileStream, file);
+
+                        files.Add(file);
+
+                        while (endings.Count > 0 && fileStream.Position == endings.Last())
+                        {
+                            dirs.Remove(dirs.Last());
+                            endings.Remove(endings.Last());
+                        }
+                    }
+                    else if (fileGroupId > 0)
+                    {
+                        var dir = new EdataDir(this);
+
+                        fileStream.Read(buffer, 0, 4);
+                        dir.FileEntrySize = BitConverter.ToInt32(buffer, 0);
+
+                        if (dir.FileEntrySize != 0)
+                            endings.Add(dir.FileEntrySize + fileStream.Position - 8);
+                        else if (endings.Count > 0)
+                            endings.Add(endings.Last());
+
+                        dir.Name = Utils.ReadString(fileStream);
+
+                        if (dir.Name.Length % 2 == 0)
+                            fileStream.Seek(1, SeekOrigin.Current);
+
+                        dirs.Add(dir);
+                    }
+                }
+            }
+            return files;
+        }
+
+        protected ObservableCollection<EdataContentFile> ReadEdatV1Dictionary()
+        {
+            var files = new ObservableCollection<EdataContentFile>();
+            var dirs = new List<EdataDir>();
+            var endings = new List<long>();
+
+            using (FileStream fileStream = File.Open(FilePath, FileMode.Open))
+            {
+                fileStream.Seek(Header.DirOffset, SeekOrigin.Begin);
+
+                long dirEnd = Header.DirOffset + Header.DirLengh;
+                uint id = 0;
+
+                while (fileStream.Position < dirEnd)
+                {
+                    var buffer = new byte[4];
+                    fileStream.Read(buffer, 0, 4);
+                    int fileGroupId = BitConverter.ToInt32(buffer, 0);
+
+                    if (fileGroupId == 0)
+                    {
+                        var file = new EdataContentFile(this);
+                        fileStream.Read(buffer, 0, 4);
+                        file.FileEntrySize = BitConverter.ToInt32(buffer, 0);
+
+                        //buffer = new byte[8];  - it's [4] now, so no need to change
+                        fileStream.Read(buffer, 0, 4);
+                        file.Offset = BitConverter.ToInt32(buffer, 0);
+
+                        fileStream.Read(buffer, 0, 4);
+                        file.Size = BitConverter.ToInt32(buffer, 0);
+
+                        //var checkSum = new byte[16];
+                        //fileStream.Read(checkSum, 0, checkSum.Length);
+                        //file.Checksum = checkSum;
+                        fileStream.Seek(1, SeekOrigin.Current);  //instead, skip 1 byte - as in WEE DAT unpacker
+
+                        file.Name = Utils.ReadString(fileStream);
+                        file.Path = MergePath(dirs, file.Name);
+
+                        if ((file.Name.Length + 1) % 2 == 0)
+                            fileStream.Seek(1, SeekOrigin.Current);
+
+                        file.Id = id;
+                        id++;
+
+                        //ResolveFileType(fileStream, file);  
 
                         files.Add(file);
 
@@ -362,8 +440,6 @@ namespace moddingSuite.BL
                     newFile.Seek(0x31, SeekOrigin.Begin);
 
                     newFile.Write(dirCheckSum, 0, dirCheckSum.Length);
-
-                    //return newFile.ToArray();
                 }
             }
 
@@ -390,11 +466,52 @@ namespace moddingSuite.BL
             File.Move(newFile, FilePath);
 
             File.Delete(backupFile);
+        }
 
-            //using (var fs = new FileStream(FilePath, FileMode.Truncate))
-            //{
-            //    fs.Write(newCont, 0, newCont.Length);
-            //}
+        protected void ResolveFileType(FileStream fs, EdataContentFile file)
+        {
+            // save original offset
+            long origOffset = fs.Position;
+
+            fs.Seek(file.Offset + Header.FileOffset, SeekOrigin.Begin);
+
+            var headerBuffer = new byte[12];
+            fs.Read(headerBuffer, 0, headerBuffer.Length);
+
+            file.FileType = GetFileTypeFromHeaderData(headerBuffer);
+
+            // set offset back to original
+            fs.Seek(origOffset, SeekOrigin.Begin);
+        }
+
+        public static EdataFileType GetFileTypeFromHeaderData(byte[] headerData)
+        {
+            // TODO get headers from managers;
+
+            var knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>();
+
+            byte[] edataHeader = EdataMagic;
+            byte[] ndfbinheader = { 0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46 };
+            byte[] tradHeader = { 0x54, 0x52, 0x41, 0x44 };
+            byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
+            byte[] tgvHeader = { 2 };
+
+            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Ndfbin, ndfbinheader));
+            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Package, edataHeader));
+            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Dictionary, tradHeader));
+            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Save, savHeader));
+            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Image, tgvHeader));
+
+            foreach (var knownHeader in knownHeaders)
+            {
+                if (knownHeader.Value.Length < headerData.Length)
+                    headerData = headerData.Take(knownHeader.Value.Length).ToArray();
+
+                if (Utils.ByteArrayCompare(headerData, knownHeader.Value))
+                    return knownHeader.Key;
+            }
+
+            return EdataFileType.Unknown;
         }
     }
 }

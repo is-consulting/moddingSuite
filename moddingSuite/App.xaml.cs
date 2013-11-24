@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows;
 using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Edata;
+using moddingSuite.ViewModel.VersionManager;
 
 namespace moddingSuite
 {
@@ -31,9 +32,12 @@ namespace moddingSuite
 
             var mainVm = new EdataManagerViewModel();
             DialogProvider.ProvideView(mainVm);
+
+            //var versionVm = new VersionManagerViewModel(mainVm);
+            //DialogProvider.ProvideView(versionVm);
         }
 
-        void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
 

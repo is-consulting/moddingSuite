@@ -29,7 +29,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override string ToString()
         {
-            return Utils.ByteArrayToBigEndianHeyByteString(Value);
+            return Utils.ByteArrayToBigEndianHexByteString(Value);
         }
 
         public override byte[] GetNdfText()

@@ -8,8 +8,7 @@ namespace moddingSuite.Settings
     public static class SettingsManager
     {
         public static string SettingsPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "edataFileManager",
-                         "settings.xml");
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "edataFileManager", "settings.xml");
 
         //private static Settings LastLoadedSettings { get; set; }
 

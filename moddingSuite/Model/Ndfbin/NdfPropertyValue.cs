@@ -63,7 +63,7 @@ namespace moddingSuite.Model.Ndfbin
 
         public string BinValue
         {
-            get { return Utils.ByteArrayToBigEndianHeyByteString(ValueData); }
+            get { return Utils.ByteArrayToBigEndianHexByteString(ValueData); }
         }
 
         public NdfProperty Property

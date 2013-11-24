@@ -17,7 +17,7 @@ namespace moddingSuite.Util
             do
             {
                 fs.Read(buffer, 0, 1);
-                c = Encoding.GetEncoding("ISO-8859-1").GetChars(buffer)[0];
+                c = Encoding.ASCII.GetChars(buffer)[0];
                 b.Append(c);
             } while (c != '\0');
 
@@ -29,14 +29,6 @@ namespace moddingSuite.Util
             return s.Split('\0')[0].TrimEnd();
         }
 
-        //public static bool ByteArrayCompare(byte[] a1, byte[] a2)
-        //{
-        //    if (a1.Length != a2.Length)
-        //        return false;
-
-        //    return !a1.Where((t, i) => t != a2[i]).Any();
-        //}
-
         public static string Int32ToBigEndianHexByteString(Int32 i)
         {
             byte[] bytes = BitConverter.GetBytes(i);
@@ -46,7 +38,7 @@ namespace moddingSuite.Util
             return String.Format(format, bytes[0], bytes[1], bytes[2], bytes[3]);
         }
 
-        public static string ByteArrayToBigEndianHeyByteString(byte[] data)
+        public static string ByteArrayToBigEndianHexByteString(byte[] data)
         {
             if (data == null)
                 return string.Empty;
@@ -66,12 +58,10 @@ namespace moddingSuite.Util
             if (hex.Length % 2 == 1)
                 throw new Exception("The binary key cannot have an odd number of digits");
 
-            byte[] arr = new byte[hex.Length >> 1];
+            var arr = new byte[hex.Length >> 1];
 
-            for (int i = 0; i < hex.Length >> 1; ++i)
-            {
+            for (int i = 0; i < (hex.Length >> 1); ++i)
                 arr[i] = (byte)((GetHexVal(hex[i << 1]) << 4) + (GetHexVal(hex[(i << 1) + 1])));
-            }
 
             return arr;
         }
@@ -87,7 +77,6 @@ namespace moddingSuite.Util
             return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
         }
 
-
         [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
         private static extern int memcmp(byte[] b1, byte[] b2, long count);
 
@@ -98,31 +87,27 @@ namespace moddingSuite.Util
             return b1.Length == b2.Length && memcmp(b1, b2, b1.Length) == 0;
         }
 
-
         public static void SaveDebug(string fileName, byte[] contentData)
         {
             var path = SettingsManager.Load().SavePath;
-
             var file = Path.Combine(path, string.Format("{0}_{1}", DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ff"), fileName));
 
             if (!File.Exists(file))
                 using (File.Create(file))
                 { }
 
-
             using (var fs = new FileStream(file, FileMode.Truncate))
-            {
                 fs.Write(contentData, 0, contentData.Length);
-            }
-
         }
 
         public static string GenerateCoupon(int length, Random random)
         {
             const string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             var result = new StringBuilder(length);
+
             for (int i = 0; i < length; i++)
                 result.Append(characters[random.Next(characters.Length)]);
+
             return result.ToString();
         }
 

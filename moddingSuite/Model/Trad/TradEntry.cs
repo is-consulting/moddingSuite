@@ -30,7 +30,7 @@ namespace moddingSuite.Model.Trad
             set
             {
                 _hash = value;
-                HashView = Utils.ByteArrayToBigEndianHeyByteString(_hash);
+                HashView = Utils.ByteArrayToBigEndianHexByteString(_hash);
                 OnPropertyChanged(() => Hash);
             }
         }

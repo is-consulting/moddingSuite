@@ -57,6 +57,7 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand OpenFileCommand { get; set; }
         public ICommand CloseFileCommand { get; set; }
         public ICommand ChangeExportPathCommand { get; set; }
+        public ICommand ChangeWargamePathCommand { get; set; }
         public ICommand ViewContentCommand { get; set; }
         public ICommand ViewTradFileCommand { get; set; }
         public ICommand PlayMovieCommand { get; set; }
@@ -99,6 +100,7 @@ namespace moddingSuite.ViewModel.Edata
             CloseFileCommand = new ActionCommand(CloseFileExecute);
 
             ChangeExportPathCommand = new ActionCommand(ChangeExportPathExecute);
+            ChangeWargamePathCommand = new ActionCommand(ChangeWargamePathExecute);
 
             ExportNdfCommand = new ActionCommand(ExportNdfExecute, () => IsOfType(EdataFileType.Ndfbin));
             ExportRawCommand = new ActionCommand(ExportRawExecute);
@@ -366,6 +368,24 @@ namespace moddingSuite.ViewModel.Edata
             if (folderDlg.ShowDialog() == DialogResult.OK)
             {
                 settings.SavePath = folderDlg.SelectedPath;
+                SettingsManager.Save(settings);
+            }
+        }
+
+        protected void ChangeWargamePathExecute(object obj)
+        {
+            Settings.Settings settings = SettingsManager.Load();
+
+            var folderDlg = new FolderBrowserDialog
+            {
+                SelectedPath = settings.WargamePath,
+                //RootFolder = Environment.SpecialFolder.MyComputer,
+                ShowNewFolderButton = true,
+            };
+
+            if (folderDlg.ShowDialog() == DialogResult.OK)
+            {
+                settings.WargamePath = folderDlg.SelectedPath;
                 SettingsManager.Save(settings);
             }
         }

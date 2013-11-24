@@ -10,12 +10,14 @@ using moddingSuite.View.Common;
 using moddingSuite.View.Edata;
 using moddingSuite.View.Ndfbin;
 using moddingSuite.View.Ndfbin.Viewer;
+using moddingSuite.View.VersionManager;
 using moddingSuite.ViewModel;
 using moddingSuite.ViewModel.About;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
 using moddingSuite.ViewModel.Ndf;
 using moddingSuite.ViewModel.Trad;
+using moddingSuite.ViewModel.VersionManager;
 
 namespace moddingSuite.View.DialogProvider
 {
@@ -50,6 +52,7 @@ namespace moddingSuite.View.DialogProvider
 
             Maps.Add(new ViewMap<AboutView, AboutViewModel>());
 
+            Maps.Add(new ViewMap<VersionManagerView, VersionManagerViewModel>());
         }
 
         public static void ProvideView(ViewModelBase vm, ViewModelBase parentVm = null)

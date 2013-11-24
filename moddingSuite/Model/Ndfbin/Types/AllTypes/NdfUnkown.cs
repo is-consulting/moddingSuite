@@ -24,7 +24,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override string ToString()
         {
-            return string.Format("{0} : {1}", OffSet, Utils.ByteArrayToBigEndianHeyByteString((byte[]) Value));
+            return string.Format("{0} : {1}", OffSet, Utils.ByteArrayToBigEndianHexByteString((byte[]) Value));
         }
     }
 }

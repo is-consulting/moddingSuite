@@ -9,6 +9,7 @@ namespace moddingSuite.Settings
         private List<string> _lastOpenedFile = new List<string>();
         private string _savePath = @"C:\";
         private int _lastHighlightedFileIndex;
+        private string _wargamePath;
 
         public string SavePath
         {
@@ -36,10 +37,18 @@ namespace moddingSuite.Settings
             set { _lastOpenFolder = value; OnPropertyChanged(() => LastOpenedFiles); }
         }
 
+
+
         public int LastHighlightedFileIndex
         {
             get { return _lastHighlightedFileIndex; }
             set { _lastHighlightedFileIndex = value; OnPropertyChanged(() => LastOpenedFiles); }
+        }
+
+        public string WargamePath
+        {
+            get { return _wargamePath; }
+            set { _wargamePath = value; OnPropertyChanged(() => WargamePath); }
         }
     }
 }

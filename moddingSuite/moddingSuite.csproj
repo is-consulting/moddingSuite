@@ -160,6 +160,9 @@
     <Compile Include="ViewModel\Ndf\NdfClassViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfObjectViewModel.cs" />
     <Compile Include="ViewModel\Trad\TradFileViewModel.cs" />
+    <Compile Include="ViewModel\VersionManager\VersionFileViewModel.cs" />
+    <Compile Include="ViewModel\VersionManager\VersionInfoViewModel.cs" />
+    <Compile Include="ViewModel\VersionManager\VersionManagerViewModel.cs" />
     <Compile Include="View\Common\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -230,6 +233,9 @@
     </Compile>
     <Compile Include="View\Common\TradFileView.xaml.cs">
       <DependentUpon>TradFileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\VersionManager\VersionManagerView.xaml.cs">
+      <DependentUpon>VersionManagerView.xaml</DependentUpon>
     </Compile>
     <Page Include="View\Common\AboutView.xaml">
       <SubType>Designer</SubType>
@@ -325,6 +331,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Common\TradFileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\VersionManager\VersionManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -424,9 +434,6 @@
     <Resource Include="View\Images\gplv3-127x51.png" />
   </ItemGroup>
   <ItemGroup>
-    <SplashScreen Include="View\Images\SplashScreen.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
@@ -442,6 +449,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\about.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="View\Images\splash.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,7 +13,7 @@ namespace moddingSuite.View.Extension
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((EdataFileType) value)
+            switch ((EdataFileType)value)
             {
                 case EdataFileType.Ndfbin:
                     return Application.Current.Resources["ScriptIcon"] as BitmapImage;
@@ -21,6 +21,8 @@ namespace moddingSuite.View.Extension
                     return Application.Current.Resources["OpenDictionayIcon"] as BitmapImage;
                 case EdataFileType.Package:
                     return Application.Current.Resources["PackageFileIcon"] as BitmapImage;
+                case EdataFileType.Image:
+                    return Application.Current.Resources["TextureIcon"] as BitmapImage;
                 default:
                     return Application.Current.Resources["UnknownFileIcon"] as BitmapImage;
             }
