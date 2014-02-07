@@ -52,12 +52,12 @@ namespace moddingSuite.BL.DDS
 
         private static readonly LegacyMap[] LegacyMaps = new[]
                                                              {
-                                                                 new LegacyMap(PixelFormats.BC1_UNORM, ConversionFlags.None, DDS.PixelFormat.DXT1), // D3DFMT_DXT1
-                                                                 new LegacyMap(PixelFormats.BC2_UNORM, ConversionFlags.None, DDS.PixelFormat.DXT3), // D3DFMT_DXT3
-                                                                 new LegacyMap(PixelFormats.BC3_UNORM, ConversionFlags.None, DDS.PixelFormat.DXT5), // D3DFMT_DXT5
+                                                                 new LegacyMap(PixelFormats.BC1_UNORM_SRGB, ConversionFlags.None, DDS.PixelFormat.DXT1), // D3DFMT_DXT1
+                                                                 new LegacyMap(PixelFormats.BC2_UNORM_SRGB, ConversionFlags.None, DDS.PixelFormat.DXT3), // D3DFMT_DXT3
+                                                                 new LegacyMap(PixelFormats.BC3_UNORM_SRGB, ConversionFlags.None, DDS.PixelFormat.DXT5), // D3DFMT_DXT5
 
-                                                                 new LegacyMap(PixelFormats.BC2_UNORM, ConversionFlags.None, DDS.PixelFormat.DXT2), // D3DFMT_DXT2 (ignore premultiply)
-                                                                 new LegacyMap(PixelFormats.BC3_UNORM, ConversionFlags.None, DDS.PixelFormat.DXT4), // D3DFMT_DXT4 (ignore premultiply)
+                                                                 new LegacyMap(PixelFormats.BC2_UNORM_SRGB, ConversionFlags.None, DDS.PixelFormat.DXT2), // D3DFMT_DXT2 (ignore premultiply)
+                                                                 new LegacyMap(PixelFormats.BC3_UNORM_SRGB, ConversionFlags.None, DDS.PixelFormat.DXT4), // D3DFMT_DXT4 (ignore premultiply)
 
                                                                  new LegacyMap(PixelFormats.BC4_UNORM, ConversionFlags.None, DDS.PixelFormat.BC4_UNorm),
                                                                  new LegacyMap(PixelFormats.BC4_SNORM, ConversionFlags.None, DDS.PixelFormat.BC4_SNorm),
