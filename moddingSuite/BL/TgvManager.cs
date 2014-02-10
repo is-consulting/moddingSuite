@@ -34,9 +34,9 @@ namespace moddingSuite.BL
                 file.Height = BitConverter.ToUInt32(buffer, 0);
 
                 ms.Read(buffer, 0, buffer.Length);
-                file.ImageHeight = BitConverter.ToUInt32(buffer, 0);
+                file.ImageWidth = BitConverter.ToUInt32(buffer, 0);                
                 ms.Read(buffer, 0, buffer.Length);
-                file.ImageWidth = BitConverter.ToUInt32(buffer, 0);
+                file.ImageHeight = BitConverter.ToUInt32(buffer, 0);
 
                 buffer = new byte[2];
 
@@ -78,6 +78,11 @@ namespace moddingSuite.BL
             }
 
             file.Format = GetPixelFormatFromTgv(file.PixelFormatStr);
+
+            if (file.Width != file.ImageWidth || file.Height != file.ImageHeight)
+            {
+                throw new InvalidDataException("something interresting happened here");
+            }
 
             return file;
         }

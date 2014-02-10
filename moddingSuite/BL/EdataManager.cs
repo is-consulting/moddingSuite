@@ -127,7 +127,7 @@ namespace moddingSuite.BL
                 header.DirOffset = BitConverter.ToInt32(buffer, 0);
 
                 fileStream.Read(buffer, 0, 4);
-                header.DirLengh = BitConverter.ToInt32(buffer, 0);
+                header.DirLength = BitConverter.ToInt32(buffer, 0);
 
                 fileStream.Read(buffer, 0, 4);
                 header.FileOffset = BitConverter.ToInt32(buffer, 0);
@@ -161,7 +161,7 @@ namespace moddingSuite.BL
             {
                 fileStream.Seek(Header.DirOffset, SeekOrigin.Begin);
 
-                long dirEnd = Header.DirOffset + Header.DirLengh;
+                long dirEnd = Header.DirOffset + Header.DirLength;
                 uint id = 0;
 
                 while (fileStream.Position < dirEnd)
@@ -240,7 +240,7 @@ namespace moddingSuite.BL
             {
                 fileStream.Seek(Header.DirOffset, SeekOrigin.Begin);
 
-                long dirEnd = Header.DirOffset + Header.DirLengh;
+                long dirEnd = Header.DirOffset + Header.DirLength;
                 uint id = 0;
 
                 while (fileStream.Position < dirEnd)
@@ -257,10 +257,10 @@ namespace moddingSuite.BL
 
                         //buffer = new byte[8];  - it's [4] now, so no need to change
                         fileStream.Read(buffer, 0, 4);
-                        file.Offset = BitConverter.ToInt32(buffer, 0);
+                        file.Offset = BitConverter.ToUInt32(buffer, 0);
 
                         fileStream.Read(buffer, 0, 4);
-                        file.Size = BitConverter.ToInt32(buffer, 0);
+                        file.Size = BitConverter.ToUInt32(buffer, 0);
 
                         //var checkSum = new byte[16];
                         //fileStream.Read(checkSum, 0, checkSum.Length);
@@ -276,7 +276,7 @@ namespace moddingSuite.BL
                         file.Id = id;
                         id++;
 
-                        ResolveFileType(fileStream, file);  
+                        ResolveFileType(fileStream, file);
 
                         files.Add(file);
 
@@ -334,7 +334,7 @@ namespace moddingSuite.BL
         /// <param name="oldFile">The EdataFile object which is to be replaced.</param>
         /// <param name="newContent">The data of the new File including Header and content.</param>
         /// <returns>The data of the completly rebuilt EdataFile. This has to be saved back to the file.</returns>
-        public string ReplaceRebuild(EdataContentFile oldFile, byte[] newContent)
+        public string ReplaceRebuildV2(EdataContentFile oldFile, byte[] newContent)
         {
             var reserveBuffer = new byte[200];
 
@@ -356,11 +356,10 @@ namespace moddingSuite.BL
                     fs.Seek(Header.FileOffset, SeekOrigin.Begin);
 
                     uint filesContentLength = 0;
+                    byte[] fileBuffer;
 
                     foreach (EdataContentFile file in Files)
                     {
-                        byte[] fileBuffer;
-
                         long oldOffset = file.Offset;
                         file.Offset = newFile.Position - Header.FileOffset;
 
@@ -389,7 +388,7 @@ namespace moddingSuite.BL
 
 
                     newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
-                    long dirEnd = Header.DirOffset + Header.DirLengh;
+                    long dirEnd = Header.DirOffset + Header.DirLength;
                     uint id = 0;
 
                     while (newFile.Position < dirEnd)
@@ -432,7 +431,7 @@ namespace moddingSuite.BL
                     }
 
                     newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
-                    var dirBuffer = new byte[Header.DirLengh];
+                    var dirBuffer = new byte[Header.DirLength];
                     newFile.Read(dirBuffer, 0, dirBuffer.Length);
 
                     byte[] dirCheckSum = MD5.Create().ComputeHash(dirBuffer);
@@ -440,6 +439,111 @@ namespace moddingSuite.BL
                     newFile.Seek(0x31, SeekOrigin.Begin);
 
                     newFile.Write(dirCheckSum, 0, dirCheckSum.Length);
+                }
+            }
+
+            return tmpPath;
+        }
+
+        public string ReplaceRebuildV1(EdataContentFile oldFile, byte[] newContent)
+        {
+            var reserveBuffer = new byte[200];
+
+            var tmp = new FileInfo(FilePath);
+
+            var tmpPath = Path.Combine(tmp.DirectoryName, string.Format("{0}_{1}", tmp.FullName, "temp"));
+
+            if (!File.Exists(tmpPath))
+                using (File.Create(tmpPath)) { }
+
+            using (var fs = new FileStream(FilePath, FileMode.Open))
+            {
+                using (var newFile = new FileStream(tmpPath, FileMode.Truncate))
+                {
+                    byte[] oldHead = new byte[Header.FileOffset];
+                    fs.Read(oldHead, 0, Header.FileOffset);
+                    newFile.Write(oldHead, 0, oldHead.Length);
+
+                    byte[] fileBuffer;
+                    uint filesContentLength = 0;
+
+                    // Write Filecontent and replace selected file
+                    foreach (var file in Files)
+                    {
+                        long oldOffset = file.Offset;
+                        file.Offset = newFile.Position - Header.FileOffset;
+
+                        if (file == oldFile)
+                        {
+                            fileBuffer = newContent;
+                            file.Size = newContent.Length;
+                        }
+                        else
+                        {
+                            fileBuffer = new byte[file.Size];
+                            fs.Seek(oldOffset + Header.FileOffset, SeekOrigin.Begin);
+                            fs.Read(fileBuffer, 0, fileBuffer.Length);
+                        }
+
+                        newFile.Write(fileBuffer, 0, fileBuffer.Length);
+                        newFile.Write(reserveBuffer, 0, reserveBuffer.Length);
+
+                        filesContentLength += (uint)fileBuffer.Length + (uint)reserveBuffer.Length;
+                    }
+
+                    newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
+                    long dirEnd = Header.DirOffset + Header.DirLength;
+                    uint id = 0;
+
+                    var buffer = new byte[4];
+
+                    while (newFile.Position < dirEnd)
+                    {
+                        newFile.Read(buffer, 0, 4);
+                        int fileGroupId = BitConverter.ToInt32(buffer, 0);
+
+                        if (fileGroupId == 0)
+                        {
+                            EdataContentFile curFile = Files.Single(x => x.Id == id);
+
+                            // FileEntrySize
+                            newFile.Seek(4, SeekOrigin.Current);
+
+                            buffer = BitConverter.GetBytes((uint)curFile.Offset);
+                            newFile.Write(buffer, 0, buffer.Length);
+
+                            buffer = BitConverter.GetBytes((uint)curFile.Size);
+                            newFile.Write(buffer, 0, buffer.Length);
+
+                            newFile.Seek(1, SeekOrigin.Current);
+
+                            string name = Utils.ReadString(newFile);
+
+                            if ((name.Length + 1) % 2 == 0)
+                                newFile.Seek(1, SeekOrigin.Current);
+
+                            id++;
+                        }
+                        else if (fileGroupId > 0)
+                        {
+                            newFile.Seek(4, SeekOrigin.Current);
+                            string name = Utils.ReadString(newFile);
+
+                            if ((name.Length + 1) % 2 == 1)
+                                newFile.Seek(1, SeekOrigin.Current);
+                        }
+                    }
+                    
+                    newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
+                    var dirBuffer = new byte[Header.DirLength];
+                    newFile.Read(dirBuffer, 0, dirBuffer.Length);
+                    byte[] dirCheckSum = MD5.Create().ComputeHash(dirBuffer);
+
+                    newFile.Seek(8, SeekOrigin.Begin);
+                    newFile.Write(dirCheckSum, 0, dirCheckSum.Length);
+
+                    newFile.Seek(13, SeekOrigin.Current);
+                    newFile.Write(BitConverter.GetBytes(filesContentLength), 0, 4);
                 }
             }
 
@@ -456,7 +560,19 @@ namespace moddingSuite.BL
             if (!File.Exists(FilePath))
                 throw new InvalidOperationException("The Edata file does not exist anymore.");
 
-            var newFile = ReplaceRebuild(oldFile, newContent);
+            string newFile;
+
+            switch (Header.Version)
+            {
+                case 1:
+                    newFile = ReplaceRebuildV1(oldFile, newContent);
+                    break;
+                case 2:
+                    newFile = ReplaceRebuildV2(oldFile, newContent);
+                    break;
+                default:
+                    throw new NotSupportedException(string.Format("Edata Version {0} is currently not supported", Header.Version));
+            }
 
             var oldFileInfo = new FileInfo(FilePath);
 

@@ -24,7 +24,7 @@ namespace moddingSuite.Model.Edata
         public int Version { get; set; }
         public byte[] Checksum { get; set; }
         public int DirOffset { get; set; }
-        public int DirLengh { get; set; }
+        public int DirLength { get; set; }
         public int FileOffset { get; set; }
         public int FileLengh { get; set; }
         

@@ -35,6 +35,8 @@ for each property:
 
 1D 00 00 00 is 8 byte, its a localisation hash -> points to an entry of the *.dic (TRAD) files
 
+1E 00 00 00 seems to be a ZIP block / content block
+
 22 00 00 00 Marks an entry of a list as "map" entry: string-value pair
 
 21 00 00 00 is 8 byte, look like some kind of double float too me but we alreay have that.

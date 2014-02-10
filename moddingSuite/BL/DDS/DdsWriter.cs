@@ -34,18 +34,19 @@ namespace moddingSuite.BL.DDS
                          {
                              Size = 124,
                              Flags = DDS.HeaderFlags.Texture,
-                             SurfaceFlags = DDS.SurfaceFlags.Texture,
+                             //SurfaceFlags = DDS.SurfaceFlags.Texture,
                              Width = file.Width,
                              Height = file.Height,
-                             Depth = 1,
+                             Depth = 0,
+                             MipMapCount = 1
                          };
 
             DDS.PixelFormat ddpf = DDS.PixelFormatFromDXGIFormat(file.Format);
 
             int rowPitch, slicePitch;
-            int newWidth, newHeight;
-            DDS.ComputePitch(file.Format, (int)file.Width, (int)file.Height, out rowPitch, out slicePitch, out newWidth,
-                         out newHeight);
+            int widthCount, heightCount;
+            DDS.ComputePitch(file.Format, (int)file.Width, (int)file.Height, out rowPitch, out slicePitch, out widthCount,
+                         out heightCount);
 
             if (DDS.IsCompressedFormat(file.Format))
             {
