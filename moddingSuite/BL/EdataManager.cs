@@ -447,7 +447,7 @@ namespace moddingSuite.BL
 
         public string ReplaceRebuildV1(EdataContentFile oldFile, byte[] newContent)
         {
-            var reserveBuffer = new byte[200];
+            //var reserveBuffer = new byte[200]; // RUSE doesn't like the reserve buffer between files.
 
             var tmp = new FileInfo(FilePath);
 
@@ -486,9 +486,9 @@ namespace moddingSuite.BL
                         }
 
                         newFile.Write(fileBuffer, 0, fileBuffer.Length);
-                        newFile.Write(reserveBuffer, 0, reserveBuffer.Length);
+                        //newFile.Write(reserveBuffer, 0, reserveBuffer.Length);
 
-                        filesContentLength += (uint)fileBuffer.Length + (uint)reserveBuffer.Length;
+                        filesContentLength += (uint)fileBuffer.Length; // +(uint)reserveBuffer.Length;
                     }
 
                     newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
