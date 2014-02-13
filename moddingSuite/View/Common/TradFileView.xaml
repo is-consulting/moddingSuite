@@ -8,16 +8,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid>
-            <ToolBar>
-                <Button ToolTip="Save changes back" Command="{Binding Path=SaveCommand}">
+            <ToolBar Style="{StaticResource Vs2010StyleToolBar}">
+                <Button ToolTip="Save changes back" Command="{Binding Path=SaveCommand}" Style="{StaticResource ButtonStyle1}">
                     <Image Source="{StaticResource SaveIcon}"  />
                 </Button>
                 <Separator></Separator>
-                <Button ToolTip="Save changes back" Command="{Binding Path=CreateHashCommand}">
+                <Button ToolTip="Save changes back" Command="{Binding Path=CreateHashCommand}" Style="{StaticResource ButtonStyle1}" >
                     <Image Source="{StaticResource CreateHashIcon}"  />
                 </Button>
             </ToolBar>
-            <TextBox Text="{Binding Path=FilterExpression, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="200" Margin="5" />
+            <TextBox Text="{Binding Path=FilterExpression, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Margin="5" />
         </Grid>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Path=EntriesCollectionView}" Margin="5"
             IsSynchronizedWithCurrentItem="True"

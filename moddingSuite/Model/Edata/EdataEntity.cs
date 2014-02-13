@@ -23,7 +23,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _groupId = value;
-                OnPropertyChanged(() => GroupId);
+                OnPropertyChanged("GroupId");
             }
         }
 
@@ -33,7 +33,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _name = value;
-                OnPropertyChanged(() => Name);
+                OnPropertyChanged("Name");
             }
         }
 
@@ -43,7 +43,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _fileEntrySize = value;
-                OnPropertyChanged(() => FileEntrySize);
+                OnPropertyChanged("FileEntrySize");
             }
         }
 

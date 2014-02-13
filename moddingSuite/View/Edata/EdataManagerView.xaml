@@ -4,7 +4,7 @@
         xmlns:ViewModel="clr-namespace:moddingSuite.ViewModel" xmlns:View="clr-namespace:moddingSuite.View"
         xmlns:Common="clr-namespace:moddingSuite.View.Common" xmlns:Edata="clr-namespace:moddingSuite.View.Edata"
         x:Class="moddingSuite.View.Edata.EdataManagerView"
-        Height="468" Width="902"  Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}" WindowStartupLocation="CenterScreen">
+        Height="565.855" Width="1008.364"  Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -29,7 +29,7 @@
             </MenuItem>
         </Menu>
 
-        <ToolBar Grid.Row="1">
+        <ToolBar Grid.Row="1" Style="{StaticResource Vs2010StyleToolBar}">
             <Menu>
                 <MenuItem ToolTip="Raw data" >
                     <MenuItem.Header>
@@ -42,7 +42,7 @@
             <!--<Button ToolTip="Export raw data" Command="{Binding Path=ExportRawCommand}">
                 <Image Source="{StaticResource ExtractRawIcon}"  />
             </Button>-->
-            <Button ToolTip="Export Uncompressed NDF content" Command="{Binding Path=ExportNdfCommand}">
+            <Button ToolTip="Export Uncompressed NDF content" Command="{Binding Path=ExportNdfCommand}"  Style="{DynamicResource ButtonStyle1}">
                 <Image Source="{StaticResource ExtractZipedPartIcon}"  />
             </Button>
             
@@ -57,18 +57,18 @@
             </Menu>
 
             <Separator />
-            
-            <Button ToolTip="View Ndf file" Command="{Binding ViewContentCommand}" >
+
+            <Button ToolTip="View Ndf file" Command="{Binding ViewContentCommand}"  Style="{DynamicResource ButtonStyle1}">
                 <Image Source="{StaticResource OpenDetailsIcon}" />
             </Button>
-            <Button ToolTip="View dictionary" Command="{Binding ViewTradFileCommand}" >
+            <Button ToolTip="View dictionary" Command="{Binding ViewTradFileCommand}"  Style="{DynamicResource ButtonStyle1}">
                 <Image Source="{StaticResource OpenDictionayIcon}" />
             </Button>
-            <Button ToolTip="View Wmv file" Command="{Binding PlayMovieCommand}" >
+            <Button ToolTip="View Wmv file" Command="{Binding PlayMovieCommand}"  Style="{DynamicResource ButtonStyle1}">
                 <Image Source="{StaticResource OpenMovieIcon}" />
             </Button>
             <Separator />
-            <Button ToolTip="About" Command="{Binding AboutUsCommand}" >
+            <Button ToolTip="About" Command="{Binding AboutUsCommand}"  Style="{DynamicResource ButtonStyle1}">
                 <Image Source="{StaticResource AboutIcon}" />
             </Button>
 

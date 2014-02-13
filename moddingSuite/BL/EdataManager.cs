@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using System.Text;
 using moddingSuite.Model.Edata;
 using moddingSuite.Util;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace moddingSuite.BL
 {
@@ -25,6 +27,23 @@ namespace moddingSuite.BL
         public EdataManager(string filePath)
         {
             FilePath = filePath;
+        }
+
+        static EdataManager()
+        {
+            byte[] edataHeader = EdataMagic;
+            byte[] ndfbinheader = { 0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46 };
+            byte[] tradHeader = { 0x54, 0x52, 0x41, 0x44 };
+            byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
+            byte[] tgvHeader = { 2 };
+
+            _knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>();
+
+            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Ndfbin, ndfbinheader));
+            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Package, edataHeader));
+            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Dictionary, tradHeader));
+            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Save, savHeader));
+            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Image, tgvHeader));
         }
 
         /// <summary>
@@ -71,6 +90,8 @@ namespace moddingSuite.BL
         /// </summary>
         public void ParseEdataFile()
         {
+            var sw = Stopwatch.StartNew();
+
             Header = ReadEdataHeader();
 
             switch (Header.Version)
@@ -84,6 +105,8 @@ namespace moddingSuite.BL
                 default:
                     throw new NotSupportedException(string.Format("Edata Version {0} is currently not supported", Header.Version));
             }
+
+            Console.WriteLine("Reading {0} took {1} ms", FilePath, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -320,7 +343,11 @@ namespace moddingSuite.BL
         {
             var b = new StringBuilder();
 
-            foreach (EdataDir dir in dirs)
+            //Parallel.ForEach(dirs, dir =>
+            //    { lock (b) { b.Append(dir.Name); } }
+            //);
+
+            foreach (var dir in dirs)
                 b.Append(dir.Name);
 
             b.Append(fileName);
@@ -367,6 +394,7 @@ namespace moddingSuite.BL
                         {
                             fileBuffer = newContent;
                             file.Size = newContent.Length;
+                            file.Checksum = MD5.Create().ComputeHash(fileBuffer);
                         }
                         else
                         {
@@ -375,7 +403,6 @@ namespace moddingSuite.BL
                             fs.Read(fileBuffer, 0, fileBuffer.Length);
                         }
 
-                        file.Checksum = MD5.Create().ComputeHash(fileBuffer);
 
                         newFile.Write(fileBuffer, 0, fileBuffer.Length);
                         newFile.Write(reserveBuffer, 0, reserveBuffer.Length);
@@ -399,7 +426,7 @@ namespace moddingSuite.BL
 
                         if (fileGroupId == 0)
                         {
-                            EdataContentFile curFile = Files.Single(x => x.Id == id);
+                            EdataContentFile curFile = Files[(int)id];
 
                             // FileEntrySize
                             newFile.Seek(4, SeekOrigin.Current);
@@ -504,7 +531,7 @@ namespace moddingSuite.BL
 
                         if (fileGroupId == 0)
                         {
-                            EdataContentFile curFile = Files.Single(x => x.Id == id);
+                            EdataContentFile curFile = Files[(int)id];
 
                             // FileEntrySize
                             newFile.Seek(4, SeekOrigin.Current);
@@ -533,7 +560,7 @@ namespace moddingSuite.BL
                                 newFile.Seek(1, SeekOrigin.Current);
                         }
                     }
-                    
+
                     newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
                     var dirBuffer = new byte[Header.DirLength];
                     newFile.Read(dirBuffer, 0, dirBuffer.Length);
@@ -600,28 +627,26 @@ namespace moddingSuite.BL
             fs.Seek(origOffset, SeekOrigin.Begin);
         }
 
+        private static List<KeyValuePair<EdataFileType, byte[]>> _knownHeaders;
+
+        public static List<KeyValuePair<EdataFileType, byte[]>> KnownHeaders
+        {
+            get
+            {
+                return _knownHeaders;
+            }
+        }
+
         public static EdataFileType GetFileTypeFromHeaderData(byte[] headerData)
         {
-            // TODO get headers from managers;
-
-            var knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>();
-
-            byte[] edataHeader = EdataMagic;
-            byte[] ndfbinheader = { 0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46 };
-            byte[] tradHeader = { 0x54, 0x52, 0x41, 0x44 };
-            byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
-            byte[] tgvHeader = { 2 };
-
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Ndfbin, ndfbinheader));
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Package, edataHeader));
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Dictionary, tradHeader));
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Save, savHeader));
-            knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Image, tgvHeader));
-
-            foreach (var knownHeader in knownHeaders)
+            foreach (var knownHeader in KnownHeaders)
             {
                 if (knownHeader.Value.Length < headerData.Length)
-                    headerData = headerData.Take(knownHeader.Value.Length).ToArray();
+                {
+                    var tmp = new byte[knownHeader.Value.Length];
+                    Array.Copy(headerData, tmp, knownHeader.Value.Length);
+                    headerData = tmp;
+                }
 
                 if (Utils.ByteArrayCompare(headerData, knownHeader.Value))
                     return knownHeader.Key;

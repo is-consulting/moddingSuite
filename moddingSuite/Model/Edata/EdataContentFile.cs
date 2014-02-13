@@ -38,7 +38,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _path = value;
-                OnPropertyChanged(() => Path);
+                OnPropertyChanged("Path");
             }
         }
 
@@ -48,7 +48,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _offset = value;
-                OnPropertyChanged(() => Offset);
+                OnPropertyChanged("Offset");
             }
         }
 
@@ -58,7 +58,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _size = value;
-                OnPropertyChanged(() => Size);
+                OnPropertyChanged("Size");
             }
         }
 
@@ -68,7 +68,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _checkSum = value;
-                OnPropertyChanged(() => Checksum);
+                OnPropertyChanged("Checksum");
             }
         }
 
@@ -78,7 +78,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _id = value;
-                OnPropertyChanged(() => Id);
+                OnPropertyChanged("Id");
             }
         }
 
@@ -88,7 +88,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _fileType = value;
-                OnPropertyChanged(() => FileType);
+                OnPropertyChanged("FileType");
             }
         }
 

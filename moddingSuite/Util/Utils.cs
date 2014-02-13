@@ -11,14 +11,12 @@ namespace moddingSuite.Util
         public static string ReadString(Stream fs)
         {
             var b = new StringBuilder();
-            var buffer = new byte[1];
-            char c;
+            int c;
 
             do
             {
-                fs.Read(buffer, 0, 1);
-                c = Encoding.ASCII.GetChars(buffer)[0];
-                b.Append(c);
+                c = fs.ReadByte();
+                b.Append((char)c);
             } while (c != '\0');
 
             return StripString(b.ToString());

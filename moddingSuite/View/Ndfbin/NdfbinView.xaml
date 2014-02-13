@@ -8,11 +8,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ToolBar>
-            <Button ToolTip="Save changes back" Command="{Binding Path=SaveNdfbinCommand}">
+        <ToolBar Style="{StaticResource Vs2010StyleToolBar}">
+            <Button ToolTip="Save changes back" Command="{Binding Path=SaveNdfbinCommand}" Style="{StaticResource ButtonStyle1}">
                 <Image Source="{StaticResource SaveIcon}"  />
             </Button>
-            <ToggleButton x:Name="changesButton" ToolTip="View pending changes">
+            <ToggleButton x:Name="changesButton" ToolTip="View pending changes" Style="{StaticResource ToggleButtonStyle1}">
                 <Image Source="{StaticResource ViewChanges}"  />
             </ToggleButton>
 

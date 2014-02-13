@@ -19,6 +19,8 @@ using moddingSuite.ViewModel.Media;
 using moddingSuite.ViewModel.Ndf;
 using moddingSuite.ViewModel.Trad;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -44,7 +46,8 @@ namespace moddingSuite.ViewModel.Edata
             //if (settings.LastHighlightedFileIndex <= OpenFiles.Count)
             //    CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentTo(OpenFiles.ElementAt(settings.LastHighlightedFileIndex));
             //else
-            CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentToFirst();
+            if (settings.LastOpenedFiles.Count == 0)
+                CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentToFirst();
 
             OpenFiles.CollectionChanged += OpenFilesCollectionChanged;
         }
@@ -83,6 +86,7 @@ namespace moddingSuite.ViewModel.Edata
             vm.LoadFile(path);
 
             OpenFiles.Add(vm);
+
             CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentTo(vm);
         }
 
@@ -105,8 +109,8 @@ namespace moddingSuite.ViewModel.Edata
             ExportNdfCommand = new ActionCommand(ExportNdfExecute, () => IsOfType(EdataFileType.Ndfbin));
             ExportRawCommand = new ActionCommand(ExportRawExecute);
             ReplaceRawCommand = new ActionCommand(ReplaceRawExecute);
-            ExportTextureCommand = new ActionCommand(ExportTextureExecute);
-            ReplaceTextureCommand = new ActionCommand(ReplaceTextureExecute);
+            ExportTextureCommand = new ActionCommand(ExportTextureExecute, () => IsOfType(EdataFileType.Image));
+            ReplaceTextureCommand = new ActionCommand(ReplaceTextureExecute, () => IsOfType(EdataFileType.Image));
             PlayMovieCommand = new ActionCommand(PlayMovieExecute);
 
             AboutUsCommand = new ActionCommand(AboutUsExecute);
@@ -126,7 +130,7 @@ namespace moddingSuite.ViewModel.Edata
 
             if (file == null)
                 return;
-            
+
             Settings.Settings settings = SettingsManager.Load();
 
             var openfDlg = new OpenFileDialog
@@ -428,7 +432,6 @@ namespace moddingSuite.ViewModel.Edata
                 fs.Read(headerBuffer, 0, headerBuffer.Length);
 
                 type = EdataManager.GetFileTypeFromHeaderData(headerBuffer);
-
 
                 if (type == EdataFileType.Ndfbin)
                 {
