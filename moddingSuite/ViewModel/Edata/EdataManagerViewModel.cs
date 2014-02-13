@@ -81,7 +81,7 @@ namespace moddingSuite.ViewModel.Edata
 
         public void AddFile(string path)
         {
-            var vm = new EdataFileViewModel();
+            var vm = new EdataFileViewModel(this);
 
             vm.LoadFile(path);
 

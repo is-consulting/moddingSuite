@@ -300,7 +300,7 @@
 
         <Style  TargetType="{x:Type TabItem}">
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Padding" Value="5,3,30,3"/>
+            <Setter Property="Padding" Value="5,3,5,3"/>
             <Setter Property="Background" Value="{StaticResource ToolBarBackground}"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -327,6 +327,5 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
     </Application.Resources>
 </Application>

@@ -5,6 +5,7 @@ using System.Windows.Data;
 using moddingSuite.BL;
 using moddingSuite.Model.Edata;
 using moddingSuite.ViewModel.Base;
+using System.Windows.Input;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -14,8 +15,26 @@ namespace moddingSuite.ViewModel.Edata
         private ICollectionView _filesCollectionView;
         private string _filterExpression = string.Empty;
         private string _loadedFile = string.Empty;
+        private EdataManagerViewModel _parentVm;
 
         public EdataManager EdataManager { get; protected set; }
+
+        public ICommand CloseCommand { get; set; }
+        
+        public EdataManagerViewModel ParentVm
+        {
+            get
+            {
+                return _parentVm;
+            }
+        }
+
+        public EdataFileViewModel(EdataManagerViewModel parentVm)
+        {
+            _parentVm = parentVm;
+
+            CloseCommand = new ActionCommand((x) => ParentVm.CloseFile(this));
+        }
 
         public string LoadedFile
         {
