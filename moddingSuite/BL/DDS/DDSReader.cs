@@ -49,7 +49,7 @@ namespace moddingSuite.BL.DDS
                 file.Height = header.Height;
                 file.ImageHeight = header.Height;
                 file.Width = header.Width;
-                file.ImageHeight = header.Width;
+                file.ImageWidth = header.Width;
 
                 file.MipMapCount = (ushort)header.MipMapCount;
 

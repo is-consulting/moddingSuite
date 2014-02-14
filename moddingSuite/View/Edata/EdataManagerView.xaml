@@ -3,110 +3,110 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ViewModel="clr-namespace:moddingSuite.ViewModel" xmlns:View="clr-namespace:moddingSuite.View"
         xmlns:Common="clr-namespace:moddingSuite.View.Common" xmlns:Edata="clr-namespace:moddingSuite.View.Edata"
+        xmlns:view="clr-namespace:moddingSuite.View"
         x:Class="moddingSuite.View.Edata.EdataManagerView"
         Height="565.855" Width="1008.364"  Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="22" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Panel.ZIndex="1000" Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Margin="0 0 0 20">
+            <view:SpinningWheel IsSpinning="True" 
+                              DotRadius="7" 
+                              Speed="1.25"
+                              Radius="36"
+                              DotCount="21"  
+                              SymmetricalArrange="True"
+                              Direction="CW"
+                              x:Name="wheel" />
+        </UniformGrid>
 
-        <Menu Grid.Row="0" Grid.ColumnSpan="2" IsMainMenu="True">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Open" Command="{Binding Path=OpenFileCommand}" />
-                <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
-                <Separator />
-                <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
+        <Grid Panel.ZIndex="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="22" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            </MenuItem>
-            <MenuItem Header="_Settings">
-                <MenuItem Header="Change export _path" Command="{Binding Path=ChangeExportPathCommand}" />
-                <MenuItem Header="Change _Wargame path" Command="{Binding Path=ChangeWargamePathCommand}" />
-            </MenuItem>
-        </Menu>
+            <Menu Grid.Row="0" Grid.ColumnSpan="2" IsMainMenu="True">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open" Command="{Binding Path=OpenFileCommand}" />
+                    <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
+                    <Separator />
+                    <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
 
-        <ToolBar Grid.Row="1" Style="{StaticResource Vs2010StyleToolBar}">
-            <Menu>
-                <MenuItem ToolTip="Raw data" >
-                    <MenuItem.Header>
-                        <Image Source="{StaticResource ExtractRawIcon}"  />
-                    </MenuItem.Header>
-                    <MenuItem Header="Export" Command="{Binding ExportRawCommand}" />
-                    <MenuItem Header="Replace" Command="{Binding ReplaceRawCommand}" />
+                </MenuItem>
+                <MenuItem Header="_Settings">
+                    <MenuItem Header="Change export _path" Command="{Binding Path=ChangeExportPathCommand}" />
+                    <MenuItem Header="Change _Wargame path" Command="{Binding Path=ChangeWargamePathCommand}" />
                 </MenuItem>
             </Menu>
-            <!--<Button ToolTip="Export raw data" Command="{Binding Path=ExportRawCommand}">
+
+            <ToolBar Grid.Row="1" Style="{StaticResource Vs2010StyleToolBar}">
+                <Menu>
+                    <MenuItem ToolTip="Raw data" >
+                        <MenuItem.Header>
+                            <Image Source="{StaticResource ExtractRawIcon}"  />
+                        </MenuItem.Header>
+                        <MenuItem Header="Export" Command="{Binding ExportRawCommand}" />
+                        <MenuItem Header="Replace" Command="{Binding ReplaceRawCommand}" />
+                    </MenuItem>
+                </Menu>
+                <!--<Button ToolTip="Export raw data" Command="{Binding Path=ExportRawCommand}">
                 <Image Source="{StaticResource ExtractRawIcon}"  />
             </Button>-->
-            <Button ToolTip="Export Uncompressed NDF content" Command="{Binding Path=ExportNdfCommand}"  Style="{DynamicResource ButtonStyle1}">
-                <Image Source="{StaticResource ExtractZipedPartIcon}"  />
-            </Button>
-            
-            <Menu>
-                <MenuItem ToolTip="Textures" >
-                    <MenuItem.Header>
-                        <Image Source="{StaticResource TextureIcon}" />
-                    </MenuItem.Header>
-                    <MenuItem Header="Export" Command="{Binding ExportTextureCommand}" />
-                    <MenuItem Header="Replace" Command="{Binding ReplaceTextureCommand}" />
-                </MenuItem>
-            </Menu>
+                <Button ToolTip="Export Uncompressed NDF content" Command="{Binding Path=ExportNdfCommand}"  Style="{DynamicResource ButtonStyle1}">
+                    <Image Source="{StaticResource ExtractZipedPartIcon}"  />
+                </Button>
 
-            <Separator />
+                <Menu>
+                    <MenuItem ToolTip="Textures" >
+                        <MenuItem.Header>
+                            <Image Source="{StaticResource TextureIcon}" />
+                        </MenuItem.Header>
+                        <MenuItem Header="Export" Command="{Binding ExportTextureCommand}" />
+                        <MenuItem Header="Replace" Command="{Binding ReplaceTextureCommand}" />
+                    </MenuItem>
+                </Menu>
 
-            <Button ToolTip="View Ndf file" Command="{Binding ViewContentCommand}"  Style="{DynamicResource ButtonStyle1}">
-                <Image Source="{StaticResource OpenDetailsIcon}" />
-            </Button>
-            <Button ToolTip="View dictionary" Command="{Binding ViewTradFileCommand}"  Style="{DynamicResource ButtonStyle1}">
-                <Image Source="{StaticResource OpenDictionayIcon}" />
-            </Button>
-            <Button ToolTip="View Wmv file" Command="{Binding PlayMovieCommand}"  Style="{DynamicResource ButtonStyle1}">
-                <Image Source="{StaticResource OpenMovieIcon}" />
-            </Button>
-            <Separator />
-            <Button ToolTip="About" Command="{Binding AboutUsCommand}"  Style="{DynamicResource ButtonStyle1}">
-                <Image Source="{StaticResource AboutIcon}" />
-            </Button>
+                <Separator />
 
-        </ToolBar>
+                <Button ToolTip="View Ndf file" Command="{Binding EditNdfbinCommand}"  Style="{DynamicResource ButtonStyle1}">
+                    <Image Source="{StaticResource OpenDetailsIcon}" />
+                </Button>
+                <Button ToolTip="View dictionary" Command="{Binding EditTradFileCommand}"  Style="{DynamicResource ButtonStyle1}">
+                    <Image Source="{StaticResource OpenDictionayIcon}" />
+                </Button>
+                <!--<Button ToolTip="View Wmv file" Command="{Binding PlayMovieCommand}"  Style="{DynamicResource ButtonStyle1}">
+                        <Image Source="{StaticResource OpenMovieIcon}" />
+                    </Button>-->
+                <Separator />
+                <Button ToolTip="About" Command="{Binding AboutUsCommand}"  Style="{DynamicResource ButtonStyle1}">
+                    <Image Source="{StaticResource AboutIcon}" />
+                </Button>
 
+            </ToolBar>
 
-   
+            <TabControl Grid.Row="2" ItemsSource="{Binding Path=OpenFiles}" IsSynchronizedWithCurrentItem="True">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Button x:Name="close_btn" Content="X" DockPanel.Dock="Right" Height="15" Margin="15 0 0 0" Command="{Binding Path=CloseCommand}" Style="{StaticResource ButtonStyle1}" />
+                            <TextBlock Text="{Binding Path=HeaderText}" ToolTip="{Binding Path=LoadedFile}" />
+                        </DockPanel>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+                <TabControl.ContentTemplate>
+                    <DataTemplate>
+                        <Edata:EdataFileView />
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
 
-        <TabControl Grid.Row="2" ItemsSource="{Binding Path=OpenFiles}" IsSynchronizedWithCurrentItem="True">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <Button x:Name="close_btn" Content="X" DockPanel.Dock="Right" Height="15" Margin="15 0 0 0" Command="{Binding Path=CloseCommand}" Style="{StaticResource ButtonStyle1}" />
-                        <TextBlock Text="{Binding Path=HeaderText}" ToolTip="{Binding Path=LoadedFile}" />
-                    </DockPanel>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <Edata:EdataFileView />
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
-
-        <!--<TabControl Grid.Row="1" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
-            <TabItem Header="Actions">
-                <Grid VerticalAlignment="Bottom">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Button Grid.Row="0" Content="NDF Content" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Bottom" Width="127" Command="{Binding Path=ViewNdfContentCommand}" CommandParameter="{Binding SelectedItem, ElementName=dataGrid}"/>
-                    <Button Grid.Row="1" Content="Export NDF" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Bottom" Width="127" Command="{Binding Path=ExportNdfCommand}" CommandParameter="{Binding SelectedItem, ElementName=dataGrid}"/>
-                    <Button Grid.Row="2" Content="Export Raw/Texture" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Bottom" Width="127" Command="{Binding ExportTextureCommand}" CommandParameter="{Binding SelectedItem, ElementName=dataGrid}"/>
-                </Grid>
-            </TabItem>
- 
-        </TabControl>-->
+            <StatusBar Grid.Row="3" >
+                <TextBlock Text="{Binding Path=StatusText }" />
+            </StatusBar>
+        </Grid>
     </Grid>
 </Window>

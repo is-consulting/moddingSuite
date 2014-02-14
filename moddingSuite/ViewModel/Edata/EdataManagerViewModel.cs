@@ -21,6 +21,7 @@ using moddingSuite.ViewModel.Trad;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -28,6 +29,18 @@ namespace moddingSuite.ViewModel.Edata
     {
         private readonly ObservableCollection<EdataFileViewModel> _openFiles =
             new ObservableCollection<EdataFileViewModel>();
+
+        private string _statusText;
+
+        public string StatusText
+        {
+            get { return _statusText; }
+            set
+            {
+                _statusText = value;
+                OnPropertyChanged(() => StatusText);
+            }
+        }
 
         public EdataManagerViewModel()
         {
@@ -61,8 +74,8 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand CloseFileCommand { get; set; }
         public ICommand ChangeExportPathCommand { get; set; }
         public ICommand ChangeWargamePathCommand { get; set; }
-        public ICommand ViewContentCommand { get; set; }
-        public ICommand ViewTradFileCommand { get; set; }
+        public ICommand EditNdfbinCommand { get; set; }
+        public ICommand EditTradFileCommand { get; set; }
         public ICommand PlayMovieCommand { get; set; }
         public ICommand AboutUsCommand { get; set; }
 
@@ -115,8 +128,8 @@ namespace moddingSuite.ViewModel.Edata
 
             AboutUsCommand = new ActionCommand(AboutUsExecute);
 
-            ViewTradFileCommand = new ActionCommand(ViewTradFileExecute, () => IsOfType(EdataFileType.Dictionary));
-            ViewContentCommand = new ActionCommand(ViewContentExecute, () => IsOfType(EdataFileType.Ndfbin));
+            EditTradFileCommand = new ActionCommand(EditTradFileExecute, () => IsOfType(EdataFileType.Dictionary));
+            EditNdfbinCommand = new ActionCommand(EditNdfbinExecute, () => IsOfType(EdataFileType.Ndfbin));
         }
 
         private void ReplaceRawExecute(object obj)
@@ -148,10 +161,25 @@ namespace moddingSuite.ViewModel.Edata
                 settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
                 SettingsManager.Save(settings);
 
-                byte[] replacefile = File.ReadAllBytes(openfDlg.FileName);
+                IsUIBusy = true;
 
-                vm.EdataManager.ReplaceFile(file, replacefile);
-                vm.LoadFile(vm.LoadedFile);
+                var dispatcher = Dispatcher.CurrentDispatcher;
+
+                Action<string> report = (msg) => StatusText = msg;
+
+                report(string.Format("Replacing {0}...", file.Path));
+
+                Thread s = new Thread(() =>
+                {
+                    byte[] replacefile = File.ReadAllBytes(openfDlg.FileName);
+
+                    vm.EdataManager.ReplaceFile(file, replacefile);
+                    vm.LoadFile(vm.LoadedFile);
+
+                    dispatcher.Invoke(report, "Replacing finished!");
+
+                    IsUIBusy = false;
+                });
             }
         }
 
@@ -168,13 +196,8 @@ namespace moddingSuite.ViewModel.Edata
                 return;
 
             var mgr = new TgvManager();
-
             var data = tgvFile.Manager.GetRawData(tgvFile);
-
-            //Util.Utils.SaveDebug("testooooor", data);
-
             var tgv = mgr.ReadFile(data);
-
 
             Settings.Settings settings = SettingsManager.Load();
 
@@ -188,23 +211,38 @@ namespace moddingSuite.ViewModel.Edata
             if (File.Exists(settings.LastOpenFolder))
                 openfDlg.InitialDirectory = settings.LastOpenFolder;
 
-
             if (openfDlg.ShowDialog().Value)
             {
                 settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
                 SettingsManager.Save(settings);
 
-                byte[] oldDds = File.ReadAllBytes(openfDlg.FileName);
+                IsUIBusy = true;
+                var dispatcher = Dispatcher.CurrentDispatcher;
+                Action<string> report = (msg) => StatusText = msg;
 
-                var reader = new DDSReader();
-                var newDds = reader.ReadDDS(oldDds);
+                report(string.Format("Replacing {0}...", tgvFile.Path));
 
-                var newTgv = mgr.CreateTgv(newDds, tgv.SourceChecksum, tgv.IsCompressed);
+                Thread s = new Thread(() =>
+                {
+                    byte[] oldDds = File.ReadAllBytes(openfDlg.FileName);
 
-                //Util.Utils.SaveDebug(string.Format("created_tgv_{0}", DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ff")), newTgv);
+                    dispatcher.Invoke(report, "Converting DDS to TGV file format...");
 
-                vm.EdataManager.ReplaceFile(tgvFile, newTgv);
-                vm.LoadFile(vm.LoadedFile);
+                    var reader = new DDSReader();
+                    var newDds = reader.ReadDDS(oldDds);
+
+                    var newTgv = mgr.CreateTgv(newDds, tgv.SourceChecksum, tgv.IsCompressed);
+
+                    dispatcher.Invoke(report, "Replacing file in edata container...");
+
+                    vm.EdataManager.ReplaceFile(tgvFile, newTgv);
+                    vm.LoadFile(vm.LoadedFile);
+
+                    dispatcher.Invoke(report, "Replacing finished!");
+                    IsUIBusy = false;
+                });
+
+                s.Start();
             }
         }
 
@@ -253,7 +291,7 @@ namespace moddingSuite.ViewModel.Edata
             return ndf.FileType == type;
         }
 
-        protected void ViewTradFileExecute(object obj)
+        protected void EditTradFileExecute(object obj)
         {
             var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
 
@@ -270,7 +308,7 @@ namespace moddingSuite.ViewModel.Edata
             DialogProvider.ProvideView(tradVm, this);
         }
 
-        protected void ViewContentExecute(object obj)
+        protected void EditNdfbinExecute(object obj)
         {
             var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
 
@@ -282,9 +320,21 @@ namespace moddingSuite.ViewModel.Edata
             if (ndf == null)
                 return;
 
-            var detailsVm = new NdfEditorMainViewModel(ndf, vm);
 
-            DialogProvider.ProvideView(detailsVm, this);
+            IsUIBusy = true;
+            var dispatcher = Dispatcher.CurrentDispatcher;
+
+            Action<ViewModelBase, ViewModelBase> open = (ownerVm, parent) => DialogProvider.ProvideView(ownerVm, parent);
+
+            Thread s = new Thread(() =>
+            {
+                var detailsVm = new NdfEditorMainViewModel(ndf, vm);
+
+                dispatcher.Invoke(open, detailsVm, this);
+                IsUIBusy = false;
+            });
+
+            s.Start();
         }
 
         protected void ExportNdfExecute(object obj)
