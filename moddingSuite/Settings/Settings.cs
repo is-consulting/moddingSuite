@@ -37,8 +37,6 @@ namespace moddingSuite.Settings
             set { _lastOpenFolder = value; OnPropertyChanged(() => LastOpenedFiles); }
         }
 
-
-
         public int LastHighlightedFileIndex
         {
             get { return _lastHighlightedFileIndex; }

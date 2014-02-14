@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
+using System.Xml.Serialization;
 
 namespace moddingSuite.ViewModel.Base
 {
@@ -26,6 +27,7 @@ namespace moddingSuite.ViewModel.Base
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
+        [XmlIgnore]
         public bool IsUIBusy
         {
             get

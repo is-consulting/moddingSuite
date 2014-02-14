@@ -17,8 +17,8 @@ namespace moddingSuite.Model.Ndfbin.Types
 
             uint value = BitConverter.ToUInt32(data, 0);
 
-            if (Enum.IsDefined(typeof (NdfType), value))
-                return (NdfType) value;
+            if (Enum.IsDefined(typeof(NdfType), value))
+                return (NdfType)value;
 
             return NdfType.Unknown;
         }
@@ -67,16 +67,12 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.ObjectReference:
                     uint instId = BitConverter.ToUInt32(data.Take(4).ToArray(), 0);
                     uint clsId = BitConverter.ToUInt32(data.Skip(4).ToArray(), 0);
-                    NdfClass cls;
-                    try
-                    {
-                        cls = mgr.Classes[(int) clsId];
-                    }
-                    catch
-                    {
-                        cls = null;
-                    }
-                    //mgr.Classes.SingleOrDefault(x => x.Id == clsId); // mgr.Classes[(int)clsId]; due to deadrefs...
+                    NdfClass cls = null;
+
+                    // possible deadrefs here
+                    if (clsId <= mgr.Classes.Count)
+                        cls = mgr.Classes[(int)clsId];
+
                     return new NdfObjectReference(cls, instId, pos, cls == null);
 
                 case NdfType.Map:

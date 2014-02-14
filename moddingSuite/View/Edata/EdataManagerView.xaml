@@ -33,8 +33,6 @@
                 <MenuItem Header="_File">
                     <MenuItem Header="_Open" Command="{Binding Path=OpenFileCommand}" />
                     <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
-                    <Separator />
-                    <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
 
                 </MenuItem>
                 <MenuItem Header="_Settings">
