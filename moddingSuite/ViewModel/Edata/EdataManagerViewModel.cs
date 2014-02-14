@@ -178,7 +178,7 @@ namespace moddingSuite.ViewModel.Edata
 
                     dispatcher.Invoke(report, "Replacing finished!");
 
-                    IsUIBusy = false;
+                    dispatcher.Invoke(() => IsUIBusy = false);
                 });
             }
         }
@@ -239,7 +239,7 @@ namespace moddingSuite.ViewModel.Edata
                     vm.LoadFile(vm.LoadedFile);
 
                     dispatcher.Invoke(report, "Replacing finished!");
-                    IsUIBusy = false;
+                    dispatcher.Invoke(() =>  IsUIBusy = false);
                 });
 
                 s.Start();
@@ -331,7 +331,7 @@ namespace moddingSuite.ViewModel.Edata
                 var detailsVm = new NdfEditorMainViewModel(ndf, vm);
 
                 dispatcher.Invoke(open, detailsVm, this);
-                IsUIBusy = false;
+                dispatcher.Invoke(() => IsUIBusy = false);
             });
 
             s.Start();

@@ -33,6 +33,9 @@
 
         <BitmapImage UriSource="View\Images\picture-26.png" x:Key="TextureIcon" />
 
+        <BitmapImage UriSource="View\Images\export-26.png" x:Key="ExportIcon" />
+        <BitmapImage UriSource="View\Images\import-26.png" x:Key="ImportIcon" />
+
         <!--Thanks to Mitchellnolte!!!-->
         <ImageBrush ImageSource="View\Images\about.jpg" x:Key="SplashScreenArt" />
 

@@ -47,8 +47,16 @@
                         <MenuItem.Header>
                             <Image Source="{StaticResource ExtractRawIcon}"  />
                         </MenuItem.Header>
-                        <MenuItem Header="Export" Command="{Binding ExportRawCommand}" />
-                        <MenuItem Header="Replace" Command="{Binding ReplaceRawCommand}" />
+                        <MenuItem Header="Export" Command="{Binding ExportRawCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource ExportIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Replace" Command="{Binding ReplaceRawCommand}"  >
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource ImportIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
                 <!--<Button ToolTip="Export raw data" Command="{Binding Path=ExportRawCommand}">
@@ -63,8 +71,16 @@
                         <MenuItem.Header>
                             <Image Source="{StaticResource TextureIcon}" />
                         </MenuItem.Header>
-                        <MenuItem Header="Export" Command="{Binding ExportTextureCommand}" />
-                        <MenuItem Header="Replace" Command="{Binding ReplaceTextureCommand}" />
+                        <MenuItem Header="Export" Command="{Binding ExportTextureCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource ExportIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Replace" Command="{Binding ReplaceTextureCommand}" >
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource ImportIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
 
