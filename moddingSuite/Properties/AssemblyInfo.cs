@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("moddingSuite")]
-[assembly: AssemblyCopyright("GPL 3.0")]
+[assembly: AssemblyCopyright("enohka")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -6,6 +6,8 @@ namespace moddingSuite.ViewModel.Base
 {
     public class ViewModelBase : INotifyPropertyChanged, IEditableObject
     {
+        private bool _isUiBusy = false;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged<T>(params Expression<Func<T>>[] props)
@@ -22,6 +24,19 @@ namespace moddingSuite.ViewModel.Base
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        public bool IsUIBusy
+        {
+            get
+            {
+                return _isUiBusy;
+            }
+            set
+            {
+                _isUiBusy = value;
+                OnPropertyChanged(() => IsUIBusy);
+            }
         }
 
         public virtual void BeginEdit()

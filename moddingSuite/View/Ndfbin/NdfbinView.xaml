@@ -1,8 +1,21 @@
 ﻿<Window x:Class="moddingSuite.View.Ndfbin.NdfbinView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:view="clr-namespace:moddingSuite.View"
         xmlns:Viewer="clr-namespace:moddingSuite.View.Ndfbin.Viewer" Title="{Binding Path=Title}" Height="500" Width="1000" Icon="{StaticResource ScriptIcon}">
     <Grid>
+        <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Panel.ZIndex="1000" Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Margin="0 0 0 20">
+            <view:SpinningWheel IsSpinning="True" 
+                              DotRadius="7" 
+                              Speed="1.25"
+                              Radius="36"
+                              DotCount="21"  
+                              SymmetricalArrange="True"
+                              Direction="CW"
+                              x:Name="wheel" />
+        </UniformGrid>
+        
+        <Grid Panel.ZIndex="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -15,8 +28,6 @@
             <ToggleButton x:Name="changesButton" ToolTip="View pending changes" Style="{StaticResource ToggleButtonStyle1}">
                 <Image Source="{StaticResource ViewChanges}"  />
             </ToggleButton>
-
-
         </ToolBar>
         <Popup IsOpen="{Binding ElementName=changesButton, Path=IsChecked}" 
                                PlacementTarget="{Binding ElementName=changesButton}"
@@ -348,5 +359,6 @@
         <StatusBar Grid.Row="2" >
             <TextBlock Text="{Binding Path=StatusText }" />
         </StatusBar>
+    </Grid>
     </Grid>
 </Window>

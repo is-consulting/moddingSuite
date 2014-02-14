@@ -66,6 +66,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -173,6 +174,7 @@
     <Compile Include="View\DialogProvider\IViewMap.cs" />
     <Compile Include="View\DialogProvider\ViewInstance.cs" />
     <Compile Include="View\DialogProvider\ViewMap.cs" />
+    <Compile Include="View\Extension\BoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="View\Extension\EdataFileTypeToImageConverter.cs" />
     <Compile Include="View\Extension\EditingControlDataTemplateSelector.cs" />
     <Compile Include="View\Extension\LocalisationHashValueConverter.cs" />
@@ -234,6 +236,8 @@
     <Compile Include="View\Common\TradFileView.xaml.cs">
       <DependentUpon>TradFileView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SpinningWheel\Enums\RotateDirection.cs" />
+    <Compile Include="View\SpinningWheel\SpinningWheel.cs" />
     <Compile Include="View\VersionManager\VersionManagerView.xaml.cs">
       <DependentUpon>VersionManagerView.xaml</DependentUpon>
     </Compile>
@@ -333,6 +337,10 @@
     <Page Include="View\Common\TradFileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\VersionManager\VersionManagerView.xaml">
       <SubType>Designer</SubType>
@@ -456,6 +464,7 @@
   <ItemGroup>
     <SplashScreen Include="View\Images\splash.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -12,6 +12,8 @@ using moddingSuite.Model.Ndfbin;
 using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace moddingSuite.ViewModel.Ndf
 {
@@ -279,27 +281,39 @@ namespace moddingSuite.ViewModel.Ndf
 
         private void SaveNdfbinExecute(object obj)
         {
-            StatusText = string.Format("Saving back {0} changes into {1}", NdfbinManager.ChangeManager.Changes.Count,
-                                       EdataFileViewModel.EdataManager.FilePath);
+            IsUIBusy = true;
+            StatusText = string.Format("Saving back {0} changes...", NdfbinManager.ChangeManager.Changes.Count);
 
             try
             {
                 int changesCount = NdfbinManager.ChangeManager.Changes.Count;
 
-                //NdfbinManager.CommitChanges();
+                var dispatcher = Dispatcher.CurrentDispatcher;
 
-                byte[] newFile = NdfbinManager.BuildNdfFile(NdfbinManager.Header.IsCompressedBody);
+                Action<string> report = (msg) => StatusText = msg; 
 
-                EdataFileViewModel.EdataManager.ReplaceFile(OwnerFile, newFile);
+                Thread s = new Thread(() =>
+                {
+                    byte[] newFile = NdfbinManager.BuildNdfFile(NdfbinManager.Header.IsCompressedBody);
 
-                EdataFileViewModel.LoadFile(EdataFileViewModel.LoadedFile);
+                    dispatcher.Invoke(report, string.Format("Recompiling of {0} finished! ", EdataFileViewModel.EdataManager.FilePath));
 
-                EdataContentFile newOwen = EdataFileViewModel.EdataManager.Files.Single(x => x.Path == OwnerFile.Path);
+                    EdataFileViewModel.EdataManager.ReplaceFile(OwnerFile, newFile);
 
-                OwnerFile = newOwen;
+                    dispatcher.Invoke(report, "Replacing new File in edata finished!");
 
-                StatusText = string.Format("Saving of {0} changes finished! {1}", changesCount,
-                                           EdataFileViewModel.EdataManager.FilePath);
+                    EdataFileViewModel.LoadFile(EdataFileViewModel.LoadedFile);
+
+                    EdataContentFile newOwen = EdataFileViewModel.EdataManager.Files.Single(x => x.Path == OwnerFile.Path);
+
+                    OwnerFile = newOwen;
+
+                    dispatcher.Invoke(report, string.Format("Saving of {0} changes finished! {1}", changesCount, EdataFileViewModel.EdataManager.FilePath));
+
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                });
+
+                s.Start();
             }
             catch (Exception e)
             {

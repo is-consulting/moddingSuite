@@ -38,6 +38,8 @@
 
 
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Extension:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter" />
+        
         <Extension:LocalisationHashValueConverter x:Key="LocalisationHashValueConverter" />
 
 
