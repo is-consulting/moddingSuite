@@ -1,32 +1,49 @@
 ﻿using moddingSuite.BL;
+using moddingSuite.Model.Common;
+using System.Runtime.InteropServices;
 
 namespace moddingSuite.Model.Edata
 {
     /// <summary>
     /// Thanks to Wargame:EE DAT Unpacker by Giovanni Condello
+    /// Restructured header
     /// struct edataHeader
     /// {
-    ///	    CHAR edat[4];
-    ///	    blob junk[21];
-    ///	    DWORD dirOffset;
-    ///	    DWORD dirLength;
-    ///	    DWORD fileOffset;
-    ///	    DWORD fileLength;
+	/// DWORD magic;
+	/// DWORD version;
+    ///
+	/// blob checksum_v1[16]; 
+	/// blob skip[1]; 
+    ///
+	/// DWORD dictionaryOffset;
+	/// DWORD dictionaryLength;
+	/// DWORD filesOffset;
+	/// DWORD filesLength;
+	///
+	/// DWORD unkown2; // always 0
+    ///
+	/// DWORD padding; // always 8192
+    /// 
+	/// blob checksum_v2[16];	
     /// };
     /// </summary>
-    public class EdataHeader : EdataEntity
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct EdataHeader
     {
-        public EdataHeader(EdataManager mgr) : base(mgr)
-        {
+        public uint Magic;
+        public uint Version;
 
-        }
+        public Md5Hash Checksum_V1;
+        public readonly byte Skip1;
 
-        public int Version { get; set; }
-        public byte[] Checksum { get; set; }
-        public int DirOffset { get; set; }
-        public int DirLength { get; set; }
-        public int FileOffset { get; set; }
-        public int FileLengh { get; set; }
-        
+        public uint DictOffset;
+        public uint DictLength;
+        public uint FileOffset;
+        public uint FileLengh;
+
+        public readonly uint Unkown_1;
+        public uint Padding;
+
+        public Md5Hash Checksum_V2;
     }
 }

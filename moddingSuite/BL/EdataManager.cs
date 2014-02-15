@@ -9,6 +9,8 @@ using moddingSuite.Model.Edata;
 using moddingSuite.Util;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using moddingSuite.Model.Common;
+using System.Runtime.InteropServices;
 
 namespace moddingSuite.BL
 {
@@ -115,57 +117,17 @@ namespace moddingSuite.BL
         /// <returns>A instance of the current header.</returns>
         protected EdataHeader ReadEdataHeader()
         {
-            var header = new EdataHeader(this);
+            EdataHeader header;
 
-            using (FileStream fileStream = File.Open(FilePath, FileMode.Open))
-            {
-                var buffer = new byte[4];
+            var buffer = new byte[Marshal.SizeOf(typeof(EdataHeader))];
 
-                fileStream.Read(buffer, 0, buffer.Length);
-                if (!Utils.ByteArrayCompare(buffer, EdataMagic))
-                    throw new InvalidDataException("The file is not edata conform or edata magic is missing.");
+            using (var fs = File.Open(FilePath, FileMode.Open))
+                fs.Read(buffer,0,buffer.Length);
 
-                fileStream.Read(buffer, 0, buffer.Length);
-                header.Version = BitConverter.ToInt32(buffer, 0);
-
-                if (header.Version == 1)
-                {
-                    buffer = new byte[16];
-                    fileStream.Read(buffer, 0, buffer.Length);
-                    header.Checksum = buffer;
-                    buffer = new byte[4];
-                }
-                else if (header.Version == 2)
-                {
-                    // Checksum is not here in V2
-                    fileStream.Seek(16, SeekOrigin.Current);
-                }
-                else
-                    throw new NotSupportedException(string.Format("Edata Version {0} is currently not supported", Header.Version));
-
-                fileStream.Seek(1, SeekOrigin.Current);
-
-
-                fileStream.Read(buffer, 0, 4);
-                header.DirOffset = BitConverter.ToInt32(buffer, 0);
-
-                fileStream.Read(buffer, 0, 4);
-                header.DirLength = BitConverter.ToInt32(buffer, 0);
-
-                fileStream.Read(buffer, 0, 4);
-                header.FileOffset = BitConverter.ToInt32(buffer, 0);
-
-                fileStream.Read(buffer, 0, 4);
-                header.FileLengh = BitConverter.ToInt32(buffer, 0);
-
-                if (header.Version == 2)
-                {
-                    fileStream.Seek(8, SeekOrigin.Current);
-                    buffer = new byte[16];
-                    fileStream.Read(buffer, 0, buffer.Length);
-                    header.Checksum = buffer;
-                }
-            }
+            header = Utils.ByteArrayToStructure<EdataHeader>(buffer);
+            
+            if (header.Version > 2)
+                throw new NotSupportedException(string.Format("Edata version {0} not supported", header.Version));
 
             return header;
         }
@@ -180,15 +142,19 @@ namespace moddingSuite.BL
             var dirs = new List<EdataDir>();
             var endings = new List<long>();
 
+            int entc = 0;
+
             using (FileStream fileStream = File.Open(FilePath, FileMode.Open))
             {
-                fileStream.Seek(Header.DirOffset, SeekOrigin.Begin);
+                fileStream.Seek(Header.DictOffset, SeekOrigin.Begin);
 
-                long dirEnd = Header.DirOffset + Header.DirLength;
+                long dirEnd = Header.DictOffset + Header.DictLength;
                 uint id = 0;
+
 
                 while (fileStream.Position < dirEnd)
                 {
+                    entc++;
                     var buffer = new byte[4];
                     fileStream.Read(buffer, 0, 4);
                     int fileGroupId = BitConverter.ToInt32(buffer, 0);
@@ -261,9 +227,9 @@ namespace moddingSuite.BL
 
             using (FileStream fileStream = File.Open(FilePath, FileMode.Open))
             {
-                fileStream.Seek(Header.DirOffset, SeekOrigin.Begin);
+                fileStream.Seek(Header.DictOffset, SeekOrigin.Begin);
 
-                long dirEnd = Header.DirOffset + Header.DirLength;
+                long dirEnd = Header.DictOffset + Header.DictLength;
                 uint id = 0;
 
                 while (fileStream.Position < dirEnd)
@@ -414,8 +380,8 @@ namespace moddingSuite.BL
                     newFile.Write(BitConverter.GetBytes(filesContentLength), 0, 4);
 
 
-                    newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
-                    long dirEnd = Header.DirOffset + Header.DirLength;
+                    newFile.Seek(Header.DictOffset, SeekOrigin.Begin);
+                    long dirEnd = Header.DictOffset + Header.DictLength;
                     uint id = 0;
 
                     while (newFile.Position < dirEnd)
@@ -457,8 +423,8 @@ namespace moddingSuite.BL
                         }
                     }
 
-                    newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
-                    var dirBuffer = new byte[Header.DirLength];
+                    newFile.Seek(Header.DictOffset, SeekOrigin.Begin);
+                    var dirBuffer = new byte[Header.DictLength];
                     newFile.Read(dirBuffer, 0, dirBuffer.Length);
 
                     byte[] dirCheckSum = MD5.Create().ComputeHash(dirBuffer);
@@ -488,7 +454,7 @@ namespace moddingSuite.BL
                 using (var newFile = new FileStream(tmpPath, FileMode.Truncate))
                 {
                     byte[] oldHead = new byte[Header.FileOffset];
-                    fs.Read(oldHead, 0, Header.FileOffset);
+                    fs.Read(oldHead, 0, (int)Header.FileOffset);
                     newFile.Write(oldHead, 0, oldHead.Length);
 
                     byte[] fileBuffer;
@@ -518,8 +484,8 @@ namespace moddingSuite.BL
                         filesContentLength += (uint)fileBuffer.Length; // +(uint)reserveBuffer.Length;
                     }
 
-                    newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
-                    long dirEnd = Header.DirOffset + Header.DirLength;
+                    newFile.Seek(Header.DictOffset, SeekOrigin.Begin);
+                    long dirEnd = Header.DictOffset + Header.DictLength;
                     uint id = 0;
 
                     var buffer = new byte[4];
@@ -561,8 +527,8 @@ namespace moddingSuite.BL
                         }
                     }
 
-                    newFile.Seek(Header.DirOffset, SeekOrigin.Begin);
-                    var dirBuffer = new byte[Header.DirLength];
+                    newFile.Seek(Header.DictOffset, SeekOrigin.Begin);
+                    var dirBuffer = new byte[Header.DictLength];
                     newFile.Read(dirBuffer, 0, dirBuffer.Length);
                     byte[] dirCheckSum = MD5.Create().ComputeHash(dirBuffer);
 

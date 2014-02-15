@@ -93,6 +93,7 @@
     <Compile Include="BL\DDS\FourCC.cs" />
     <Compile Include="BL\SavManager.cs" />
     <Compile Include="BL\TgvManager.cs" />
+    <Compile Include="Model\Common\Md5Hash.cs" />
     <Compile Include="Model\Edata\EdataDir.cs" />
     <Compile Include="Model\Edata\EdataEntity.cs" />
     <Compile Include="Model\Edata\EdataContentFile.cs" />
