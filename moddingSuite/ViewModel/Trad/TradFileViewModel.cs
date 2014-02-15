@@ -32,7 +32,7 @@ namespace moddingSuite.ViewModel.Trad
 
             Entries = Manager.Entries;
 
-            TitleText = string.Format("Dictionary Viewer [{0}]", OwnerFile.Path);
+            TitleText = string.Format("Dictionary editor [{0}]", OwnerFile.Path);
         }
 
         public TradManager Manager { get; protected set; }

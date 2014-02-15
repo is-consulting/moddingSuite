@@ -86,10 +86,10 @@
 
                 <Separator />
 
-                <Button ToolTip="View Ndf file" Command="{Binding EditNdfbinCommand}"  Style="{DynamicResource ButtonStyle1}">
+                <Button ToolTip="Edit ndf file" Command="{Binding EditNdfbinCommand}"  Style="{DynamicResource ButtonStyle1}">
                     <Image Source="{StaticResource OpenDetailsIcon}" />
                 </Button>
-                <Button ToolTip="View dictionary" Command="{Binding EditTradFileCommand}"  Style="{DynamicResource ButtonStyle1}">
+                <Button ToolTip="Edit dictionary" Command="{Binding EditTradFileCommand}"  Style="{DynamicResource ButtonStyle1}">
                     <Image Source="{StaticResource OpenDictionayIcon}" />
                 </Button>
                 <!--<Button ToolTip="View Wmv file" Command="{Binding PlayMovieCommand}"  Style="{DynamicResource ButtonStyle1}">
