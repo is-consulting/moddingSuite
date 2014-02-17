@@ -6,7 +6,7 @@ using moddingSuite.Util;
 
 namespace moddingSuite.BL.DDS
 {
-    public class DDSReader
+    public class TgvDDSReader
     {
         public TgvFile ReadDDS(byte[] input)
         {

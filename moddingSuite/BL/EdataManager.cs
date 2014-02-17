@@ -92,8 +92,6 @@ namespace moddingSuite.BL
         /// </summary>
         public void ParseEdataFile()
         {
-            var sw = Stopwatch.StartNew();
-
             Header = ReadEdataHeader();
 
             switch (Header.Version)
@@ -107,8 +105,6 @@ namespace moddingSuite.BL
                 default:
                     throw new NotSupportedException(string.Format("Edata Version {0} is currently not supported", Header.Version));
             }
-
-            Console.WriteLine("Reading {0} took {1} ms", FilePath, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -142,8 +138,6 @@ namespace moddingSuite.BL
             var dirs = new List<EdataDir>();
             var endings = new List<long>();
 
-            int entc = 0;
-
             using (FileStream fileStream = File.Open(FilePath, FileMode.Open))
             {
                 fileStream.Seek(Header.DictOffset, SeekOrigin.Begin);
@@ -151,10 +145,8 @@ namespace moddingSuite.BL
                 long dirEnd = Header.DictOffset + Header.DictLength;
                 uint id = 0;
 
-
                 while (fileStream.Position < dirEnd)
                 {
-                    entc++;
                     var buffer = new byte[4];
                     fileStream.Read(buffer, 0, 4);
                     int fileGroupId = BitConverter.ToInt32(buffer, 0);

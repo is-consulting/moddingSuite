@@ -15,7 +15,8 @@ namespace moddingSuite.Model.Edata
 	/// blob checksum_v1[16]; 
 	/// blob skip[1]; 
     ///
-	/// DWORD dictionaryOffset;
+	/// DWORD dictionaryOffset;  // ASM seems to say it must be 1037: CMP DWORD PTR DS:[ESI+0x19],0x40D   (Compare value at offset 25 is 1037)
+
 	/// DWORD dictionaryLength;
 	/// DWORD filesOffset;
 	/// DWORD filesLength;
@@ -34,7 +35,7 @@ namespace moddingSuite.Model.Edata
         public uint Version;
 
         public Md5Hash Checksum_V1;
-        public readonly byte Skip1;
+        public readonly byte Skip_1;
 
         public uint DictOffset;
         public uint DictLength;

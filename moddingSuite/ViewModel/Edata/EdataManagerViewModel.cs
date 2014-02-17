@@ -22,6 +22,7 @@ using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Threading;
+using moddingSuite.BL.TGV;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -195,9 +196,9 @@ namespace moddingSuite.ViewModel.Edata
             if (tgvFile == null)
                 return;
 
-            var mgr = new TgvManager();
+            var tgvReader = new TgvReader();
             var data = tgvFile.Manager.GetRawData(tgvFile);
-            var tgv = mgr.ReadFile(data);
+            var tgv = tgvReader.Read(data);
 
             Settings.Settings settings = SettingsManager.Load();
 
@@ -228,10 +229,16 @@ namespace moddingSuite.ViewModel.Edata
 
                     dispatcher.Invoke(report, "Converting DDS to TGV file format...");
 
-                    var reader = new DDSReader();
-                    var newDds = reader.ReadDDS(oldDds);
+                    var ddsReader = new TgvDDSReader();
+                    var newDds = ddsReader.ReadDDS(oldDds);
+                    byte[] newTgv;
 
-                    var newTgv = mgr.CreateTgv(newDds, tgv.SourceChecksum, tgv.IsCompressed);
+                    using (var tgvwriterStream = new MemoryStream())
+                    {
+                        var tgvWriter = new TgvWriter();
+                        tgvWriter.Write(tgvwriterStream, newDds, tgv.SourceChecksum, tgv.IsCompressed);
+                        newTgv = tgvwriterStream.ToArray();
+                    }
 
                     dispatcher.Invoke(report, "Replacing file in edata container...");
 
@@ -260,10 +267,10 @@ namespace moddingSuite.ViewModel.Edata
 
             Settings.Settings settings = SettingsManager.Load();
 
-            var mgr = new TgvManager();
-            var tgv = mgr.ReadFile(tgvFile.Manager.GetRawData(tgvFile));
+            var tgvReader = new TgvReader();
+            var tgv = tgvReader.Read(tgvFile.Manager.GetRawData(tgvFile));
 
-            var writer = new DDSWriter();
+            var writer = new TgvDDSWriter();
 
             byte[] content = writer.CreateDDSFile(tgv);
 

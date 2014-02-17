@@ -1,20 +1,19 @@
-﻿using System;
+﻿using moddingSuite.BL.DDS;
+using moddingSuite.Compressing;
+using moddingSuite.Model.Textures;
+using moddingSuite.Util;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using moddingSuite.Compressing;
-using moddingSuite.Model.Textures;
-using moddingSuite.Util;
-using moddingSuite.BL.DDS;
+using System.Threading.Tasks;
 
-namespace moddingSuite.BL
+namespace moddingSuite.BL.TGV
 {
-    public class TgvManager
+    public class TgvReader
     {
-        public const uint VersionMagic = 0x00000002;
-
-        public TgvFile ReadFile(byte[] data)
+        public TgvFile Read(byte[] data)
         {
             var file = new TgvFile();
 
@@ -34,7 +33,7 @@ namespace moddingSuite.BL
                 file.Height = BitConverter.ToUInt32(buffer, 0);
 
                 ms.Read(buffer, 0, buffer.Length);
-                file.ImageWidth = BitConverter.ToUInt32(buffer, 0);                
+                file.ImageWidth = BitConverter.ToUInt32(buffer, 0);
                 ms.Read(buffer, 0, buffer.Length);
                 file.ImageHeight = BitConverter.ToUInt32(buffer, 0);
 
@@ -74,20 +73,20 @@ namespace moddingSuite.BL
                 }
 
                 for (int i = 0; i < file.MipMapCount; i++)
-                    file.MipMaps.Add(ReadMipMap(i, data, file));
+                    file.MipMaps.Add(ReadMip(i, data, file));
             }
 
-            file.Format = GetPixelFormatFromTgv(file.PixelFormatStr);
+            file.Format = TranslatePixelFormat(file.PixelFormatStr);
 
-            if (file.Width != file.ImageWidth || file.Height != file.ImageHeight)
-            {
-                throw new InvalidDataException("something interresting happened here");
-            }
+            //if (file.Width != file.ImageWidth || file.Height != file.ImageHeight)
+            //{
+            //    throw new InvalidDataException("something interresting happened here");
+            //}
 
             return file;
         }
 
-        protected TgvMipMap ReadMipMap(int id, byte[] data, TgvFile file)
+        protected TgvMipMap ReadMip(int id, byte[] data, TgvFile file)
         {
             if (id > file.MipMapCount)
                 throw new ArgumentException("id");
@@ -122,106 +121,7 @@ namespace moddingSuite.BL
             }
         }
 
-        public byte[] CreateTgv(TgvFile file, byte[] sourceChecksum, bool compress = true)
-        {
-            if (sourceChecksum.Length > 16)
-                throw new ArgumentException("sourceChecksum");
-
-            file.PixelFormatStr = GetTgvFromPixelFormat(file.Format);
-            var zipoMagic = Encoding.ASCII.GetBytes("ZIPO");
-
-            using (var ms = new MemoryStream())
-            {
-                var buffer = BitConverter.GetBytes(VersionMagic);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(compress ? 1 : 0);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(file.Width);
-                ms.Write(buffer, 0, buffer.Length);
-                buffer = BitConverter.GetBytes(file.Height);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes(file.Width);
-                ms.Write(buffer, 0, buffer.Length);
-                buffer = BitConverter.GetBytes(file.Height);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = BitConverter.GetBytes((short)file.MipMapCount);
-                ms.Write(buffer, 0, buffer.Length);
-
-                var fmtLen = (short)file.PixelFormatStr.Length;
-                buffer = BitConverter.GetBytes(fmtLen);
-                ms.Write(buffer, 0, buffer.Length);
-
-                buffer = Encoding.ASCII.GetBytes(file.PixelFormatStr);
-                ms.Write(buffer, 0, buffer.Length);
-                ms.Seek(Utils.RoundToNextDivBy4(fmtLen) - fmtLen, SeekOrigin.Current);
-
-                ms.Write(sourceChecksum, 0, sourceChecksum.Length);
-
-                var mipdefOffset = (uint)(ms.Position);
-
-                var mipImgsizes = new List<int>();
-                var tileSize = file.Width - file.Width / file.MipMapCount;
-
-                for (int i = 0; i < file.MipMapCount; i++)
-                {
-                    ms.Seek(8, SeekOrigin.Current);
-                    mipImgsizes.Add((int)tileSize);
-                    tileSize /= 4;
-                }
-
-                var sortedMipMaps = file.MipMaps.OrderBy(x => x.Content.Length).ToList();
-
-                mipImgsizes = mipImgsizes.OrderBy(x => x).ToList();
-
-                // Create the content and write all MipMaps, 
-                // since we compress on this part its the first part where we know the size of a MipMap
-                foreach (var sortedMipMap in sortedMipMaps)
-                {
-                    sortedMipMap.Offset = (uint)ms.Position;
-                    if (compress)
-                    {
-                        ms.Write(zipoMagic, 0, zipoMagic.Length);
-
-                        //buffer = BitConverter.GetBytes(mipImgsizes[sortedMipMaps.IndexOf(sortedMipMap)]);
-                        buffer = BitConverter.GetBytes((int)Math.Pow(4, sortedMipMaps.IndexOf(sortedMipMap)));
-                        ms.Write(buffer, 0, buffer.Length);
-
-                        buffer = Compressor.Comp(sortedMipMap.Content);
-                        ms.Write(buffer, 0, buffer.Length);
-                        sortedMipMap.Size = (uint)buffer.Length;
-                    }
-                    else
-                    {
-                        ms.Write(sortedMipMap.Content, 0, sortedMipMap.Content.Length);
-                        sortedMipMap.Size = (uint)sortedMipMap.Content.Length;
-                    }
-                }
-
-                ms.Seek(mipdefOffset, SeekOrigin.Begin);
-
-                // Write the offset collection in the header.
-                for (int i = 0; i < file.MipMapCount; i++)
-                {
-                    buffer = BitConverter.GetBytes(sortedMipMaps[i].Offset);
-                    ms.Write(buffer, 0, buffer.Length);
-                }
-
-                // Write the size collection into the header.
-                for (int i = 0; i < file.MipMapCount; i++)
-                {
-                    buffer = BitConverter.GetBytes(sortedMipMaps[i].Size + 8);
-                    ms.Write(buffer, 0, buffer.Length);
-                }
-
-                return ms.ToArray();
-            }
-        }
-
-        public static PixelFormats GetPixelFormatFromTgv(string pixelFormat)
+        protected PixelFormats TranslatePixelFormat(string pixelFormat)
         {
             switch (pixelFormat)
             {
@@ -343,64 +243,5 @@ namespace moddingSuite.BL
                     throw new NotSupportedException(string.Format("Unknown Pixelformat {0} ", pixelFormat));
             }
         }
-
-        public static string GetTgvFromPixelFormat(PixelFormats pixelFormat)
-        {
-            switch (pixelFormat)
-            {
-                case PixelFormats.R8G8B8A8_UNORM:
-                    return "A8R8G8B8";
-                case PixelFormats.B8G8R8X8_UNORM:
-                    return "X8R8G8B8";
-                case PixelFormats.B8G8R8X8_UNORM_SRGB:
-                    return "X8R8G8B8_SRGB";
-
-                case PixelFormats.R8G8B8A8_UNORM_SRGB:
-                    return "A8R8G8B8_SRGB";
-
-                case PixelFormats.R16G16B16A16_UNORM:
-                    return "A16B16G16R16";
-
-                case PixelFormats.R16G16B16A16_FLOAT:
-                    return "A16B16G16R16F";
-
-                case PixelFormats.R32G32B32A32_FLOAT:
-                    return "A32B32G32R32F";
-
-                case PixelFormats.A8_UNORM:
-                    return "A8";
-                case PixelFormats.A8P8:
-                    return "A8P8";
-                case PixelFormats.P8:
-                    return "P8";
-                case PixelFormats.R8_UNORM:
-                    return "L8";
-                case PixelFormats.R16_UNORM:
-                    return "L16";
-                case PixelFormats.D16_UNORM:
-                    return "D16";
-                case PixelFormats.R8G8_SNORM:
-                    return "V8U8";
-                case PixelFormats.R16G16_SNORM:
-                    return "V16U16";
-
-                case PixelFormats.BC1_UNORM:
-                    return "DXT1";
-                case PixelFormats.BC1_UNORM_SRGB:
-                    return "DXT1_SRGB";
-                case PixelFormats.BC2_UNORM:
-                    return "DXT3";
-                case PixelFormats.BC2_UNORM_SRGB:
-                    return "DXT3_SRGB";
-                case PixelFormats.BC3_UNORM:
-                    return "DXT5";
-                case PixelFormats.BC3_UNORM_SRGB:
-                    return "DXT5_SRGB";
-
-                default:
-                    throw new NotSupportedException(string.Format("Unsupported PixelFormat {0}", pixelFormat));
-            }
-        }
-
     }
 }

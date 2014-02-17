@@ -9,7 +9,7 @@ namespace moddingSuite.BL.DDS
     /// <summary>
     /// Writes a DDS File     
     /// </summary>
-    public class DDSWriter
+    public class TgvDDSWriter
     {
         public byte[] CreateDDSFile(TgvFile file)
         {
@@ -34,7 +34,7 @@ namespace moddingSuite.BL.DDS
                          {
                              Size = 124,
                              Flags = DDS.HeaderFlags.Texture,
-                             //SurfaceFlags = DDS.SurfaceFlags.Texture,
+                             SurfaceFlags = DDS.SurfaceFlags.Texture,
                              Width = file.Width,
                              Height = file.Height,
                              Depth = 0,
