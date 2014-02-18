@@ -289,7 +289,7 @@ namespace moddingSuite.BL.DDS
             return ((fmt == PixelFormats.R8G8_B8G8_UNORM) || (fmt == PixelFormats.G8R8_G8B8_UNORM));
         }
 
-        public  static bool IsCompressedFormat(PixelFormats format)
+        public static bool IsCompressedFormat(PixelFormats format)
         {
             switch (format)
             {

@@ -35,8 +35,8 @@ namespace moddingSuite.BL.DDS
                              Size = 124,
                              Flags = DDS.HeaderFlags.Texture,
                              SurfaceFlags = DDS.SurfaceFlags.Texture,
-                             Width = file.Width,
-                             Height = file.Height,
+                             Width = file.ImageWidth,
+                             Height = file.ImageHeight,
                              Depth = 0,
                              MipMapCount = 1
                          };
@@ -45,7 +45,7 @@ namespace moddingSuite.BL.DDS
 
             int rowPitch, slicePitch;
             int widthCount, heightCount;
-            DDS.ComputePitch(file.Format, (int)file.Width, (int)file.Height, out rowPitch, out slicePitch, out widthCount,
+            DDS.ComputePitch(file.Format, (int)file.ImageWidth, (int)file.ImageHeight, out rowPitch, out slicePitch, out widthCount,
                          out heightCount);
 
             if (DDS.IsCompressedFormat(file.Format))

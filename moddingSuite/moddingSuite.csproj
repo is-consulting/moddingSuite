@@ -87,12 +87,15 @@
     </ApplicationDefinition>
     <Compile Include="BL\DDS\DDS.cs" />
     <Compile Include="BL\DDS\DDSHelper.cs" />
+    <Compile Include="BL\ImageService\BlockDXT\BlockDXT1.cs" />
+    <Compile Include="BL\ImageService\Color16.cs" />
+    <Compile Include="BL\ImageService\ColorBlock.cs" />
+    <Compile Include="BL\TGV\TgvBitmapReader.cs" />
     <Compile Include="BL\TGV\TgvDDSReader.cs" />
     <Compile Include="BL\TGV\TgvDDSWriter.cs" />
     <Compile Include="BL\DDS\PixelFormats.cs" />
     <Compile Include="BL\DDS\FourCC.cs" />
     <Compile Include="BL\ImageService\Color32.cs" />
-    <Compile Include="BL\ImageService\DXTDecoder.cs" />
     <Compile Include="BL\ImageService\RawImage.cs" />
     <Compile Include="BL\SavManager.cs" />
     <Compile Include="BL\TGV\TgvReader.cs" />

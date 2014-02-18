@@ -7,20 +7,44 @@ using System.Threading.Tasks;
 
 namespace moddingSuite.BL.ImageService
 {
-    // Because of .NET's Little Endian we use BGRA
+    /// <summary>
+    /// .NET is little endian -> bgra
+    /// </summary>
     [StructLayout(LayoutKind.Explicit, Size = 4, Pack = 1)]
-    public struct Color32
+    public class Color32
     {
         [FieldOffset(0)]
-        public byte B;
+        public byte b;
         [FieldOffset(1)]
-        public byte G;
+        public byte g;
         [FieldOffset(2)]
-        public byte R;
+        public byte r;
         [FieldOffset(3)]
-        public byte A;
+        public byte a;
 
         [FieldOffset(0)]
-        public uint Color;
+        public uint u;
+
+        public Color32() { }
+        public Color32(Color32 c) { u = c.u; }
+        public Color32(byte R, byte G, byte B) { setRGBA(R, G, B, 0xFF); }
+        public Color32(byte R, byte G, byte B, byte A) { setRGBA(R, G, B, A); }
+        public Color32(uint U) { u = U; }
+
+        public void setRGBA(byte R, byte G, byte B, byte A)
+        {
+            r = R;
+            g = G;
+            b = B;
+            a = A;
+        }
+
+        public void setBGRA(byte B, byte G, byte R, byte A = 0xFF)
+        {
+            r = R;
+            g = G;
+            b = B;
+            a = A;
+        }
     }
 }

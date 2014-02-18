@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +9,9 @@ namespace moddingSuite.BL.ImageService
 {
     public class RawImage
     {
-        enum Format
+        private Color32[] _data;
+
+        public enum Format
         {
             Format_RGB,
             Format_ARGB,
@@ -26,13 +29,12 @@ namespace moddingSuite.BL.ImageService
             set;
         }
 
-        private Color32[] Data
+        public Color32[] Data
         {
-            get;
-            set;
+            get { return _data; }
         }
 
-        private Format ColFormat
+        public Format ColFormat
         {
             get;
             set;
@@ -40,9 +42,18 @@ namespace moddingSuite.BL.ImageService
 
         public RawImage(Color32[] data, uint width, uint height)
         {
-            Data = data;
+            if (data == null)
+                _data = new Color32[width * height * Marshal.SizeOf(typeof(Color32))];
+            else
+                _data = data;
+
             Width = width;
             Height = height;
+        }
+
+        public RawImage(uint width, uint height)
+            : this(null, width, height)
+        {
         }
 
         public Color32[] Scanline(uint line)
