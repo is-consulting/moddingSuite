@@ -11,7 +11,7 @@ namespace moddingSuite.BL.ImageService
     /// .NET is little endian -> bgr
     /// </summary>
     [StructLayout(LayoutKind.Explicit, Size = 2, Pack = 1)]
-    public class Color16
+    public struct Color16
     {
         // Btifield: 5
         [FieldOffset(0)]
@@ -46,9 +46,9 @@ namespace moddingSuite.BL.ImageService
         [FieldOffset(0)]
         public ushort u;
 
-        public Color16() { }
-        public Color16(Color16 c) { u = c.u; }
-        public Color16(ushort U) { u = U; }
+        //public Color16() { }
+        public Color16(Color16 c) { r_i = 0; g_i = 0; b_i = 0; u = c.u; }
+        public Color16(ushort U) { r_i = 0; g_i = 0; b_i = 0; u = U; }
 
 
     }

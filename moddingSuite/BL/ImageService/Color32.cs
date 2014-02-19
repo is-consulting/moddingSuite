@@ -11,7 +11,7 @@ namespace moddingSuite.BL.ImageService
     /// .NET is little endian -> bgra
     /// </summary>
     [StructLayout(LayoutKind.Explicit, Size = 4, Pack = 1)]
-    public class Color32
+    public struct Color32
     {
         [FieldOffset(0)]
         public byte b;
@@ -25,26 +25,19 @@ namespace moddingSuite.BL.ImageService
         [FieldOffset(0)]
         public uint u;
 
-        public Color32() { }
-        public Color32(Color32 c) { u = c.u; }
-        public Color32(byte R, byte G, byte B) { setRGBA(R, G, B, 0xFF); }
-        public Color32(byte R, byte G, byte B, byte A) { setRGBA(R, G, B, A); }
-        public Color32(uint U) { u = U; }
+        public Color32(Color32 c) { b = 0; g = 0; r = 0; a = 0; u = c.u; }
+        public Color32(byte R, byte G, byte B) { u = 0; r = R; g = G; b = B; a = 0xFF; }
+        public Color32(byte R, byte G, byte B, byte A) { u = 0; r = R; g = G; b = B; a = A; }
+        public Color32(uint U) { b = 0; g = 0; r = 0; a = 0; u = U; }
 
-        public void setRGBA(byte R, byte G, byte B, byte A)
+        public static bool operator ==(Color32 left, Color32 right)
         {
-            r = R;
-            g = G;
-            b = B;
-            a = A;
+            return left.u == right.u;
         }
 
-        public void setBGRA(byte B, byte G, byte R, byte A = 0xFF)
+        public static bool operator !=(Color32 left, Color32 right)
         {
-            r = R;
-            g = G;
-            b = B;
-            a = A;
+            return left.u != right.u;
         }
     }
 }

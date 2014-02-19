@@ -1,5 +1,6 @@
 ﻿using moddingSuite.BL.DDS;
 using moddingSuite.BL.ImageService;
+using moddingSuite.BL.ImageService.BlockDXT;
 using moddingSuite.Model.Textures;
 using System;
 using System.Collections.Generic;
@@ -65,11 +66,11 @@ namespace moddingSuite.BL.TGV
 
         }
 
-        private static void ReadBlock(ColorBlock block)
+        private static void ReadBlock(ColorBlock rgba)
         {
+            BlockDXT5 blockdxt5 = new BlockDXT5();
 
-
-
+            blockdxt5.decodeBlock(rgba);
         }
 
     }

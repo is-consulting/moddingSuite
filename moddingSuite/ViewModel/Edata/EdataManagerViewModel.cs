@@ -23,6 +23,8 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Threading;
 using moddingSuite.BL.TGV;
+using System.Drawing.Imaging;
+using System.Drawing;
 
 namespace moddingSuite.ViewModel.Edata
 {

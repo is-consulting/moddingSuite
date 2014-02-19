@@ -13,8 +13,8 @@ namespace moddingSuite.BL.ImageService
 
         public Color32[] Data
         {
-            get;
-            set;
+            get { return _data; }
+            //set { _data = value; }
         }
 
         static uint colorLuminance(Color32 c)
@@ -28,7 +28,7 @@ namespace moddingSuite.BL.ImageService
             return (uint)((c0.r - c1.r) * (c0.r - c1.r) + (c0.g - c1.g) * (c0.g - c1.g) + (c0.b - c1.b) * (c0.b - c1.b));
         }
 
-        public Color32 Color(uint i)
+        public Color32 Color(uint i) 
         {
             return Data[(int)i];
         }
@@ -207,10 +207,10 @@ namespace moddingSuite.BL.ImageService
         /// Get diameter color range.
         void diameterRange(Color32 start, Color32 end)
         {
-            if (start == null)
-                throw new ArgumentNullException("start");
-            if (end == null)
-                throw new ArgumentNullException("end");
+            //if (start == null)
+            //    throw new ArgumentNullException("start");
+            //if (end == null)
+            //    throw new ArgumentNullException("end");
 
             Color32 c0 = new Color32();
             Color32 c1 = new Color32();

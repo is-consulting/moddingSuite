@@ -1,4 +1,5 @@
-﻿using System;
+﻿using moddingSuite.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -71,6 +72,18 @@ namespace moddingSuite.BL.ImageService
         public Color32 Pixel(uint x, uint y)
         {
             return Pixel(y * Width + x);
+        }
+
+        public byte[] GetRawData()
+        {
+            List<byte> ret = new List<byte>();
+
+            foreach (var col in Data)
+            {
+                ret.AddRange(Utils.StructToBytes(col));
+            }
+
+            return ret.ToArray();
         }
     }
 }

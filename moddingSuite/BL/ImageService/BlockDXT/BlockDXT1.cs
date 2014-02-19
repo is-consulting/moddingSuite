@@ -177,7 +177,7 @@ namespace moddingSuite.BL.ImageService.BlockDXT
                 throw new ArgumentNullException("block");
 
             // Decode color block.
-            Color32[] color_array = new Color32[4];
+            Color32[] color_array = { new Color32(), new Color32(), new Color32(), new Color32() };
             evaluatePalette(color_array);
 
             // Write color block.
