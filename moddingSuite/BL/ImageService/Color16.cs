@@ -13,15 +13,35 @@ namespace moddingSuite.BL.ImageService
     [StructLayout(LayoutKind.Explicit, Size = 2, Pack = 1)]
     public class Color16
     {
-        // 5
+        // Btifield: 5
         [FieldOffset(0)]
-        public ushort b;
-        // 6
+        private ushort b_i;
+
+        public ushort b
+        {
+            get { return (ushort)((b_i >> 11) & 0x1F); }
+            set { b_i = (ushort)((b_i & ~(0x1F << 11)) | (value & 0x3F) << 11); }
+        }
+
+        // Bitfield: 6
         [FieldOffset(0)]
-        public ushort g;
-        // 5
+        private ushort g_i;
+
+        public ushort g
+        {
+            get { return (ushort)((g_i >> 5) & 0x7F); }
+            set { g_i = (ushort)((g_i & ~(0x7F << 5)) | (value & 0x7F) << 5); }
+        }
+
+        // Bitfield: 5
         [FieldOffset(0)]
-        public short r;
+        private ushort r_i;
+
+        public ushort r
+        {
+            get { return (ushort) (r_i & 0x1F); }
+            set { r_i = (ushort) ((r_i & ~0x1F) | (value & 0x1F)); }
+        }
 
         [FieldOffset(0)]
         public ushort u;
@@ -29,5 +49,7 @@ namespace moddingSuite.BL.ImageService
         public Color16() { }
         public Color16(Color16 c) { u = c.u; }
         public Color16(ushort U) { u = U; }
+
+
     }
 }

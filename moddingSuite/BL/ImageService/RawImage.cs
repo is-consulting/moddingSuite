@@ -43,7 +43,7 @@ namespace moddingSuite.BL.ImageService
         public RawImage(Color32[] data, uint width, uint height)
         {
             if (data == null)
-                _data = new Color32[width * height * Marshal.SizeOf(typeof(Color32))];
+                _data = new Color32[width * height * 4]; // sizeof(Color32) == 4
             else
                 _data = data;
 

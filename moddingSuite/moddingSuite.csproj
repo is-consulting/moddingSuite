@@ -87,6 +87,7 @@
     </ApplicationDefinition>
     <Compile Include="BL\DDS\DDS.cs" />
     <Compile Include="BL\DDS\DDSHelper.cs" />
+    <Compile Include="BL\ImageService\BlockDXT\AlphaBlockDXT5.cs" />
     <Compile Include="BL\ImageService\BlockDXT\BlockDXT1.cs" />
     <Compile Include="BL\ImageService\Color16.cs" />
     <Compile Include="BL\ImageService\ColorBlock.cs" />
