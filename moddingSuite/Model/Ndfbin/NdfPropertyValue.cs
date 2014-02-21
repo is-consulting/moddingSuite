@@ -29,15 +29,15 @@ namespace moddingSuite.Model.Ndfbin
             _instance = instance;
 
             DetailsCommand = new ActionCommand(DetailsCommandExecute);
-            AddRowCommand = new ActionCommand(AddRowExecute);
-            AddRowOfCommonTypeCommand = new ActionCommand(AddRowOfCommonTypeExecute, AddRowOfCommonTypeCanExecute);
-            DeleteRowCommand = new ActionCommand(DeleteRowExecute, DeleteRowCanExecute);
+            //AddRowCommand = new ActionCommand(AddRowExecute);
+            //AddRowOfCommonTypeCommand = new ActionCommand(AddRowOfCommonTypeExecute, AddRowOfCommonTypeCanExecute);
+            //DeleteRowCommand = new ActionCommand(DeleteRowExecute, DeleteRowCanExecute);
         }
 
         public ICommand DetailsCommand { get; set; }
-        public ICommand AddRowCommand { get; protected set; }
-        public ICommand AddRowOfCommonTypeCommand { get; protected set; }
-        public ICommand DeleteRowCommand { get; protected set; }
+        //public ICommand AddRowCommand { get; protected set; }
+        //public ICommand AddRowOfCommonTypeCommand { get; protected set; }
+        //public ICommand DeleteRowCommand { get; protected set; }
 
         public NdfType Type
         {
@@ -110,70 +110,70 @@ namespace moddingSuite.Model.Ndfbin
 
         #endregion
 
-        private bool AddRowOfCommonTypeCanExecute()
-        {
-            var col = Value as NdfCollection;
+        //private bool AddRowOfCommonTypeCanExecute()
+        //{
+        //    var col = Value as NdfCollection;
 
-            return col != null && col.Count > 0;
-        }
+        //    return col != null && col.Count > 0;
+        //}
 
-        private bool DeleteRowCanExecute()
-        {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(Value);
+        //private bool DeleteRowCanExecute()
+        //{
+        //    ICollectionView cv = CollectionViewSource.GetDefaultView(Value);
 
-            return cv != null && cv.CurrentItem != null;
-        }
+        //    return cv != null && cv.CurrentItem != null;
+        //}
 
-        private void DeleteRowExecute(object obj)
-        {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(Value);
+        //private void DeleteRowExecute(object obj)
+        //{
+        //    ICollectionView cv = CollectionViewSource.GetDefaultView(Value);
 
-            if (cv == null || cv.CurrentItem == null)
-                return;
+        //    if (cv == null || cv.CurrentItem == null)
+        //        return;
 
-            var val = cv.CurrentItem as CollectionItemValueHolder;
+        //    var val = cv.CurrentItem as CollectionItemValueHolder;
 
-            if (val == null)
-                return;
+        //    if (val == null)
+        //        return;
 
-            ((NdfCollection)Value).Remove(cv.CurrentItem);
-        }
+        //    ((NdfCollection)Value).Remove(cv.CurrentItem);
+        //}
 
-        private void AddRowOfCommonTypeExecute(object obj)
-        {
-            var col = Value as NdfCollection;
+        //private void AddRowOfCommonTypeExecute(object obj)
+        //{
+        //    var col = Value as NdfCollection;
 
-            if (col == null)
-                return;
+        //    if (col == null)
+        //        return;
 
-            NdfType type =
-                col.GroupBy(x => x.Value.Type).OrderByDescending(gp => gp.Count()).Select(x => x.First().Value.Type).
-                    Single();
+        //    NdfType type =
+        //        col.GroupBy(x => x.Value.Type).OrderByDescending(gp => gp.Count()).Select(x => x.First().Value.Type).
+        //            Single();
 
-            var wrapper =
-                new CollectionItemValueHolder(
-                    NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, Manager, 0), Manager, 0);
+        //    var wrapper =
+        //        new CollectionItemValueHolder(
+        //            NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, Manager, 0), Manager, 0);
 
-            col.Add(wrapper);
-        }
+        //    col.Add(wrapper);
+        //}
 
-        private void AddRowExecute(object obj)
-        {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(Value);
+        //private void AddRowExecute(object obj)
+        //{
+        //    ICollectionView cv = CollectionViewSource.GetDefaultView(Value);
 
-            if (cv == null)
-                return;
+        //    if (cv == null)
+        //        return;
 
-            var view = new AddCollectionItemView();
-            var vm = new AddCollectionItemViewModel(Manager, view);
+        //    var view = new AddCollectionItemView();
+        //    var vm = new AddCollectionItemViewModel(Manager, view);
 
-            view.DataContext = vm;
+        //    view.DataContext = vm;
 
-            bool? ret = view.ShowDialog();
+        //    bool? ret = view.ShowDialog();
 
-            if (ret.HasValue && ret.Value)
-                ((NdfCollection)Value).Add(vm.Wrapper);
-        }
+        //    if (ret.HasValue && ret.Value)
+        //        ((NdfCollection)Value).Add(vm.Wrapper);
+        //}
 
         public override void BeginEdit()
         {
@@ -203,9 +203,6 @@ namespace moddingSuite.Model.Ndfbin
 
             base.EndEdit();
         }
-
-
-
 
         public void DetailsCommandExecute(object obj)
         {
@@ -274,9 +271,9 @@ namespace moddingSuite.Model.Ndfbin
             if (refe == null)
                 return;
 
-            DialogProvider.ProvideView(prop as ViewModelBase);
-            var view = new ListEditorWindow { DataContext = prop };
-            view.Show();
+            var editor = new ListEditorViewModel(refe, Manager);
+
+            DialogProvider.ProvideView(editor);
         }
     }
 }

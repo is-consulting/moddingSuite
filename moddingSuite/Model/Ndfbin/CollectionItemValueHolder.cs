@@ -8,7 +8,7 @@ namespace moddingSuite.Model.Ndfbin
 {
     public class CollectionItemValueHolder : ViewModelBase, IValueHolder
     {
-        private byte[] _oldVal = new byte[0];
+        //private byte[] _oldVal = new byte[0];
         private NdfValueWrapper _value;
 
         public CollectionItemValueHolder(NdfValueWrapper value, NdfbinManager manager, long instanceOffset)
@@ -37,31 +37,31 @@ namespace moddingSuite.Model.Ndfbin
 
         public override void BeginEdit()
         {
-            bool valid;
-            _oldVal = Value.GetBytes(out valid);
+            //bool valid;
+            //_oldVal = Value.GetBytes(out valid);
 
             base.BeginEdit();
         }
 
         public override void EndEdit()
         {
-            bool valid;
+            //bool valid;
 
-            byte[] newValue = Value.GetBytes(out valid);
+            //byte[] newValue = Value.GetBytes(out valid);
 
-            if (valid && !Utils.ByteArrayCompare(newValue, _oldVal))
-            {
-                Manager.ChangeManager.Changes.Add(new ChangeEntry
-                                                      {
-                                                          ChangedValue = this,
-                                                          NewValue = newValue,
-                                                          OldValue = _oldVal
-                                                      });
+            //if (valid && !Utils.ByteArrayCompare(newValue, _oldVal))
+            //{
+            //    Manager.ChangeManager.Changes.Add(new ChangeEntry
+            //                                          {
+            //                                              ChangedValue = this,
+            //                                              NewValue = newValue,
+            //                                              OldValue = _oldVal
+            //                                          });
 
-                OnPropertyChanged(() => Value);
+            //    OnPropertyChanged(() => Value);
 
-                _oldVal = newValue;
-            }
+            //    _oldVal = newValue;
+            //}
 
             base.EndEdit();
         }

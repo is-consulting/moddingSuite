@@ -187,9 +187,9 @@ namespace moddingSuite.ViewModel.Ndf
             if (refe == null)
                 return;
 
-            DialogProvider.ProvideView(prop as ViewModelBase, ParentVm);
-            //var view = new ListEditorWindow {DataContext = prop};
-            //view.Show();
+            var editor = new ListEditorViewModel(refe, Object.Class.Manager);
+
+            DialogProvider.ProvideView(editor, ParentVm);
         }
     }
 }

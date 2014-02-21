@@ -167,6 +167,7 @@
     <Compile Include="ViewModel\Base\ActionCommand.cs" />
     <Compile Include="ViewModel\Base\ViewModelBase.cs" />
     <Compile Include="ViewModel\Ndf\AddCollectionItemViewModel.cs" />
+    <Compile Include="ViewModel\Ndf\ListEditorViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfEditorMainViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfClassViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfObjectViewModel.cs" />

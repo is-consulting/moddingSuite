@@ -45,7 +45,7 @@ namespace moddingSuite.View.DialogProvider
 
             Maps.Add(new ViewMap<NdfbinView, NdfEditorMainViewModel>());
             Maps.Add(new ViewMap<InstanceWindowView, NdfClassViewModel>());
-            Maps.Add(new ViewMap<ListEditorWindow, NdfPropertyValue>());
+            Maps.Add(new ViewMap<ListEditorWindow, ListEditorViewModel>());
 
 
             Maps.Add(new ViewMap<TradFileView, TradFileViewModel>());
