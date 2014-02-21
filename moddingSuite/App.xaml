@@ -44,6 +44,10 @@
         <Extension:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter" />
         
         <Extension:LocalisationHashValueConverter x:Key="LocalisationHashValueConverter" />
+        <Extension:Color32ValueConverter x:Key="Color32ValueConverter" />
+
+
+        <Extension:ColorToBrushConverter x:Key="ColorToBrushConverter" />
 
 
         <Extension:EdataFileTypeToImageConverter x:Key="EdataFileTypeToImageConverter" />
@@ -85,6 +89,10 @@
 
         <DataTemplate x:Key="LocaleHashEditingTemplate">
             <ValueEditing:LocaleHashEditingTemplate />
+        </DataTemplate>
+
+        <DataTemplate x:Key="ColorPickerEditingTemplate">
+            <ValueEditing:ColorPickerEditingTemplate />
         </DataTemplate>
 
 

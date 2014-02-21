@@ -40,7 +40,7 @@ namespace moddingSuite.View.Extension
                     return element.FindResource("BooleanEditingTemplate") as DataTemplate;
 
                 case NdfType.Color32:
-                    return null;
+                    return element.FindResource("ColorPickerEditingTemplate") as DataTemplate;
 
                 case NdfType.Vector:
                     return null;

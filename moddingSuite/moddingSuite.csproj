@@ -186,6 +186,8 @@
     <Compile Include="View\DialogProvider\ViewInstance.cs" />
     <Compile Include="View\DialogProvider\ViewMap.cs" />
     <Compile Include="View\Extension\BoolToVisibilityCollapsedConverter.cs" />
+    <Compile Include="View\Extension\Color32ValueConverter.cs" />
+    <Compile Include="View\Extension\ColorToBrushConverter.cs" />
     <Compile Include="View\Extension\EdataFileTypeToImageConverter.cs" />
     <Compile Include="View\Extension\EditingControlDataTemplateSelector.cs" />
     <Compile Include="View\Extension\LocalisationHashValueConverter.cs" />

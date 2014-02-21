@@ -53,7 +53,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                     int id2 = BitConverter.ToInt32(data, 0);
                     return new NdfString(mgr.Strings[id2], pos);
                 case NdfType.Color32:
-                    return new NdfColor32(Color.FromArgb(data[0], data[1], data[2], data[3]), pos);
+                    return new NdfColor32(Color.FromArgb(data[3], data[0], data[1], data[2]), pos);
                 case NdfType.Color128:
                     return new NdfColor128(data, pos);
                 case NdfType.Vector:
