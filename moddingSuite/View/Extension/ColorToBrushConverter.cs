@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using MediaColor = System.Windows.Media.Color;
 
 namespace moddingSuite.View.Extension
 {
@@ -13,9 +12,9 @@ namespace moddingSuite.View.Extension
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            MediaColor col = (MediaColor)value;
+            var col = (Color)value;
 
-            return new SolidBrush(Color.FromArgb(col.R, col.B, col.G, col.A));
+            return new SolidBrush(Color.FromArgb(col.A, col.R, col.B, col.G));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

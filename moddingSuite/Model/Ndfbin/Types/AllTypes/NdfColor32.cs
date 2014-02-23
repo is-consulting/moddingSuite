@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows.Media;
+using System.Drawing;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {

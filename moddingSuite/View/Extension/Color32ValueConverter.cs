@@ -1,11 +1,11 @@
 ﻿using moddingSuite.Util;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace moddingSuite.View.Extension
 {
@@ -13,7 +13,9 @@ namespace moddingSuite.View.Extension
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value.ToString();
+            var col = (Color)value;
+
+            return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", col.R, col.G, col.B, col.A);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
