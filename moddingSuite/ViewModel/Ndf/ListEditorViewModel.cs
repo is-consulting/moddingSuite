@@ -91,7 +91,9 @@ namespace moddingSuite.ViewModel.Ndf
 
         private void AddRowOfCommonTypeExecute(object obj)
         {
-            if (Value == null)
+            var cv = CollectionViewSource.GetDefaultView(Value);
+
+            if (cv == null)
                 return;
 
             NdfType type =
@@ -104,9 +106,7 @@ namespace moddingSuite.ViewModel.Ndf
 
             if (IsInsertMode)
             {
-                var cv = CollectionViewSource.GetDefaultView(Value);
-
-                if (cv == null || cv.CurrentItem == null)
+                if (cv.CurrentItem == null)
                     return;
 
                 var val = cv.CurrentItem as CollectionItemValueHolder;
@@ -115,10 +115,11 @@ namespace moddingSuite.ViewModel.Ndf
                     return;
 
                 Value.Insert(cv.CurrentPosition + 1, wrapper);
-                cv.MoveCurrentTo(wrapper);
             }
             else
                 Value.Add(wrapper);
+
+            cv.MoveCurrentTo(wrapper);
         }
 
         private void AddRowExecute(object obj)
@@ -150,10 +151,11 @@ namespace moddingSuite.ViewModel.Ndf
                     return;
 
                 Value.Insert(cv.CurrentPosition + 1, vm.Wrapper);
-                cv.MoveCurrentTo(vm.Wrapper);
             }
             else
                 Value.Add(vm.Wrapper);
+
+            cv.MoveCurrentTo(vm.Wrapper);
         }
 
 
