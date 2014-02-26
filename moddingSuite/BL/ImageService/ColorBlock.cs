@@ -205,7 +205,7 @@ namespace moddingSuite.BL.ImageService
         }
 
         /// Get diameter color range.
-        void diameterRange(Color32 start, Color32 end)
+        void diameterRange(ref Color32 start, ref Color32 end)
         {
             //if (start == null)
             //    throw new ArgumentNullException("start");

@@ -76,12 +76,10 @@ namespace moddingSuite.BL.ImageService
 
         public byte[] GetRawData()
         {
-            List<byte> ret = new List<byte>();
+            var ret = new List<byte>();
 
             foreach (var col in Data)
-            {
                 ret.AddRange(Utils.StructToBytes(col));
-            }
 
             return ret.ToArray();
         }

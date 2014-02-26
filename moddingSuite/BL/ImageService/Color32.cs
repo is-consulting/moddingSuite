@@ -39,5 +39,10 @@ namespace moddingSuite.BL.ImageService
         {
             return left.u != right.u;
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

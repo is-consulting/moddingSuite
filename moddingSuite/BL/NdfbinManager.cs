@@ -16,7 +16,6 @@ namespace moddingSuite.BL
     {
         public const string InstanceNamePrefix = "public";
         public static readonly Encoding NdfTextEncoding = Encoding.Unicode;
-        private readonly List<NdfObject> _allInstances = new List<NdfObject>();
 
         public NdfbinManager(byte[] fileData)
         {
@@ -42,10 +41,7 @@ namespace moddingSuite.BL
 
         public bool HasUnkownTypes { get; set; }
 
-        public List<NdfObject> AllInstances
-        {
-            get { return _allInstances; }
-        }
+        public List<NdfObject> AllInstances { get; protected set; }
 
         public bool HasUnkownType { get; set; }
 
@@ -76,7 +72,7 @@ namespace moddingSuite.BL
             Impr = ReadTopologyList("IMPR");
             Expr = ReadTopologyList("EXPR");
 
-            ReadObjects();
+            AllInstances = ReadObjects();
         }
 
         protected HashSet<uint> ReadTopologyList(string lst)
@@ -157,7 +153,6 @@ namespace moddingSuite.BL
                     property.Class = cls;
 
                     cls.Properties.Add(property);
-
 
                     i++;
                 }
@@ -241,9 +236,9 @@ namespace moddingSuite.BL
             }
         }
 
-        protected ObservableCollection<NdfObject> ReadObjects()
+        protected List<NdfObject> ReadObjects()
         {
-            var objects = new ObservableCollection<NdfObject>();
+            var objects = new List<NdfObject>();
 
             NdfFooterEntry objEntry = Footer.Entries.Single(x => x.Name == "OBJE");
 
@@ -303,7 +298,6 @@ namespace moddingSuite.BL
                     throw new InvalidDataException("Object without class found.");
 
                 cls.Instances.Add(instance);
-                _allInstances.Add(instance);
 
                 NdfPropertyValue prop;
                 bool triggerBreak;
@@ -328,6 +322,7 @@ namespace moddingSuite.BL
 
                 AddEmptyProperties(instance);
             }
+
             return instance;
         }
 
@@ -640,7 +635,7 @@ namespace moddingSuite.BL
         }
 
         /// <summary>
-        /// Recompileing
+        /// Recompiling
         /// </summary>
         /// <returns></returns>
         protected byte[] RecompileObj()
@@ -649,7 +644,7 @@ namespace moddingSuite.BL
 
             byte[] objSep = {0xAB, 0xAB, 0xAB, 0xAB};
 
-            foreach (NdfObject instance in _allInstances)
+            foreach (NdfObject instance in AllInstances)
             {
                 objectPart.AddRange(BitConverter.GetBytes(instance.Class.Id));
 
@@ -734,11 +729,7 @@ namespace moddingSuite.BL
 
         protected byte[] RecompileChnk()
         {
-            var chnk = new List<byte> {0, 0, 0, 0};
-
-            chnk.AddRange(BitConverter.GetBytes(AllInstances.Count));
-
-            return chnk.ToArray();
+            return BitConverter.GetBytes(AllInstances.Count);
         }
 
         protected byte[] RecompileStrTable(IEnumerable<NdfStringReference> table)
@@ -828,10 +819,9 @@ namespace moddingSuite.BL
 
         public byte[] CreateNdfScript()
         {
-            throw new NotImplementedException("not yet implemented");
             using (var ms = new MemoryStream())
             {
-                byte[] buffer = NdfTextEncoding.GetBytes(string.Format("// Handwritten by enohka \n // For real\n\n\n"));
+                byte[] buffer = NdfTextEncoding.GetBytes(string.Format("// Handwritten by enohka \n// For real\n\n\n"));
 
                 ms.Write(buffer, 0, buffer.Length);
 

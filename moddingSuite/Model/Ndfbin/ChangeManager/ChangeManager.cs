@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -35,6 +36,8 @@ namespace moddingSuite.Model.Ndfbin.ChangeManager
 
             if (item == null)
                 return;
+
+            throw new NotImplementedException();
 
             //Changes.Remove(item);
             //item.ChangedValue.Value = NdfTypeManager.GetValue(item.OldValue, item.ChangedValue.Value.Type, item.ChangedValue.Manager, item.ChangedValue.Value.OffSet);

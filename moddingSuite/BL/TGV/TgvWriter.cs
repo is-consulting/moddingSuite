@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace moddingSuite.BL.TGV
 {
@@ -67,7 +66,7 @@ namespace moddingSuite.BL.TGV
 
             var sortedMipMaps = sourceFile.MipMaps.OrderBy(x => x.Content.Length).ToList();
 
-            mipImgsizes = mipImgsizes.OrderBy(x => x).ToList();
+            //mipImgsizes = mipImgsizes.OrderBy(x => x).ToList();
 
             // Create the content and write all MipMaps, 
             // since we compress on this part its the first part where we know the size of a MipMap

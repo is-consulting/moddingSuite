@@ -11,7 +11,7 @@ namespace moddingSuite.BL.ImageService.BlockDXT
         AlphaBlockDXT5 alpha;
         BlockDXT1 color;
 
-        public void decodeBlock(ColorBlock block)
+        public void decodeBlock(ref ColorBlock block)
         {
             if (block == null)
                 throw new ArgumentNullException("block");

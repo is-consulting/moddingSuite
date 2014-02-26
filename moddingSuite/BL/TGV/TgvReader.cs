@@ -3,11 +3,8 @@ using moddingSuite.Compressing;
 using moddingSuite.Model.Textures;
 using moddingSuite.Util;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace moddingSuite.BL.TGV
 {

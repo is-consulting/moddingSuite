@@ -11,15 +11,17 @@ namespace moddingSuite.Test
         [TestMethod]
         public void TestMethod1()
         {
-            //var path = @"C:\Users\enohka\Desktop\Teststuff\texture reversing\tsccombds_combineddstexture01-2.dds";
+            SavManager mgr = new SavManager();
 
-            //var wr = new DDSReader();
+            using (var fs = new FileStream(@"D:\Programme\Steam\userdata\2346410\58610\remote\profile.wargame", FileMode.Open))
+            {
+                using (var ms = new MemoryStream())
+                {
+                    fs.CopyTo(ms);
 
-            //var data = File.ReadAllBytes(path);
-
-            //var file = wr.ReadDDS(data);
-
-            //TgvManager mgr = new TgvManager();
+                    mgr.Read(ms.ToArray());
+                }
+            }
         }
 
         [TestMethod]

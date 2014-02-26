@@ -15,8 +15,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong alpha0
         {
-            get { return (ulong)((alpha0_i >> 56) & 0xFF); }
-            set { alpha0_i = (ulong)((alpha0_i & ~(0xFF << 56)) | (value & 0xFF) << 56); }
+            get { return ((alpha0_i >> 56) & 0xFF); }
+            set { alpha0_i = ((alpha0_i & ~(0xFF << 56)) | (value & 0xFF) << 56); }
         }
 
         [FieldOffset(0)]
@@ -24,8 +24,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong alpha1
         {
-            get { return (ulong)((alpha1_i >> 48) & 0xFF); }
-            set { alpha1_i = (ulong)((alpha1_i & ~(0xFFU << 48)) | (value & 0xFFU) << 48); }
+            get { return ((alpha1_i >> 48) & 0xFF); }
+            set { alpha1_i = ((alpha1_i & ~(0xFFU << 48)) | (value & 0xFFU) << 48); }
         }
 
         [FieldOffset(0)]
@@ -33,8 +33,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits0
         {
-            get { return (ulong)((bits0_i >> 45) & 0x7U); }
-            set { bits0_i = (ulong)((bits0_i & ~(0x7U << 45)) | (value & 0x7U) << 45); }
+            get { return ((bits0_i >> 45) & 0x7U); }
+            set { bits0_i = ((bits0_i & ~(0x7U << 45)) | (value & 0x7U) << 45); }
         }
 
         [FieldOffset(0)]
@@ -42,8 +42,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits1
         {
-            get { return (ulong)((bits1_i >> 42) & 0x7U); }
-            set { bits1_i = (ulong)((bits1_i & ~(0x7U << 42)) | (value & 0x7U) << 42); }
+            get { return ((bits1_i >> 42) & 0x7U); }
+            set { bits1_i = ((bits1_i & ~(0x7U << 42)) | (value & 0x7U) << 42); }
         }
 
         [FieldOffset(0)]
@@ -51,8 +51,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits2
         {
-            get { return (ulong)((bits2_i >> 39) & 0x7U); }
-            set { bits2_i = (ulong)((bits2_i & ~(0x7U << 39)) | (value & 0x7U) << 39); }
+            get { return ((bits2_i >> 39) & 0x7U); }
+            set { bits2_i = ((bits2_i & ~(0x7U << 39)) | (value & 0x7U) << 39); }
         }
 
         [FieldOffset(0)]
@@ -60,8 +60,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits3
         {
-            get { return (ulong)((bits3_i >> 36) & 0x7U); }
-            set { bits3_i = (ulong)((bits3_i & ~(0x7U << 36)) | (value & 0x7U) << 36); }
+            get { return ((bits3_i >> 36) & 0x7U); }
+            set { bits3_i = ((bits3_i & ~(0x7U << 36)) | (value & 0x7U) << 36); }
         }
 
         [FieldOffset(0)]
@@ -69,8 +69,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits4
         {
-            get { return (ulong)((bits4_i >> 33) & 0x7U); }
-            set { bits4_i = (ulong)((bits4_i & ~(0x7U << 33)) | (value & 0x7U) << 33); }
+            get { return ((bits4_i >> 33) & 0x7U); }
+            set { bits4_i = ((bits4_i & ~(0x7U << 33)) | (value & 0x7U) << 33); }
         }
 
         [FieldOffset(0)]
@@ -78,8 +78,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits5
         {
-            get { return (ulong)((bits5_i >> 30) & 0x7U); }
-            set { bits5_i = (ulong)((bits5_i & ~(0x7U << 30)) | (value & 0x7U) << 30); }
+            get { return ((bits5_i >> 30) & 0x7U); }
+            set { bits5_i = ((bits5_i & ~(0x7U << 30)) | (value & 0x7U) << 30); }
         }
 
         [FieldOffset(0)]
@@ -87,8 +87,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits6
         {
-            get { return (ulong)((bits6_i >> 27) & 0x7U); }
-            set { bits6_i = (ulong)((bits6_i & ~(0x7U << 27)) | (value & 0x7U) << 27); }
+            get { return ((bits6_i >> 27) & 0x7U); }
+            set { bits6_i = ((bits6_i & ~(0x7U << 27)) | (value & 0x7U) << 27); }
         }
 
         [FieldOffset(0)]
@@ -96,8 +96,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits7
         {
-            get { return (ulong)((bits7_i >> 24) & 0x7U); }
-            set { bits7_i = (ulong)((bits7_i & ~(0x7U << 24)) | (value & 0x7U) << 24); }
+            get { return ((bits7_i >> 24) & 0x7U); }
+            set { bits7_i = ((bits7_i & ~(0x7U << 24)) | (value & 0x7U) << 24); }
         }
 
         [FieldOffset(0)]
@@ -105,8 +105,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits8
         {
-            get { return (ulong)((bits8_i >> 21) & 0x7U); }
-            set { bits8_i = (ulong)((bits8_i & ~(0x7U << 21)) | (value & 0x7U) << 21); }
+            get { return ((bits8_i >> 21) & 0x7U); }
+            set { bits8_i = ((bits8_i & ~(0x7U << 21)) | (value & 0x7U) << 21); }
         }
 
         [FieldOffset(0)]
@@ -114,8 +114,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bits9
         {
-            get { return (ulong)((bits9_i >> 18) & 0x7U); }
-            set { bits9_i = (ulong)((bits9_i & ~(0x7U << 18)) | (value & 0x7U) << 18); }
+            get { return ((bits9_i >> 18) & 0x7U); }
+            set { bits9_i = ((bits9_i & ~(0x7U << 18)) | (value & 0x7U) << 18); }
         }
 
         [FieldOffset(0)]
@@ -123,8 +123,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bitsA
         {
-            get { return (ulong)((bitsA_i >> 15) & 0x7U); }
-            set { bitsA_i = (ulong)((bitsA_i & ~(0x7U << 15)) | (value & 0x7U) << 15); }
+            get { return ((bitsA_i >> 15) & 0x7U); }
+            set { bitsA_i = ((bitsA_i & ~(0x7U << 15)) | (value & 0x7U) << 15); }
         }
 
         [FieldOffset(0)]
@@ -132,8 +132,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bitsB
         {
-            get { return (ulong)((bitsB_i >> 12) & 0x7U); }
-            set { bitsB_i = (ulong)((bitsB_i & ~(0x7U << 12)) | (value & 0x7U) << 12); }
+            get { return ((bitsB_i >> 12) & 0x7U); }
+            set { bitsB_i = ((bitsB_i & ~(0x7U << 12)) | (value & 0x7U) << 12); }
         }
 
         [FieldOffset(0)]
@@ -141,8 +141,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bitsC
         {
-            get { return (ulong)((bitsC_i >> 9) & 0x7U); }
-            set { bitsC_i = (ulong)((bitsC_i & ~(0x7U << 9)) | (value & 0x7U) << 9); }
+            get { return ((bitsC_i >> 9) & 0x7U); }
+            set { bitsC_i = ((bitsC_i & ~(0x7U << 9)) | (value & 0x7U) << 9); }
         }
 
         [FieldOffset(0)]
@@ -150,8 +150,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bitsD
         {
-            get { return (ulong)((bitsD_i >> 6) & 0x7U); }
-            set { bitsD_i = (ulong)((bitsD_i & ~(0x7U << 6)) | (value & 0x7U) << 6); }
+            get { return ((bitsD_i >> 6) & 0x7U); }
+            set { bitsD_i = ((bitsD_i & ~(0x7U << 6)) | (value & 0x7U) << 6); }
         }
 
         [FieldOffset(0)]
@@ -159,8 +159,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bitsE
         {
-            get { return (ulong)((bitsE_i >> 3) & 0x7U); }
-            set { bitsE_i = (ulong)((bitsE_i & ~(0x7U << 3)) | (value & 0x7U) << 3); }
+            get { return ((bitsE_i >> 3) & 0x7U); }
+            set { bitsE_i = ((bitsE_i & ~(0x7U << 3)) | (value & 0x7U) << 3); }
         }
 
         [FieldOffset(0)]
@@ -168,8 +168,8 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
         public ulong bitsF
         {
-            get { return (ulong)(bitsF_i & 0x7U); }
-            set { bitsF_i = (ulong)((bitsF_i & ~0x7U) | (value & 0x7U)); }
+            get { return (bitsF_i & 0x7U); }
+            set { bitsF_i = ((bitsF_i & ~0x7U) | (value & 0x7U)); }
         }
 
         [FieldOffset(0)]
@@ -177,22 +177,22 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
 
 
-        public void evaluatePalette(byte[] alpha)
+        public void evaluatePalette(ref byte[] alpha)
         {
             if (alpha.Length > 8)
                 throw new ArgumentException("alpha");
 
             if (alpha0 > alpha1)
             {
-                evaluatePalette8(alpha);
+                evaluatePalette8(ref alpha);
             }
             else
             {
-                evaluatePalette6(alpha);
+                evaluatePalette6(ref alpha);
             }
         }
 
-        public void evaluatePalette8(byte[] alpha)
+        public void evaluatePalette8(ref byte[] alpha)
         {
             if (alpha.Length != 8)
                 throw new ArgumentException("alpha");
@@ -208,7 +208,7 @@ namespace moddingSuite.BL.ImageService.BlockDXT
             alpha[7] = (byte)((1 * alpha[0] + 6 * alpha[1]) / 7);	// bit code 111
         }
 
-        public void evaluatePalette6(byte[] alpha)
+        public void evaluatePalette6(ref byte[] alpha)
         {
             if (alpha.Length != 8)
                 throw new ArgumentException("alpha");
@@ -224,7 +224,7 @@ namespace moddingSuite.BL.ImageService.BlockDXT
             alpha[7] = 0xFF;							// Bit code 111
         }
 
-        public void indices(byte[] index_array)
+        public void indices(ref byte[] index_array)
         {
             if (index_array.Length != 16)
                 throw new ArgumentException("index_array");
@@ -274,10 +274,10 @@ namespace moddingSuite.BL.ImageService.BlockDXT
                 throw new ArgumentException("block");
 
             byte[] alpha_array = new byte[8];
-            evaluatePalette(alpha_array);
+            evaluatePalette(ref alpha_array);
 
             byte[] index_array = new byte[16];
-            indices(index_array);
+            indices(ref index_array);
 
             for (uint i = 0; i < 16; i++)
             {

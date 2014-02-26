@@ -172,7 +172,7 @@ namespace moddingSuite.ViewModel.Edata
 
                 report(string.Format("Replacing {0}...", file.Path));
 
-                Thread s = new Thread(() =>
+                var s = new Thread(() =>
                 {
                     byte[] replacefile = File.ReadAllBytes(openfDlg.FileName);
 
@@ -193,13 +193,13 @@ namespace moddingSuite.ViewModel.Edata
             if (vm == null)
                 return;
 
-            var tgvFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+            var destTgvFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
 
-            if (tgvFile == null)
+            if (destTgvFile == null)
                 return;
 
             var tgvReader = new TgvReader();
-            var data = tgvFile.Manager.GetRawData(tgvFile);
+            var data = destTgvFile.Manager.GetRawData(destTgvFile);
             var tgv = tgvReader.Read(data);
 
             Settings.Settings settings = SettingsManager.Load();
@@ -221,30 +221,30 @@ namespace moddingSuite.ViewModel.Edata
 
                 IsUIBusy = true;
                 var dispatcher = Dispatcher.CurrentDispatcher;
-                Action<string> report = (msg) => StatusText = msg;
+                Action<string> report = msg => StatusText = msg;
 
-                report(string.Format("Replacing {0}...", tgvFile.Path));
+                report(string.Format("Replacing {0}...", destTgvFile.Path));
 
-                Thread s = new Thread(() =>
+                var s = new Thread(() =>
                 {
-                    byte[] oldDds = File.ReadAllBytes(openfDlg.FileName);
+                    byte[] sourceDds = File.ReadAllBytes(openfDlg.FileName);
 
                     dispatcher.Invoke(report, "Converting DDS to TGV file format...");
 
                     var ddsReader = new TgvDDSReader();
-                    var newDds = ddsReader.ReadDDS(oldDds);
-                    byte[] newTgv;
+                    var sourceTgvFile = ddsReader.ReadDDS(sourceDds);
+                    byte[] sourceTgvRawData;
 
                     using (var tgvwriterStream = new MemoryStream())
                     {
                         var tgvWriter = new TgvWriter();
-                        tgvWriter.Write(tgvwriterStream, newDds, tgv.SourceChecksum, tgv.IsCompressed);
-                        newTgv = tgvwriterStream.ToArray();
+                        tgvWriter.Write(tgvwriterStream, sourceTgvFile, tgv.SourceChecksum, tgv.IsCompressed);
+                        sourceTgvRawData = tgvwriterStream.ToArray();
                     }
 
                     dispatcher.Invoke(report, "Replacing file in edata container...");
 
-                    vm.EdataManager.ReplaceFile(tgvFile, newTgv);
+                    vm.EdataManager.ReplaceFile(destTgvFile, sourceTgvRawData);
                     vm.LoadFile(vm.LoadedFile);
 
                     dispatcher.Invoke(report, "Replacing finished!");
@@ -262,21 +262,21 @@ namespace moddingSuite.ViewModel.Edata
             if (vm == null)
                 return;
 
-            var tgvFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+            var sourceTgvFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
 
-            if (tgvFile == null)
+            if (sourceTgvFile == null)
                 return;
 
             Settings.Settings settings = SettingsManager.Load();
 
             var tgvReader = new TgvReader();
-            var tgv = tgvReader.Read(tgvFile.Manager.GetRawData(tgvFile));
+            var tgv = tgvReader.Read(sourceTgvFile.Manager.GetRawData(sourceTgvFile));
 
             var writer = new TgvDDSWriter();
 
             byte[] content = writer.CreateDDSFile(tgv);
 
-            var f = new FileInfo(tgvFile.Path);
+            var f = new FileInfo(sourceTgvFile.Path);
 
             using (var fs = new FileStream(Path.Combine(settings.SavePath, f.Name + ".dds"), FileMode.OpenOrCreate))
             {

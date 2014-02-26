@@ -9,8 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -21,6 +19,8 @@ namespace moddingSuite.ViewModel.Ndf
     {
         private NdfCollection _collection;
         private NdfbinManager _ndfbinManager;
+
+        private bool _isInsertMode;
 
         public NdfbinManager NdfbinManager
         {
@@ -34,11 +34,16 @@ namespace moddingSuite.ViewModel.Ndf
             set { _collection = value; OnPropertyChanged(() => Value); }
         }
 
-
         public ICommand DetailsCommand { get; set; }
         public ICommand AddRowCommand { get; protected set; }
         public ICommand AddRowOfCommonTypeCommand { get; protected set; }
         public ICommand DeleteRowCommand { get; protected set; }
+
+        public bool IsInsertMode
+        {
+            get { return _isInsertMode; }
+            set { _isInsertMode = value; OnPropertyChanged(() => IsInsertMode); }
+        }
 
         public ListEditorViewModel(NdfCollection collection, NdfbinManager mgr)
         {
@@ -97,7 +102,23 @@ namespace moddingSuite.ViewModel.Ndf
                 new CollectionItemValueHolder(
                     NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, NdfbinManager, 0), NdfbinManager, 0);
 
-            Value.Add(wrapper);
+            if (IsInsertMode)
+            {
+                var cv = CollectionViewSource.GetDefaultView(Value);
+
+                if (cv == null || cv.CurrentItem == null)
+                    return;
+
+                var val = cv.CurrentItem as CollectionItemValueHolder;
+
+                if (val == null)
+                    return;
+
+                Value.Insert(cv.CurrentPosition + 1, wrapper);
+                cv.MoveCurrentTo(wrapper);
+            }
+            else
+                Value.Add(wrapper);
         }
 
         private void AddRowExecute(object obj)
@@ -114,7 +135,24 @@ namespace moddingSuite.ViewModel.Ndf
 
             bool? ret = view.ShowDialog();
 
-            if (ret.HasValue && ret.Value)
+            if (!ret.HasValue || !ret.Value)
+                return;
+
+
+            if (IsInsertMode)
+            {
+                if (cv.CurrentItem == null)
+                    return;
+
+                var val = cv.CurrentItem as CollectionItemValueHolder;
+
+                if (val == null)
+                    return;
+
+                Value.Insert(cv.CurrentPosition + 1, vm.Wrapper);
+                cv.MoveCurrentTo(vm.Wrapper);
+            }
+            else
                 Value.Add(vm.Wrapper);
         }
 

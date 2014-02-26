@@ -28,6 +28,8 @@
         <BitmapImage UriSource="View\Images\Delete_Row-26.png" x:Key="DeleteRowIcon" />
         <BitmapImage UriSource="View\Images\add_property-26.png" x:Key="AddPropIcon" />
         <BitmapImage UriSource="View\Images\delete_property-26.png" x:Key="DeletePropIcon" />
+        <BitmapImage UriSource="View\Images\Generic_Sorting2-26.png" x:Key="InsertModeIcon" />
+        
 
         <BitmapImage UriSource="View\Images\gplv3-127x51.png" x:Key="GplIcon" />
 

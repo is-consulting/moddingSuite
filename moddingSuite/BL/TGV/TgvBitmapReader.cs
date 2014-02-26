@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using moddingSuite.Util;
+using System.Runtime.InteropServices;
 
 namespace moddingSuite.BL.TGV
 {
@@ -33,14 +35,14 @@ namespace moddingSuite.BL.TGV
             {
                 if (DDS.DDS.IsCompressedFormat(file.Format))
                 {
-                    ReadBlockFormat(ret);
+                    ReadBlockFormat(ret, ms);
                 }
             }
 
             return ret;
         }
 
-        private static void ReadBlockFormat(RawImage ret)
+        private static void ReadBlockFormat(RawImage ret, Stream ms)
         {
             ret.ColFormat = RawImage.Format.Format_ARGB;
 
@@ -53,10 +55,10 @@ namespace moddingSuite.BL.TGV
             for (uint by = 0; by < bh; by++)
                 for (uint bx = 0; bx < bw; bx++)
                 {
-                    ColorBlock block = new ColorBlock();
+                    var block = new ColorBlock();
 
                     // Read color block.
-                    ReadBlock(block);
+                    ReadBlock(block, ms);
 
                     // Write color block.
                     for (uint y = 0; y < Math.Min(4, h - 4 * by); y++)
@@ -66,11 +68,15 @@ namespace moddingSuite.BL.TGV
 
         }
 
-        private static void ReadBlock(ColorBlock rgba)
+        private static void ReadBlock(ColorBlock rgba, Stream ms)
         {
-            BlockDXT5 blockdxt5 = new BlockDXT5();
+            var blockBuffer = new byte[Marshal.SizeOf(typeof(BlockDXT5))];
 
-            blockdxt5.decodeBlock(rgba);
+            ms.Read(blockBuffer, 0, blockBuffer.Length);
+
+            var blockdxt5 = Utils.ByteArrayToStructure<BlockDXT5>(blockBuffer);
+
+            blockdxt5.decodeBlock(ref rgba);
         }
 
     }

@@ -8,18 +8,7 @@ namespace moddingSuite.Model.Ndfbin.ChangeManager
         private IValueHolder _changedValue;
         private byte[] _newValue;
         private byte[] _oldValue;
-        private bool _triggersOffsetreordering;
-
-        public bool TriggersOffsetreordering
-        {
-            get { return _triggersOffsetreordering; }
-            set
-            {
-                _triggersOffsetreordering = value;
-                OnPropertyChanged(() => TriggersOffsetreordering);
-            }
-        }
-
+        
         public object OldValueDisplay
         {
             get

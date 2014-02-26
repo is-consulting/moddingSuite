@@ -52,7 +52,7 @@ namespace moddingSuite.BL.ImageService.BlockDXT
             return col0.u > col1.u;
         }
 
-        public uint evaluatePalette(Color32[] color_array)
+        public uint evaluatePalette(ref Color32[] color_array)
         {
             if (color_array.Length > 4)
                 throw new ArgumentOutOfRangeException("color_array out of bounds");
@@ -115,7 +115,7 @@ namespace moddingSuite.BL.ImageService.BlockDXT
         }
 
         // Evaluate palette assuming 3 color block.
-        public void evaluatePalette3(Color32[] color_array)
+        public void evaluatePalette3(ref Color32[] color_array)
         {
             if (color_array.Length > 4)
                 throw new ArgumentOutOfRangeException("color_array out of bounds");
@@ -144,7 +144,7 @@ namespace moddingSuite.BL.ImageService.BlockDXT
         }
 
         // Evaluate palette assuming 4 color block.
-        public void evaluatePalette4(Color32[] color_array)
+        public void evaluatePalette4(ref Color32[] color_array)
         {
             if (color_array.Length > 4)
                 throw new ArgumentOutOfRangeException("color_array out of bounds");
@@ -178,7 +178,7 @@ namespace moddingSuite.BL.ImageService.BlockDXT
 
             // Decode color block.
             Color32[] color_array = { new Color32(), new Color32(), new Color32(), new Color32() };
-            evaluatePalette(color_array);
+            evaluatePalette(ref color_array);
 
             // Write color block.
             for (uint j = 0; j < 4; j++)

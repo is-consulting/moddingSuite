@@ -17,6 +17,10 @@
             <Button ToolTip="Delete selected row" Command="{Binding Path=DeleteRowCommand}">
                 <Image Source="{StaticResource DeleteRowIcon}"  />
             </Button>
+            <Separator/>
+            <ToggleButton ToolTip="Add commands insert after the new item after the currently selected one." IsChecked="{Binding IsInsertMode}">
+                <Image Source="{StaticResource InsertModeIcon}" />
+            </ToggleButton>
         </ToolBar>
         <Viewer:ListViewer Grid.Row="1" />
     </Grid>
