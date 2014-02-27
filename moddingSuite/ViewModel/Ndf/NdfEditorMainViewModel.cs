@@ -52,7 +52,10 @@ namespace moddingSuite.ViewModel.Ndf
 
             SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute); //, () => NdfbinManager.ChangeManager.HasChanges);
             OpenInstanceCommand = new ActionCommand(OpenInstanceExecute);
+            AddStringCommand = new ActionCommand(AddStringExecute);
+            DeleteStringCommand = new ActionCommand(DeleteStringExecute);
         }
+
 
         /// <summary>
         /// Virtual call
@@ -83,6 +86,8 @@ namespace moddingSuite.ViewModel.Ndf
 
         public ICommand SaveNdfbinCommand { get; set; }
         public ICommand OpenInstanceCommand { get; set; }
+        public ICommand AddStringCommand { get; set; }
+        public ICommand DeleteStringCommand { get; set; }
 
         public string Title
         {
@@ -339,6 +344,22 @@ namespace moddingSuite.ViewModel.Ndf
             vm.InstancesCollectionView.MoveCurrentTo(inst);
 
             DialogProvider.ProvideView(vm, this);
+        }
+
+        private void DeleteStringExecute(object obj)
+        {
+            var cur = StringCollectionView.CurrentItem as NdfStringReference;
+
+            if (cur == null)
+                return;
+
+            Strings.Remove(cur);
+        }
+
+        private void AddStringExecute(object obj)
+        {
+            Strings.Add(new NdfStringReference() { Id = Strings.Count ,Value = "<New string>"});
+            StringCollectionView.MoveCurrentToLast();
         }
     }
 }
