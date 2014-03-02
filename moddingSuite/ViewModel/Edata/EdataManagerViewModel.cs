@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
@@ -25,6 +26,7 @@ using System.Threading;
 using moddingSuite.BL.TGV;
 using System.Drawing.Imaging;
 using System.Drawing;
+using System.Text;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -51,19 +53,31 @@ namespace moddingSuite.ViewModel.Edata
 
             Settings.Settings settings = SettingsManager.Load();
 
-            foreach (string file in settings.LastOpenedFiles)
+            var failedFiles = new List<FileInfo>();
+
+            foreach (var file in settings.LastOpenedFiles)
             {
                 var fileInfo = new FileInfo(file);
 
                 if (fileInfo.Exists)
-                    AddFile(fileInfo.FullName);
+                    try
+                    {
+                        AddFile(fileInfo.FullName);
+                    }
+                    catch (IOException e)
+                    {
+                        failedFiles.Add(fileInfo);
+                    }
             }
 
-            //if (settings.LastHighlightedFileIndex <= OpenFiles.Count)
-            //    CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentTo(OpenFiles.ElementAt(settings.LastHighlightedFileIndex));
-            //else
+            if (failedFiles.Count > 0)
+                StatusText =
+                    string.Format("{0} files failed to open. Did you start the modding suite while running the game?",
+                                  failedFiles.Count);
+
             if (settings.LastOpenedFiles.Count == 0)
                 CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentToFirst();
+
 
             OpenFiles.CollectionChanged += OpenFilesCollectionChanged;
         }
@@ -183,6 +197,9 @@ namespace moddingSuite.ViewModel.Edata
 
                     dispatcher.Invoke(() => IsUIBusy = false);
                 });
+
+                s.Start();
+
             }
         }
 
@@ -329,18 +346,22 @@ namespace moddingSuite.ViewModel.Edata
             if (ndf == null)
                 return;
 
-
             IsUIBusy = true;
             var dispatcher = Dispatcher.CurrentDispatcher;
 
-            Action<ViewModelBase, ViewModelBase> open = (ownerVm, parent) => DialogProvider.ProvideView(ownerVm, parent);
+            Action<ViewModelBase, ViewModelBase> open = DialogProvider.ProvideView;
+            Action<string> report = msg => StatusText = msg;
 
-            Thread s = new Thread(() =>
+            report("Decompiling ndf binary...");
+
+            var s = new Thread(() =>
             {
                 var detailsVm = new NdfEditorMainViewModel(ndf, vm);
 
                 dispatcher.Invoke(open, detailsVm, this);
                 dispatcher.Invoke(() => IsUIBusy = false);
+
+                dispatcher.Invoke(report, "Ready");
             });
 
             s.Start();
