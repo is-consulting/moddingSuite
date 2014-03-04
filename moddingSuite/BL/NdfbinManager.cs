@@ -82,7 +82,7 @@ namespace moddingSuite.BL
             NdfFooterEntry topoEntry = Footer.Entries.Single(x => x.Name == lst);
 
             //TODO: int cast is a bit too hacky here, solution needed
-            using (var ms = new MemoryStream(ContentData, (int) topoEntry.Offset - 40, (int) topoEntry.Size))
+            using (var ms = new MemoryStream(ContentData, (int)topoEntry.Offset - 40, (int)topoEntry.Size))
             {
                 var buffer = new byte[4];
                 while (ms.Position < ms.Length)
@@ -102,13 +102,13 @@ namespace moddingSuite.BL
             NdfFooterEntry classEntry = Footer.Entries.Single(x => x.Name == "CLAS");
 
             //TODO: int cast is a bit too hacky here, solution needed
-            using (var ms = new MemoryStream(ContentData, (int) classEntry.Offset - 40, (int) classEntry.Size))
+            using (var ms = new MemoryStream(ContentData, (int)classEntry.Offset - 40, (int)classEntry.Size))
             {
                 int i = 0;
                 var buffer = new byte[4];
                 while (ms.Position < ms.Length)
                 {
-                    var nclass = new NdfClass(this) {Offset = ms.Position, Id = i};
+                    var nclass = new NdfClass(this) { Offset = ms.Position, Id = i };
 
                     ms.Read(buffer, 0, buffer.Length);
                     int strLen = BitConverter.ToInt32(buffer, 0);
@@ -131,13 +131,13 @@ namespace moddingSuite.BL
             NdfFooterEntry propEntry = Footer.Entries.Single(x => x.Name == "PROP");
 
             //TODO: int cast is a bit too hacky here, solution needed
-            using (var ms = new MemoryStream(ContentData, (int) propEntry.Offset - 40, (int) propEntry.Size))
+            using (var ms = new MemoryStream(ContentData, (int)propEntry.Offset - 40, (int)propEntry.Size))
             {
                 int i = 0;
                 var buffer = new byte[4];
                 while (ms.Position < ms.Length)
                 {
-                    var property = new NdfProperty {Offset = ms.Position, Id = i};
+                    var property = new NdfProperty { Offset = ms.Position, Id = i };
 
                     ms.Read(buffer, 0, buffer.Length);
                     int strLen = BitConverter.ToInt32(buffer, 0);
@@ -166,13 +166,13 @@ namespace moddingSuite.BL
             NdfFooterEntry stringEntry = Footer.Entries.Single(x => x.Name == "STRG");
 
             //TODO: int cast is a bit too hacky here, solution needed
-            using (var ms = new MemoryStream(ContentData, (int) stringEntry.Offset - 40, (int) stringEntry.Size))
+            using (var ms = new MemoryStream(ContentData, (int)stringEntry.Offset - 40, (int)stringEntry.Size))
             {
                 int i = 0;
                 var buffer = new byte[4];
                 while (ms.Position < ms.Length)
                 {
-                    var nstring = new NdfStringReference {Offset = ms.Position, Id = i};
+                    var nstring = new NdfStringReference { Offset = ms.Position, Id = i };
 
                     ms.Read(buffer, 0, buffer.Length);
                     int strLen = BitConverter.ToInt32(buffer, 0);
@@ -197,13 +197,13 @@ namespace moddingSuite.BL
             NdfFooterEntry stringEntry = Footer.Entries.Single(x => x.Name == "TRAN");
 
             //TODO: int cast is a bit too hacky here, solution needed
-            using (var ms = new MemoryStream(ContentData, (int) stringEntry.Offset - 40, (int) stringEntry.Size))
+            using (var ms = new MemoryStream(ContentData, (int)stringEntry.Offset - 40, (int)stringEntry.Size))
             {
                 int i = 0;
                 var buffer = new byte[4];
                 while (ms.Position < ms.Length)
                 {
-                    var ntran = new NdfTranReference {Offset = ms.Position, Id = i};
+                    var ntran = new NdfTranReference { Offset = ms.Position, Id = i };
 
                     ms.Read(buffer, 0, buffer.Length);
                     int strLen = BitConverter.ToInt32(buffer, 0);
@@ -227,7 +227,7 @@ namespace moddingSuite.BL
 
             var buffer = new byte[4];
 
-            using (var ms = new MemoryStream(ContentData, (int) chnk.Offset - 40, (int) chnk.Size))
+            using (var ms = new MemoryStream(ContentData, (int)chnk.Offset - 40, (int)chnk.Size))
             {
                 ms.Read(buffer, 0, buffer.Length);
                 ms.Read(buffer, 0, buffer.Length);
@@ -243,7 +243,7 @@ namespace moddingSuite.BL
             NdfFooterEntry objEntry = Footer.Entries.Single(x => x.Name == "OBJE");
 
             //TODO: int cast is a bit too hacky here, solution needed
-            using (var ms = new MemoryStream(ContentData, (int) objEntry.Offset - 40, (int) objEntry.Size))
+            using (var ms = new MemoryStream(ContentData, (int)objEntry.Offset - 40, (int)objEntry.Size))
             {
                 long[] instanceOffsets = GetInstanceOffsets(ms).ToArray();
 
@@ -280,7 +280,7 @@ namespace moddingSuite.BL
 
         protected NdfObject ParseObject(byte[] data, uint index, long objOffset)
         {
-            var instance = new NdfObject {Id = index, Data = data, Offset = objOffset};
+            var instance = new NdfObject { Id = index, Data = data, Offset = objOffset };
 
             if (Topo.Contains(index))
                 instance.IsTopObject = true;
@@ -330,8 +330,7 @@ namespace moddingSuite.BL
         {
             foreach (NdfProperty property in instance.Class.Properties)
                 if (instance.PropertyValues.All(x => x.Property != property))
-                    instance.PropertyValues.Add(new NdfPropertyValue(instance)
-                                                    {Property = property, Value = new NdfNull(0)});
+                    instance.PropertyValues.Add(new NdfPropertyValue(instance) { Property = property, Value = new NdfNull(0) });
         }
 
         /// <summary>
@@ -362,6 +361,7 @@ namespace moddingSuite.BL
                 case NdfType.WideString:
                 case NdfType.List:
                 case NdfType.MapList:
+                case NdfType.Blob:
                     ms.Read(buffer, 0, buffer.Length);
                     contBufferlen = BitConverter.ToUInt32(buffer, 0);
                     break;
@@ -448,7 +448,7 @@ namespace moddingSuite.BL
         {
             const byte ab = 0xAB;
 
-            var offsets = new List<long> {0};
+            var offsets = new List<long> { 0 };
 
             byte abCount = 0;
             byte[] buffer;
@@ -565,9 +565,9 @@ namespace moddingSuite.BL
 
         public NdfObject CreateInstanceOf(NdfClass cls, bool isTopLevelInstance = true)
         {
-            var newId = (uint) AllInstances.Count();
+            var newId = (uint)AllInstances.Count();
 
-            var inst = new NdfObject {Class = cls, Id = newId};
+            var inst = new NdfObject { Class = cls, Id = newId };
 
             AddEmptyProperties(inst);
 
@@ -602,11 +602,11 @@ namespace moddingSuite.BL
 
             //Utils.SaveDebug("listaddtest", contentData);
 
-            var header = new byte[] {0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46};
-            byte[] compressed = compress ? new byte[] {0x80, 0x00, 0x00, 0x00} : new byte[4];
+            var header = new byte[] { 0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46 };
+            byte[] compressed = compress ? new byte[] { 0x80, 0x00, 0x00, 0x00 } : new byte[4];
 
-            byte[] blockSize = BitConverter.GetBytes((long) contentData.Length + 40 - 0xE0);
-            byte[] blockSizeE0 = BitConverter.GetBytes((long) (contentData.Length + 40));
+            byte[] blockSize = BitConverter.GetBytes((long)contentData.Length + 40 - 0xE0);
+            byte[] blockSizeE0 = BitConverter.GetBytes((long)(contentData.Length + 40));
 
             byte[] blockSize3 = BitConverter.GetBytes((contentData.Length));
 
@@ -618,7 +618,7 @@ namespace moddingSuite.BL
                 ms.Write(compressed, 0, compressed.Length);
 
                 ms.Write(blockSize, 0, blockSize.Length);
-                ms.Write(BitConverter.GetBytes((long) 40), 0, 8);
+                ms.Write(BitConverter.GetBytes((long)40), 0, 8);
                 ms.Write(blockSizeE0, 0, blockSizeE0.Length);
 
                 if (compress)
@@ -642,7 +642,7 @@ namespace moddingSuite.BL
         {
             var objectPart = new List<byte>();
 
-            byte[] objSep = {0xAB, 0xAB, 0xAB, 0xAB};
+            byte[] objSep = { 0xAB, 0xAB, 0xAB, 0xAB };
 
             foreach (NdfObject instance in AllInstances)
             {
@@ -664,9 +664,9 @@ namespace moddingSuite.BL
 
                     if (propertyValue.Value.Type == NdfType.ObjectReference ||
                         propertyValue.Value.Type == NdfType.TransTableReference)
-                        objectPart.AddRange(BitConverter.GetBytes((uint) NdfType.Reference));
+                        objectPart.AddRange(BitConverter.GetBytes((uint)NdfType.Reference));
 
-                    objectPart.AddRange(BitConverter.GetBytes((uint) propertyValue.Value.Type));
+                    objectPart.AddRange(BitConverter.GetBytes((uint)propertyValue.Value.Type));
                     objectPart.AddRange(valueBytes);
                 }
 

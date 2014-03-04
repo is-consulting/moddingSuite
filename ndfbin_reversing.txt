@@ -46,6 +46,22 @@ for each property:
 
 11 00 00 00 is an array, following 4 bytes are the length of the array (offset E095 for a good example (string list) :
 
+14 00 00 00 is a data blobb:
+struct blobHead {
+	DWORD blobMagic; // 14 00 00 00 
+	DWORD sumLength;
+
+//blob block[sumLength];
+
+}
+
+struct subBlock {
+	DWORD subLengthCompressed
+	DWORD subLengthUncompressed
+	blob subBlock[subLengthCompressed];
+}
+
+
 
 11 00 00 00
 DWORD length
@@ -56,5 +72,7 @@ DWORD object index
 DWORD classid
 
 }
+
+
 
 

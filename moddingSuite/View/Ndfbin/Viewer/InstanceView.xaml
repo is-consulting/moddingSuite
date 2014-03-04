@@ -46,6 +46,6 @@
             </DataGrid.RowDetailsTemplate>-->
         </DataGrid>
         <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" />
-        <Viewer:ListViewer Grid.Row="2" DataContext="{Binding Path=SelectedItem, ElementName=propGrid}" MaxHeight="400" />
+        <Viewer:ListViewer Grid.Row="2" DataContext="{Binding Path=SelectedItem, ElementName=propGrid}" MinHeight="5" MaxHeight="400" />
     </Grid>
 </UserControl>

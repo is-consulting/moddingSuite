@@ -123,6 +123,7 @@
     <Compile Include="Model\Ndfbin\NdfPropertyValue.cs" />
     <Compile Include="Model\Ndfbin\NdfStringReference.cs" />
     <Compile Include="Model\Ndfbin\NdfTran.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfBlob.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfColor128.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfBoolean.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfCollection.cs" />
@@ -196,6 +197,9 @@
     <Compile Include="View\Extension\Masking.cs" />
     <Compile Include="View\Common\MoviePlaybackView.xaml.cs">
       <DependentUpon>MoviePlaybackView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\BlobEditingTemplate.xaml.cs">
+      <DependentUpon>BlobEditingTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Ndfbin\ValueEditing\LocaleHashEditingTemplate.xaml.cs">
       <DependentUpon>LocaleHashEditingTemplate.xaml</DependentUpon>
@@ -280,6 +284,10 @@
     <Page Include="View\Common\MoviePlaybackView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\BlobEditingTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Ndfbin\ValueEditing\LocaleHashEditingTemplate.xaml">
       <SubType>Designer</SubType>

@@ -96,6 +96,9 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.MapList:
                     return new NdfMapList(0);
 
+                case NdfType.Blob:
+                    return new NdfBlob(data, pos);
+
                 case NdfType.Unset:
                     return new NdfNull(pos);
 

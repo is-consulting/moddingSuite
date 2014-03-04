@@ -61,6 +61,8 @@ namespace moddingSuite.View.Extension
                 case NdfType.TransTableReference:
                     return element.FindResource("TransTableReferenceEditingTemplate") as DataTemplate;
 
+                case NdfType.Blob:
+                    return element.FindResource("BlobEditingTemplate") as DataTemplate;
 
                 case NdfType.List:
                     return null;

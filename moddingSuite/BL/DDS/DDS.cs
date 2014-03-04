@@ -351,6 +351,7 @@ namespace moddingSuite.BL.DDS
                     ddpf = PixelFormat.G8R8_G8B8;
                     break;
                 case PixelFormats.BC1_UNORM:
+                case PixelFormats.BC1_UNORM_SRGB:
                     ddpf = PixelFormat.DXT1;
                     break;
                 case PixelFormats.BC2_UNORM:

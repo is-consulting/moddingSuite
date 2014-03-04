@@ -97,6 +97,10 @@
             <ValueEditing:ColorPickerEditingTemplate />
         </DataTemplate>
 
+        <DataTemplate x:Key="BlobEditingTemplate">
+            <ValueEditing:BlobEditingTemplate />
+        </DataTemplate>
+
 
         <Style TargetType="Image">
             <Style.Triggers>
