@@ -27,17 +27,6 @@ namespace moddingSuite.Model.Ndfbin
         private readonly ObservableCollection<NdfFooterEntry> _entries = new ObservableCollection<NdfFooterEntry>();
 
         private ulong _offset;
-        private string _header;
-
-        public string Header
-        {
-            get { return _header; }
-            set
-            {
-                _header = value;
-                OnPropertyChanged(() => Header);
-            }
-        }
 
         public ObservableCollection<NdfFooterEntry> Entries
         {

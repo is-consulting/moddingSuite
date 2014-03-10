@@ -66,7 +66,7 @@ namespace moddingSuite.ViewModel.Edata
                     {
                         AddFile(fileInfo.FullName);
                     }
-                    catch (IOException e)
+                    catch (IOException)
                     {
                         failedFiles.Add(fileInfo);
                     }
