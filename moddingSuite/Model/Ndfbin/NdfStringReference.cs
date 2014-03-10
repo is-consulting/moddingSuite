@@ -6,7 +6,6 @@ namespace moddingSuite.Model.Ndfbin
     public class NdfStringReference : ViewModelBase
     {
         private int _id;
-        private long _offset;
         private string _value;
 
         public int Id
@@ -16,16 +15,6 @@ namespace moddingSuite.Model.Ndfbin
             {
                 _id = value;
                 OnPropertyChanged(() => Id);
-            }
-        }
-
-        public long Offset
-        {
-            get { return _offset; }
-            set
-            {
-                _offset = value;
-                OnPropertyChanged(() => Offset);
             }
         }
 

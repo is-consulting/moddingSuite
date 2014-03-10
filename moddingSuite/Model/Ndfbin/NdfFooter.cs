@@ -17,14 +17,16 @@ namespace moddingSuite.Model.Ndfbin
     /// } footerPart;
     ///
     /// struct ndfbinFooter {
-    ///    char header[8];
-    ///    footerPart entries[9];
+    ///    char header[4];
+    ///     DWORD entryCount;
+    ///    footerPart entries[entryCount];
     /// };
     /// </summary>
     public class NdfFooter : ViewModelBase
     {
         private readonly ObservableCollection<NdfFooterEntry> _entries = new ObservableCollection<NdfFooterEntry>();
 
+        private ulong _offset;
         private string _header;
 
         public string Header
@@ -42,9 +44,19 @@ namespace moddingSuite.Model.Ndfbin
             get { return _entries; }
         }
 
+        public ulong Offset
+        {
+            get { return _offset; }
+            set
+            {
+                _offset = value;
+                OnPropertyChanged(() => Offset);
+            }
+        }
+
         public void AddEntry(string name, long offset, long size)
         {
-            Entries.Add(new NdfFooterEntry {Name = name.ToUpper(), Offset = offset, Size = size});
+            Entries.Add(new NdfFooterEntry { Name = name.ToUpper(), Offset = offset, Size = size });
         }
 
         public byte[] GetBytes()

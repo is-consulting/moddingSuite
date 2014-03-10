@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
-using moddingSuite.BL;
 using moddingSuite.Model.Ndfbin;
 using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.ViewModel.Base;
@@ -14,7 +13,7 @@ namespace moddingSuite.ViewModel.Ndf
         private NdfType _type = NdfType.Unset;
         private CollectionItemValueHolder _wrapper;
 
-        public AddCollectionItemViewModel(NdfbinManager mgr, Window view)
+        public AddCollectionItemViewModel(NdfBinary mgr, Window view)
         {
             Manager = mgr;
             View = view;
@@ -27,7 +26,7 @@ namespace moddingSuite.ViewModel.Ndf
 
         public ICommand OkCommand { get; protected set; }
         public ICommand CancelCommand { get; protected set; }
-        public NdfbinManager Manager { get; protected set; }
+        public NdfBinary Manager { get; protected set; }
 
         protected Window View { get; set; }
 

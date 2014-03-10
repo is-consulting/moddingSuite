@@ -5,7 +5,7 @@ namespace moddingSuite.Model.Ndfbin
 {
     public class MapValueHolder : CollectionItemValueHolder
     {
-        public MapValueHolder(NdfValueWrapper value, NdfbinManager manager, long instanceOffset)
+        public MapValueHolder(NdfValueWrapper value, NdfBinary manager, long instanceOffset)
             : base(value, manager, instanceOffset)
         {
         }

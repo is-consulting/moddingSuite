@@ -18,11 +18,11 @@ namespace moddingSuite.ViewModel.Ndf
     public class ListEditorViewModel : ViewModelBase
     {
         private NdfCollection _collection;
-        private NdfbinManager _ndfbinManager;
+        private NdfBinary _ndfbinManager;
 
         private bool _isInsertMode;
 
-        public NdfbinManager NdfbinManager
+        public NdfBinary NdfbinManager
         {
             get { return _ndfbinManager; }
             set { _ndfbinManager = value; OnPropertyChanged(() => NdfbinManager); }
@@ -45,7 +45,7 @@ namespace moddingSuite.ViewModel.Ndf
             set { _isInsertMode = value; OnPropertyChanged(() => IsInsertMode); }
         }
 
-        public ListEditorViewModel(NdfCollection collection, NdfbinManager mgr)
+        public ListEditorViewModel(NdfCollection collection, NdfBinary mgr)
         {
             if (collection == null)
                 throw new ArgumentNullException("collection");

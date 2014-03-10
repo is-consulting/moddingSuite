@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using moddingSuite.BL;
+using moddingSuite.BL.Ndf;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
@@ -232,7 +233,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override byte[] GetNdfText()
         {
-            Encoding enc = NdfbinManager.NdfTextEncoding;
+            Encoding enc = NdfTextWriter.NdfTextEncoding;
 
             using (var ms = new MemoryStream())
             {

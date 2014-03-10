@@ -92,6 +92,11 @@
     <Compile Include="BL\ImageService\BlockDXT\BlockDXT5.cs" />
     <Compile Include="BL\ImageService\Color16.cs" />
     <Compile Include="BL\ImageService\ColorBlock.cs" />
+    <Compile Include="BL\Ndf\INdfReader.cs" />
+    <Compile Include="BL\Ndf\INdfWriter.cs" />
+    <Compile Include="BL\Ndf\NdfbinReader.cs" />
+    <Compile Include="BL\Ndf\NdfbinWriter.cs" />
+    <Compile Include="BL\Ndf\NdfTextWriter.cs" />
     <Compile Include="BL\TGV\TgvBitmapReader.cs" />
     <Compile Include="BL\TGV\TgvDDSReader.cs" />
     <Compile Include="BL\TGV\TgvDDSWriter.cs" />
@@ -114,6 +119,7 @@
     <Compile Include="Model\Ndfbin\INdfScriptSerializable.cs" />
     <Compile Include="Model\Ndfbin\IValueHolder.cs" />
     <Compile Include="Model\Ndfbin\MapValueHolder.cs" />
+    <Compile Include="Model\Ndfbin\NdfBinary.cs" />
     <Compile Include="Model\Ndfbin\NdfHeader.cs" />
     <Compile Include="Model\Ndfbin\NdfClass.cs" />
     <Compile Include="Model\Ndfbin\NdfFooter.cs" />
@@ -130,9 +136,12 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfColor32.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfDouble.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfDouble_2.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfEugInt2.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFileNameString.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfGuid.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfHash.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfInt16.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfUInt16.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfInt32.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfInt8.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfLocalisationHash.cs" />
@@ -147,6 +156,7 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfUnkown.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfVector.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfWideString.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfZipBlob.cs" />
     <Compile Include="Model\Ndfbin\Types\NdfType.cs" />
     <Compile Include="Model\Ndfbin\Types\NdfTypeManager.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFlatValueWrapper.cs" />
@@ -156,7 +166,6 @@
     <Compile Include="Model\Textures\TgvMipMap.cs" />
     <Compile Include="Model\Trad\TradEntry.cs" />
     <Compile Include="BL\TradManager.cs" />
-    <Compile Include="BL\NdfbinManager.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Util\Utils.cs" />
@@ -390,6 +399,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

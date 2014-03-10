@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using moddingSuite.BL;
+using moddingSuite.BL.Ndf;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
@@ -14,7 +15,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         private NdfType _keyType = NdfType.Unset;
         private NdfType _valueType = NdfType.Unset;
 
-        public NdfMap(MapValueHolder key, MapValueHolder value, long offset, NdfbinManager mgr)
+        public NdfMap(MapValueHolder key, MapValueHolder value, long offset, NdfBinary mgr)
             : base(NdfType.Map, value, offset)
         {
             Key = key;
@@ -23,7 +24,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             _typeSelection.AddRange(NdfTypeManager.GetTypeSelection());
         }
 
-        public NdfbinManager Manager { get; protected set; }
+        public NdfBinary Manager { get; protected set; }
 
         public NdfType KeyType
         {
@@ -122,7 +123,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override byte[] GetNdfText()
         {
-            Encoding end = NdfbinManager.NdfTextEncoding;
+            Encoding end = NdfTextWriter.NdfTextEncoding;
             var data = new List<byte>();
 
             data.AddRange(end.GetBytes("(\n"));

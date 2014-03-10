@@ -6,10 +6,12 @@ namespace moddingSuite.Model.Ndfbin
 {
     public class NdfProperty : ViewModelBase
     {
-        private NdfClass _class;
         private int _id;
         private string _name;
+        private NdfClass _class;
+#if DEBUG
         private long _offset;
+#endif
 
         public int Id
         {
@@ -18,31 +20,6 @@ namespace moddingSuite.Model.Ndfbin
             {
                 _id = value;
                 OnPropertyChanged(() => Id);
-            }
-        }
-
-        public string BinId
-        {
-            get { return Utils.Int32ToBigEndianHexByteString(Id); }
-        }
-
-        public NdfClass Class
-        {
-            get { return _class; }
-            set
-            {
-                _class = value;
-                OnPropertyChanged(() => Class);
-            }
-        }
-
-        public long Offset
-        {
-            get { return _offset; }
-            set
-            {
-                _offset = value;
-                OnPropertyChanged(() => Offset);
             }
         }
 
@@ -55,6 +32,28 @@ namespace moddingSuite.Model.Ndfbin
                 OnPropertyChanged(() => Name);
             }
         }
+
+        public NdfClass Class
+        {
+            get { return _class; }
+            set
+            {
+                _class = value;
+                OnPropertyChanged(() => Class);
+            }
+        }
+
+#if DEBUG
+        public long Offset
+        {
+            get { return _offset; }
+            set
+            {
+                _offset = value;
+                OnPropertyChanged(() => Offset);
+            }
+        }
+#endif
 
         public override string ToString()
         {

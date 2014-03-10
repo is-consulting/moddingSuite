@@ -3,17 +3,18 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-using moddingSuite.BL;
+using System.Windows.Threading;
+using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Edata;
 using moddingSuite.Model.Ndfbin;
 using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
-using System.Threading;
-using System.Windows.Threading;
 
 namespace moddingSuite.ViewModel.Ndf
 {
@@ -39,16 +40,19 @@ namespace moddingSuite.ViewModel.Ndf
             OwnerFile = contentFile;
             EdataFileViewModel = ownerVm;
 
-            var ndfbinManager = new NdfbinManager(ownerVm.EdataManager.GetRawData(contentFile));
-            NdfbinManager = ndfbinManager;
+            var ndfbinReader = new NdfbinReader();
+            NdfBinary = ndfbinReader.Read(ownerVm.EdataManager.GetRawData(contentFile));
 
-            ndfbinManager.Initialize();
+            //var ndfbinManager = new NdfbinManager(ownerVm.EdataManager.GetRawData(contentFile));
+            //NdfbinManager = ndfbinManager;
 
-            foreach (NdfClass cls in ndfbinManager.Classes)
+            //ndfbinManager.Initialize();
+
+            foreach (NdfClass cls in NdfBinary.Classes)
                 Classes.Add(new NdfClassViewModel(cls, this));
 
-            Strings = ndfbinManager.Strings;
-            Trans = ndfbinManager.Trans;
+            Strings = NdfBinary.Strings;
+            Trans = NdfBinary.Trans;
 
             SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute); //, () => NdfbinManager.ChangeManager.HasChanges);
             OpenInstanceCommand = new ActionCommand(OpenInstanceExecute);
@@ -58,7 +62,7 @@ namespace moddingSuite.ViewModel.Ndf
 
 
         /// <summary>
-        /// Virtual call
+        ///     Virtual call
         /// </summary>
         /// <param name="content"></param>
         public NdfEditorMainViewModel(byte[] content)
@@ -66,21 +70,25 @@ namespace moddingSuite.ViewModel.Ndf
             OwnerFile = null;
             EdataFileViewModel = null;
 
-            var ndfbinManager = new NdfbinManager(content);
-            NdfbinManager = ndfbinManager;
+            //var ndfbinManager = new NdfbinManager(content);
+            //NdfbinManager = ndfbinManager;
 
-            ndfbinManager.Initialize();
+            //ndfbinManager.Initialize();
 
-            foreach (NdfClass cls in ndfbinManager.Classes)
+            var ndfbinReader = new NdfbinReader();
+            NdfBinary = ndfbinReader.Read(content);
+
+            foreach (NdfClass cls in NdfBinary.Classes)
                 Classes.Add(new NdfClassViewModel(cls, this));
 
-            Strings = ndfbinManager.Strings;
-            Trans = ndfbinManager.Trans;
+            Strings = NdfBinary.Strings;
+            Trans = NdfBinary.Trans;
 
             SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute, () => false);
         }
 
-        public NdfbinManager NdfbinManager { get; protected set; }
+        public NdfBinary NdfBinary { get; protected set; }
+
         protected EdataFileViewModel EdataFileViewModel { get; set; }
         protected EdataContentFile OwnerFile { get; set; }
 
@@ -286,45 +294,49 @@ namespace moddingSuite.ViewModel.Ndf
 
         private void SaveNdfbinExecute(object obj)
         {
-            IsUIBusy = true;
-            StatusText = string.Format("Saving back {0} changes...", NdfbinManager.ChangeManager.Changes.Count);
+            Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
+            Action<string> report = (msg) => StatusText = msg;
 
-            try
-            {
-                int changesCount = NdfbinManager.ChangeManager.Changes.Count;
-
-                var dispatcher = Dispatcher.CurrentDispatcher;
-
-                Action<string> report = (msg) => StatusText = msg; 
-
-                Thread s = new Thread(() =>
+            var s = new Task(() =>
                 {
-                    byte[] newFile = NdfbinManager.BuildNdfFile(NdfbinManager.Header.IsCompressedBody);
+                    try
+                    {
+                        dispatcher.Invoke(() => IsUIBusy = true);
+                        dispatcher.Invoke(report, string.Format("Saving back changes..."));
 
-                    dispatcher.Invoke(report, string.Format("Recompiling of {0} finished! ", EdataFileViewModel.EdataManager.FilePath));
+                        byte[] newFile;
 
-                    EdataFileViewModel.EdataManager.ReplaceFile(OwnerFile, newFile);
+                        var writer = new NdfbinWriter();
+                        using (var ms = new MemoryStream())
+                        {
+                            writer.Write(ms, NdfBinary, NdfBinary.Header.IsCompressedBody);
+                            newFile = ms.ToArray();
+                        }
 
-                    dispatcher.Invoke(report, "Replacing new File in edata finished!");
+                        dispatcher.Invoke(report, string.Format("Recompiling of {0} finished! ", EdataFileViewModel.EdataManager.FilePath));
 
-                    EdataFileViewModel.LoadFile(EdataFileViewModel.LoadedFile);
+                        EdataFileViewModel.EdataManager.ReplaceFile(OwnerFile, newFile);
 
-                    EdataContentFile newOwen = EdataFileViewModel.EdataManager.Files.Single(x => x.Path == OwnerFile.Path);
+                        dispatcher.Invoke(report, "Replacing new File in edata finished!");
 
-                    OwnerFile = newOwen;
+                        EdataFileViewModel.LoadFile(EdataFileViewModel.LoadedFile);
 
-                    dispatcher.Invoke(report, string.Format("Saving of {0} changes finished! {1}", changesCount, EdataFileViewModel.EdataManager.FilePath));
+                        EdataContentFile newOwen = EdataFileViewModel.EdataManager.Files.Single(x => x.Path == OwnerFile.Path);
 
-                    dispatcher.Invoke(() => IsUIBusy = false);
+                        OwnerFile = newOwen;
+                        dispatcher.Invoke(report, string.Format("Saving of changes finished! {0}", EdataFileViewModel.EdataManager.FilePath));
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError(string.Format("Error while saving Ndfbin file: {0}", ex));
+                        dispatcher.Invoke(report, "Saving interrupted - Did you start Wargame before I was ready?");
+                    }
+                    finally
+                    {
+                        dispatcher.Invoke(() => IsUIBusy = false);
+                    }
                 });
-
-                s.Start();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceError(string.Format("Error while saving Ndfbin file: {0}", e));
-                StatusText = string.Format("Saving interrupted - Did you start Wargame before I was ready?");
-            }
+            s.Start();
         }
 
         private void OpenInstanceExecute(object obj)
@@ -358,7 +370,7 @@ namespace moddingSuite.ViewModel.Ndf
 
         private void AddStringExecute(object obj)
         {
-            Strings.Add(new NdfStringReference() { Id = Strings.Count ,Value = "<New string>"});
+            Strings.Add(new NdfStringReference {Id = Strings.Count, Value = "<New string>"});
             StringCollectionView.MoveCurrentToLast();
         }
     }

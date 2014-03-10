@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Data;
@@ -9,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using moddingSuite.BL;
 using moddingSuite.BL.DDS;
+using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Edata;
 using moddingSuite.Settings;
 using moddingSuite.View.Common;
@@ -178,28 +180,33 @@ namespace moddingSuite.ViewModel.Edata
                 settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
                 SettingsManager.Save(settings);
 
-                IsUIBusy = true;
-
                 var dispatcher = Dispatcher.CurrentDispatcher;
 
                 Action<string> report = (msg) => StatusText = msg;
 
-                report(string.Format("Replacing {0}...", file.Path));
+                var s = new Task(() =>
+                    {
+                        try
+                        {
+                            dispatcher.Invoke(() => IsUIBusy = true);
+                            dispatcher.Invoke(report, string.Format("Replacing {0}...", file.Path));
+                            byte[] replacefile = File.ReadAllBytes(openfDlg.FileName);
 
-                var s = new Thread(() =>
-                {
-                    byte[] replacefile = File.ReadAllBytes(openfDlg.FileName);
-
-                    vm.EdataManager.ReplaceFile(file, replacefile);
-                    vm.LoadFile(vm.LoadedFile);
-
-                    dispatcher.Invoke(report, "Replacing finished!");
-
-                    dispatcher.Invoke(() => IsUIBusy = false);
-                });
+                            vm.EdataManager.ReplaceFile(file, replacefile);
+                            vm.LoadFile(vm.LoadedFile);
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                        }
+                        finally
+                        {
+                            dispatcher.Invoke(report, "Ready");
+                            dispatcher.Invoke(() => IsUIBusy = false);
+                        }
+                    });
 
                 s.Start();
-
             }
         }
 
@@ -236,37 +243,47 @@ namespace moddingSuite.ViewModel.Edata
                 settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
                 SettingsManager.Save(settings);
 
-                IsUIBusy = true;
                 var dispatcher = Dispatcher.CurrentDispatcher;
                 Action<string> report = msg => StatusText = msg;
 
-                report(string.Format("Replacing {0}...", destTgvFile.Path));
-
-                var s = new Thread(() =>
-                {
-                    byte[] sourceDds = File.ReadAllBytes(openfDlg.FileName);
-
-                    dispatcher.Invoke(report, "Converting DDS to TGV file format...");
-
-                    var ddsReader = new TgvDDSReader();
-                    var sourceTgvFile = ddsReader.ReadDDS(sourceDds);
-                    byte[] sourceTgvRawData;
-
-                    using (var tgvwriterStream = new MemoryStream())
+                var s = new Task(() =>
                     {
-                        var tgvWriter = new TgvWriter();
-                        tgvWriter.Write(tgvwriterStream, sourceTgvFile, tgv.SourceChecksum, tgv.IsCompressed);
-                        sourceTgvRawData = tgvwriterStream.ToArray();
-                    }
+                        try
+                        {
+                            dispatcher.Invoke(() => IsUIBusy = true);
+                            dispatcher.Invoke(report, string.Format("Replacing {0}...", destTgvFile.Path));
 
-                    dispatcher.Invoke(report, "Replacing file in edata container...");
+                            byte[] sourceDds = File.ReadAllBytes(openfDlg.FileName);
 
-                    vm.EdataManager.ReplaceFile(destTgvFile, sourceTgvRawData);
-                    vm.LoadFile(vm.LoadedFile);
+                            dispatcher.Invoke(report, "Converting DDS to TGV file format...");
 
-                    dispatcher.Invoke(report, "Replacing finished!");
-                    dispatcher.Invoke(() =>  IsUIBusy = false);
-                });
+                            var ddsReader = new TgvDDSReader();
+                            var sourceTgvFile = ddsReader.ReadDDS(sourceDds);
+                            byte[] sourceTgvRawData;
+
+                            using (var tgvwriterStream = new MemoryStream())
+                            {
+                                var tgvWriter = new TgvWriter();
+                                tgvWriter.Write(tgvwriterStream, sourceTgvFile, tgv.SourceChecksum, tgv.IsCompressed);
+                                sourceTgvRawData = tgvwriterStream.ToArray();
+                            }
+
+                            dispatcher.Invoke(report, "Replacing file in edata container...");
+
+                            vm.EdataManager.ReplaceFile(destTgvFile, sourceTgvRawData);
+                            vm.LoadFile(vm.LoadedFile);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                        }
+                        finally
+                        {
+                            dispatcher.Invoke(report, "Ready");
+                            dispatcher.Invoke(() => IsUIBusy = false);
+                        }
+                    });
 
                 s.Start();
             }
@@ -346,25 +363,34 @@ namespace moddingSuite.ViewModel.Edata
             if (ndf == null)
                 return;
 
-            IsUIBusy = true;
             var dispatcher = Dispatcher.CurrentDispatcher;
 
             Action<ViewModelBase, ViewModelBase> open = DialogProvider.ProvideView;
             Action<string> report = msg => StatusText = msg;
 
-            report("Decompiling ndf binary...");
+            var s = new Task(() =>
+                {
+                    try
+                    {
+                        dispatcher.Invoke(() => IsUIBusy = true);
+                        dispatcher.Invoke(report, "Decompiling ndf binary...");
 
-            var s = new Thread(() =>
-            {
-                var detailsVm = new NdfEditorMainViewModel(ndf, vm);
-
-                dispatcher.Invoke(open, detailsVm, this);
-                dispatcher.Invoke(() => IsUIBusy = false);
-
-                dispatcher.Invoke(report, "Ready");
-            });
+                        var detailsVm = new NdfEditorMainViewModel(ndf, vm);
+                        dispatcher.Invoke(open, detailsVm, this);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                    }
+                    finally
+                    {
+                        dispatcher.Invoke(() => IsUIBusy = false);
+                        dispatcher.Invoke(report, "Ready");
+                    }
+                });
 
             s.Start();
+
         }
 
         protected void ExportNdfExecute(object obj)
@@ -381,7 +407,7 @@ namespace moddingSuite.ViewModel.Edata
 
             Settings.Settings settings = SettingsManager.Load();
 
-            byte[] content = new NdfbinManager(ndf.Manager.GetRawData(ndf)).GetContent();
+            byte[] content = new NdfbinReader().GetUncompressedNdfbinary(ndf.Manager.GetRawData(ndf));
 
             var f = new FileInfo(ndf.Path);
 

@@ -5,7 +5,8 @@
         Boolean = 0x00000000,
         Int8 = 0x00000001,
 
-        Int16 = 25,
+        Int16 = 0x00000018,
+        UInt16 = 0x00000019,
 
         Int32 = 0x00000002,
         UInt32 = 0x00000003,
@@ -13,6 +14,7 @@
         Float64 = 0x00000006,
         Float64_2 = 33,
 
+        EugInt2 = 0x0000001F,
 
         Guid = 26,
         Vector = 0x0000000b,
@@ -25,16 +27,16 @@
 
         LocalisationHash = 29,
 
+        Hash = 0x00000025,
+
         Reference = 0x00000009,
         ObjectReference = 0xBBBBBBBB,
         TransTableReference = 0xAAAAAAAA,
 
         Map = 0x00000022,
-        
 
         Blob = 0x00000014,
-
-
+        ZipBlob = 0x0000001E,
 
         List = 0x00000011,
         MapList = 0x00000012,

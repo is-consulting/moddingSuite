@@ -7,9 +7,6 @@ using System.Security.Cryptography;
 using System.Text;
 using moddingSuite.Model.Edata;
 using moddingSuite.Util;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using moddingSuite.Model.Common;
 using System.Runtime.InteropServices;
 
 namespace moddingSuite.BL
@@ -20,7 +17,7 @@ namespace moddingSuite.BL
     /// </summary>
     public class EdataManager
     {
-        public static byte[] EdataMagic = { 0x65, 0x64, 0x61, 0x74 };
+        public static readonly byte[] EdataMagic = { 0x65, 0x64, 0x61, 0x74 };
 
         /// <summary>
         /// Creates a new Instance of a EdataManager.

@@ -9,42 +9,49 @@ for each property:
 }
 
 00 00 00 00 is bool (1 byte)
-
 01 00 00 00 maybe its an Int8
-
-
 02 00 00 00 is int			<- pretty sure thats singed int
 03 00 00 00 is uint			<- cant confirm 8 bytes long for that i suspect uint32
 05 00 00 00 is single float (4 bytes)
 06 00 00 00 is double float (8bytes)
-
 07 00 00 00 is string with a 4 bytes STRG table reference
 08 00 00 00 is WideString, 4 bytes uint describe the length, which has to be read encoded UTF-16 (Unicode)
-1c 00 00 00 is string for filenames 4 bytes STRG table reference
-
-0C 00 00 00 is a 16 bytes Color A R G B
-0D 00 00 00 is Color 4 bytes A R G B one byte each
-0B 00 00 00 is 12 byte vector: 4byte x, 4byte y, 4byte z (single float all)
 
 09 00 00 00 BB BB BB BB is a object reference, following 4 bytes are the instance id classId is next 4 bytes
 09 00 00 00 AA AA AA AA are TRANS table references 4 bytes uint as index following
 
-19 00 00 00 2 bytes 88 / 550 "InitStage" might ne short int (int16)
+0B 00 00 00 is 12 byte vector: 4byte x, 4byte y, 4byte z (single float all)
+0C 00 00 00 is a 16 bytes Color A R G B
+0D 00 00 00 is Color 4 bytes A R G B one byte each
+
+11 00 00 00 is an array, following 4 bytes are the length of the array (offset E095 for a good example (string list) 
+12 00 00 00 seems to be a map list first 4bytes arraySize; element: 8byte string type/value; usual object reference 16 byte
+
+14 00 00 00 is a data blobb
+
+18 00 00 00 (seems to be 2 bytes) {TLoadableQuadTextureAnimatedBlade} : {AlignementY} (signed short?)
+
+19 00 00 00 2 bytes 88 / 550 "InitStage" might ne short int (int16) probably unsigned
 
 1A 00 00 00 is a GUID for descriptors
+
+1c 00 00 00 is string for filenames 4 bytes STRG table reference
 
 1D 00 00 00 is 8 byte, its a localisation hash -> points to an entry of the *.dic (TRAD) files
 
 1E 00 00 00 seems to be a ZIP block / content block
 
-22 00 00 00 Marks an entry of a list as "map" entry: string-value pair
+1F 00 00 00 It might be a int32 pair
+{TEugBMutableInt2}: Value  
+{TConstantInt2}: Value  
+{TInt2OptionFlashDescriptor}: {DegradationMapping}
 
 21 00 00 00 is 8 byte, look like some kind of double float too me but we alreay have that.
 
-12 00 00 00 seems to be a map list first 4bytes arraySize; element: 8byte string type/value; usual object reference 16 byte
+22 00 00 00 Marks an entry of a list as "map" entry: string-value pair
 
+25 00 00 00 is 16 bytes {APrioriHashToSusbtitutedSourceHash} i suspect md5 hash here.
 
-11 00 00 00 is an array, following 4 bytes are the length of the array (offset E095 for a good example (string list) :
 
 14 00 00 00 is a data blobb:
 struct blobHead {

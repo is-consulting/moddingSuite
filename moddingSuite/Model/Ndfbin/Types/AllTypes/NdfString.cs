@@ -1,5 +1,6 @@
 ﻿using System;
 using moddingSuite.BL;
+using moddingSuite.BL.Ndf;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
@@ -19,7 +20,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override byte[] GetNdfText()
         {
-            return NdfbinManager.NdfTextEncoding.GetBytes(string.Format("\"{0}\"", ((NdfStringReference) Value).Value));
+            return NdfTextWriter.NdfTextEncoding.GetBytes(string.Format("\"{0}\"", ((NdfStringReference)Value).Value));
         }
     }
 }

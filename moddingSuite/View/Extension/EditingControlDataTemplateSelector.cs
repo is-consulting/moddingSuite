@@ -27,12 +27,13 @@ namespace moddingSuite.View.Extension
                 case NdfType.Float32:
                 case NdfType.Float64:
                 case NdfType.Float64_2:
-                case NdfType.Int8:
-                case NdfType.Int16:
                     return element.FindResource("FloatEditingTemplate") as DataTemplate;
+                case NdfType.UInt16:
                 case NdfType.UInt32:
                     return element.FindResource("UInt32EditingTemplate") as DataTemplate;
                 case NdfType.Int32:
+                case NdfType.Int8:
+                case NdfType.Int16:
                     return element.FindResource("Int32EditingTemplate") as DataTemplate;
                 case NdfType.Guid:
                     return element.FindResource("GuidEditingTemplate") as DataTemplate;

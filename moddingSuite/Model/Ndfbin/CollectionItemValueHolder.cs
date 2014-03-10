@@ -11,7 +11,7 @@ namespace moddingSuite.Model.Ndfbin
         //private byte[] _oldVal = new byte[0];
         private NdfValueWrapper _value;
 
-        public CollectionItemValueHolder(NdfValueWrapper value, NdfbinManager manager, long instanceOffset)
+        public CollectionItemValueHolder(NdfValueWrapper value, NdfBinary manager, long instanceOffset)
         {
             Value = value;
             Manager = manager;
@@ -20,7 +20,7 @@ namespace moddingSuite.Model.Ndfbin
 
         #region IValueHolder Members
 
-        public virtual NdfbinManager Manager { get; private set; }
+        public virtual NdfBinary Manager { get; private set; }
         public virtual long InstanceOffset { get; private set; }
 
         public virtual NdfValueWrapper Value

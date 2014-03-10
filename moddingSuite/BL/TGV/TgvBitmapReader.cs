@@ -1,13 +1,8 @@
-﻿using moddingSuite.BL.DDS;
-using moddingSuite.BL.ImageService;
+﻿using moddingSuite.BL.ImageService;
 using moddingSuite.BL.ImageService.BlockDXT;
 using moddingSuite.Model.Textures;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using moddingSuite.Util;
 using System.Runtime.InteropServices;
 

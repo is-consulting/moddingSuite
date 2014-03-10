@@ -4,10 +4,10 @@ using moddingSuite.BL.Ndf;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
-    public class NdfUInt32 : NdfFlatValueWrapper
+    public class NdfUInt16 : NdfFlatValueWrapper
     {
-        public NdfUInt32(uint value, long offset)
-            : base(NdfType.UInt32, value, offset)
+        public NdfUInt16(ushort value, long offset)
+            : base(NdfType.UInt16, value, offset)
         {
         }
 
@@ -17,7 +17,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
             try
             {
-                return BitConverter.GetBytes(Convert.ToUInt32(Value));
+                return BitConverter.GetBytes(Convert.ToUInt16(Value));
             }
             catch (Exception)
             {

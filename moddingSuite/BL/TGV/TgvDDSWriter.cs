@@ -4,7 +4,7 @@ using System.Linq;
 using moddingSuite.Model.Textures;
 using moddingSuite.Util;
 
-namespace moddingSuite.BL.DDS
+namespace moddingSuite.BL.TGV
 {
     /// <summary>
     /// Writes a DDS File     
@@ -15,7 +15,7 @@ namespace moddingSuite.BL.DDS
         {
             using (var ms = new MemoryStream())
             {
-                byte[] buffer = BitConverter.GetBytes(DDS.MagicHeader);
+                byte[] buffer = BitConverter.GetBytes(DDS.DDS.MagicHeader);
                 ms.Write(buffer, 0, buffer.Length);
 
                 buffer = CreateDDSHeader(file);
@@ -30,32 +30,32 @@ namespace moddingSuite.BL.DDS
 
         protected byte[] CreateDDSHeader(TgvFile file)
         {
-            var hd = new DDS.Header
+            var hd = new DDS.DDS.Header
                          {
                              Size = 124,
-                             Flags = DDS.HeaderFlags.Texture,
-                             SurfaceFlags = DDS.SurfaceFlags.Texture,
+                             Flags = DDS.DDS.HeaderFlags.Texture,
+                             SurfaceFlags = DDS.DDS.SurfaceFlags.Texture,
                              Width = file.ImageWidth,
                              Height = file.ImageHeight,
                              Depth = 0,
                              MipMapCount = 1
                          };
 
-            DDS.PixelFormat ddpf = DDS.PixelFormatFromDXGIFormat(file.Format);
+            DDS.DDS.PixelFormat ddpf = DDS.DDS.PixelFormatFromDXGIFormat(file.Format);
 
             int rowPitch, slicePitch;
             int widthCount, heightCount;
-            DDS.ComputePitch(file.Format, (int)file.ImageWidth, (int)file.ImageHeight, out rowPitch, out slicePitch, out widthCount,
+            DDS.DDS.ComputePitch(file.Format, (int)file.ImageWidth, (int)file.ImageHeight, out rowPitch, out slicePitch, out widthCount,
                          out heightCount);
 
-            if (DDS.IsCompressedFormat(file.Format))
+            if (DDS.DDS.IsCompressedFormat(file.Format))
             {
-                hd.Flags |= DDS.HeaderFlags.LinearSize;
+                hd.Flags |= DDS.DDS.HeaderFlags.LinearSize;
                 hd.PitchOrLinearSize = slicePitch;
             }
             else
             {
-                hd.Flags |= DDS.HeaderFlags.Pitch;
+                hd.Flags |= DDS.DDS.HeaderFlags.Pitch;
                 hd.PitchOrLinearSize = rowPitch;
             }
 

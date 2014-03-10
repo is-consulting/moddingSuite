@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using moddingSuite.BL;
+using moddingSuite.BL.Ndf;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
@@ -16,7 +21,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
             try
             {
-                return BitConverter.GetBytes(Convert.ToInt16(Value));
+                return BitConverter.GetBytes(Convert.ToUInt16(Value));
             }
             catch (Exception)
             {
@@ -27,7 +32,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override byte[] GetNdfText()
         {
-            return NdfbinManager.NdfTextEncoding.GetBytes(Value.ToString());
+            return NdfTextWriter.NdfTextEncoding.GetBytes(Value.ToString());
         }
     }
 }

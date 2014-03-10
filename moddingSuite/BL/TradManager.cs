@@ -28,16 +28,14 @@ namespace moddingSuite.BL
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
                 foreach (object tradEntry in e.NewItems)
-                    ((TradEntry) tradEntry).UserCreated = true;
+                    ((TradEntry)tradEntry).UserCreated = true;
         }
 
         protected void ParseTradFile(byte[] data)
         {
-            uint entryCount;
-
             using (var ms = new MemoryStream(data))
             {
-                entryCount = ReadHeader(ms);
+                uint entryCount = ReadHeader(ms);
                 Entries = ReadDictionary(entryCount, ms);
 
                 GetEntryContents(ms);
@@ -46,13 +44,11 @@ namespace moddingSuite.BL
 
         protected void GetEntryContents(MemoryStream ms)
         {
-            byte[] buffer;
-
             foreach (TradEntry entry in Entries)
             {
                 ms.Seek(entry.OffsetCont, SeekOrigin.Begin);
 
-                buffer = new byte[entry.ContLen*2];
+                var buffer = new byte[entry.ContLen * 2];
 
                 ms.Read(buffer, 0, buffer.Length);
 
@@ -64,14 +60,13 @@ namespace moddingSuite.BL
         {
             var entries = new ObservableCollection<TradEntry>();
 
-            byte[] hashBuffer;
             var buffer = new byte[4];
 
             for (int i = 0; i < entryCount; i++)
             {
-                var entry = new TradEntry {OffsetDic = (uint) ms.Position};
+                var entry = new TradEntry { OffsetDic = (uint)ms.Position };
 
-                hashBuffer = new byte[8];
+                var hashBuffer = new byte[8];
 
                 ms.Read(hashBuffer, 0, hashBuffer.Length);
                 entry.Hash = hashBuffer;
@@ -115,7 +110,7 @@ namespace moddingSuite.BL
                 // Write dictionary
                 foreach (TradEntry entry in Entries)
                 {
-                    entry.OffsetDic = (uint) ms.Position;
+                    entry.OffsetDic = (uint)ms.Position;
 
                     // Hash
                     ms.Write(entry.Hash, 0, entry.Hash.Length);
@@ -130,7 +125,7 @@ namespace moddingSuite.BL
 
                 foreach (TradEntry entry in Entries)
                 {
-                    entry.OffsetCont = (uint) ms.Position;
+                    entry.OffsetCont = (uint)ms.Position;
                     buffer = Encoding.Unicode.GetBytes(entry.Content);
                     ms.Write(buffer, 0, buffer.Length);
                 }

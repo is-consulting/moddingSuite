@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using moddingSuite.BL;
+using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.ViewModel.Base;
 
@@ -69,12 +70,12 @@ namespace moddingSuite.Model.Ndfbin
 
         public byte[] GetNdfText()
         {
-            Encoding enc = NdfbinManager.NdfTextEncoding;
+            Encoding enc = NdfTextWriter.NdfTextEncoding;
 
             using (var ms = new MemoryStream())
             {
                 byte[] buffer =
-                    enc.GetBytes(string.Format("{0}_{1} is {2}\n", NdfbinManager.InstanceNamePrefix, Id, Class.Name));
+                    enc.GetBytes(string.Format("{0}_{1} is {2}\n", NdfTextWriter.InstanceNamePrefix, Id, Class.Name));
 
                 ms.Write(buffer, 0, buffer.Length);
                 ms.Write(enc.GetBytes("(\n"), 0, 1);

@@ -84,9 +84,12 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         {
             valid = true;
 
-            return Value as byte[];
-        }
+            var val = new List<byte>();
+            val.AddRange(BitConverter.GetBytes((uint)((byte[])Value).Length));
+            val.AddRange((byte[])Value);
 
+            return val.ToArray();
+        }
 
         public override byte[] GetNdfText()
         {

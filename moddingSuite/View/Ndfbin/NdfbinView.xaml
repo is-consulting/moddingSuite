@@ -25,17 +25,17 @@
                 <Button ToolTip="Save changes back" Command="{Binding Path=SaveNdfbinCommand}" Style="{StaticResource ButtonStyle1}">
                     <Image Source="{StaticResource SaveIcon}"  />
                 </Button>
-                <ToggleButton x:Name="changesButton" ToolTip="View pending changes" Style="{StaticResource ToggleButtonStyle1}">
+                <!--<ToggleButton x:Name="changesButton" ToolTip="View pending changes" Style="{StaticResource ToggleButtonStyle1}">
                     <Image Source="{StaticResource ViewChanges}"  />
-                </ToggleButton>
+                </ToggleButton>-->
             </ToolBar>
-            <Popup IsOpen="{Binding ElementName=changesButton, Path=IsChecked}" 
+            <!--<Popup IsOpen="{Binding ElementName=changesButton, Path=IsChecked}" 
                                PlacementTarget="{Binding ElementName=changesButton}"
                                PopupAnimation="Slide" 
                                Placement="Bottom" 
                                 
                                AllowsTransparency="True" StaysOpen="False">
-                <DataGrid ItemsSource="{Binding Path=NdfbinManager.ChangeManager.Changes}"
+                <DataGrid ItemsSource="{Binding Path=NdfBinary.ChangeManager.Changes}"
                       IsSynchronizedWithCurrentItem="True"
                       CanUserResizeRows="False"
                       CanUserAddRows="False"  
@@ -45,8 +45,8 @@
                       SelectionUnit="FullRow">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem  Header="Revert" Command="{Binding Path=.NdfbinManager.ChangeManager.RevertChange}" />
-                            <MenuItem  Header="Follow" Command="{Binding Path=NdfbinManager.ChangeManager.FollowChange}" Visibility="Hidden" />
+                            <MenuItem  Header="Revert" Command="{Binding Path=.NdfBinary.ChangeManager.RevertChange}" />
+                            <MenuItem  Header="Follow" Command="{Binding Path=NdfBinary.ChangeManager.FollowChange}" Visibility="Hidden" />
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
@@ -60,7 +60,7 @@
 
                     </DataGrid.Columns>
                 </DataGrid>
-            </Popup>
+            </Popup>-->
 
             <TabControl Grid.Row="1">
                 <TabItem Header="Classes">
@@ -282,7 +282,7 @@
                         </DataGrid>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Topo">
+                <TabItem Header="Top Objects">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10*" />
@@ -293,7 +293,7 @@
 
 
                         </Grid.ColumnDefinitions>
-                        <DataGrid  ItemsSource="{Binding NdfbinManager.Topo}" 
+                        <DataGrid  ItemsSource="{Binding NdfBinary.TopObjects}" 
                                                  IsSynchronizedWithCurrentItem="True"
                       CanUserResizeRows="False"
                       CanUserAddRows="False"  
@@ -303,10 +303,10 @@
                       SelectionUnit="FullRow"
                            >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Topo" Binding="{Binding}" Width="*" />
+                                <DataGridTextColumn Header="Top Objects" Binding="{Binding}" Width="*" />
                             </DataGrid.Columns>
                         </DataGrid>
-                        <DataGrid  ItemsSource="{Binding NdfbinManager.Impr}" Grid.Column="1"
+                        <DataGrid  ItemsSource="{Binding NdfBinary.Import}" Grid.Column="1"
                                                  IsSynchronizedWithCurrentItem="True"
                       CanUserResizeRows="False"
                       CanUserAddRows="False"  
@@ -316,10 +316,10 @@
                       SelectionUnit="FullRow"
                            >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Impr" Binding="{Binding}" Width="*" />
+                                <DataGridTextColumn Header="Import" Binding="{Binding}" Width="*" />
                             </DataGrid.Columns>
                         </DataGrid>
-                        <DataGrid  ItemsSource="{Binding NdfbinManager.Expr}" Grid.Column="2"
+                        <DataGrid  ItemsSource="{Binding NdfBinary.Export}" Grid.Column="2"
                                                  IsSynchronizedWithCurrentItem="True"
                       CanUserResizeRows="False"
                       CanUserAddRows="False"  
@@ -329,12 +329,12 @@
                       SelectionUnit="FullRow"
                            >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Expr" Binding="{Binding}" Width="*" />
+                                <DataGridTextColumn Header="Export" Binding="{Binding}" Width="*" />
                             </DataGrid.Columns>
                         </DataGrid>
 
 
-                        <DataGrid  ItemsSource="{Binding NdfbinManager.AllInstances}" Grid.Column="3"   
+                        <DataGrid  ItemsSource="{Binding NdfBinary.Instances}" Grid.Column="3"   
                       IsSynchronizedWithCurrentItem="True"
                       CanUserResizeRows="False"
                       CanUserAddRows="False"  
@@ -349,7 +349,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <!--<DataGrid  ItemsSource="{Binding NdfbinManager.NotInTopo}" Grid.Column="2"   
+                        <!--<DataGrid  ItemsSource="{Binding NdfBinary.NotInTopo}" Grid.Column="2"   
                       IsSynchronizedWithCurrentItem="True"
                       CanUserResizeRows="False"
                       CanUserAddRows="False"  

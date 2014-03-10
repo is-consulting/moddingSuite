@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Media.Media3D;
 using moddingSuite.BL;
+using moddingSuite.BL.Ndf;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
@@ -29,7 +30,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override byte[] GetNdfText()
         {
-            return NdfbinManager.NdfTextEncoding.GetBytes(Value.ToString());
+            return NdfTextWriter.NdfTextEncoding.GetBytes(Value.ToString());
         }
     }
 }

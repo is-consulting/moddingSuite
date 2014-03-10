@@ -23,7 +23,7 @@ namespace moddingSuite.Model.Ndfbin.Types
             return NdfType.Unknown;
         }
 
-        public static NdfValueWrapper GetValue(byte[] data, NdfType type, NdfbinManager mgr, long pos)
+        public static NdfValueWrapper GetValue(byte[] data, NdfType type, NdfBinary mgr, long pos)
         {
             //if (data.Length != SizeofType(type))
             //    return null;
@@ -36,6 +36,8 @@ namespace moddingSuite.Model.Ndfbin.Types
                     return new NdfInt8(data[0], pos);
                 case NdfType.Int16:
                     return new NdfInt16(BitConverter.ToInt16(data, 0), pos);
+                case NdfType.UInt16:
+                    return new NdfUInt16(BitConverter.ToUInt16(data, 0), pos);
                 case NdfType.Int32:
                     return new NdfInt32(BitConverter.ToInt32(data, 0), pos);
                 case NdfType.UInt32:
@@ -99,6 +101,15 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.Blob:
                     return new NdfBlob(data, pos);
 
+                case NdfType.ZipBlob:
+                    return new NdfZipBlob(data, pos);
+
+                case NdfType.EugInt2:
+                    return new NdfEugInt2(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4), pos);
+
+                case NdfType.Hash:
+                    return new NdfHash(data, pos);
+
                 case NdfType.Unset:
                     return new NdfNull(pos);
 
@@ -115,6 +126,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.Int8:
                     return 1;
                 case NdfType.Int16:
+                case NdfType.UInt16:
                     return 2;
                 case NdfType.Int32:
                 case NdfType.UInt32:
@@ -126,11 +138,13 @@ namespace moddingSuite.Model.Ndfbin.Types
                     return 4;
                 case NdfType.LocalisationHash:
                 case NdfType.ObjectReference:
+                case NdfType.EugInt2:
                     return 8;
                 case NdfType.Vector:
                     return 12;
                 case NdfType.Color128:
                 case NdfType.Guid:
+                case NdfType.Hash:
                     return 16;
 
                 case NdfType.Map:
@@ -151,7 +165,6 @@ namespace moddingSuite.Model.Ndfbin.Types
             }
         }
 
-
         public static NdfType[] GetTypeSelection()
         {
             return new[]
@@ -171,6 +184,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                            NdfType.Guid,
                            NdfType.Int8,
                            NdfType.Int16,
+                           NdfType.UInt16,
                            NdfType.Color32,
                            NdfType.Float64,
                            NdfType.Float64_2,

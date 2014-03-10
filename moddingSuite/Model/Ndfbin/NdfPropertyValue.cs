@@ -98,7 +98,7 @@ namespace moddingSuite.Model.Ndfbin
             }
         }
 
-        public NdfbinManager Manager
+        public NdfBinary Manager
         {
             get { return Property.Class.Manager; }
         }
@@ -189,17 +189,17 @@ namespace moddingSuite.Model.Ndfbin
 
             byte[] newValue = Value.GetBytes(out valid);
 
-            if (valid && !Utils.ByteArrayCompare(newValue, _oldVal))
-            {
-                Property.Class.Manager.ChangeManager.Changes.Add(new ChangeEntry
-                                                                     {
-                                                                         ChangedValue = this,
-                                                                         NewValue = newValue,
-                                                                         OldValue = _oldVal
-                                                                     });
+            //if (valid && !Utils.ByteArrayCompare(newValue, _oldVal))
+            //{
+            //    Property.Class.Manager.ChangeManager.Changes.Add(new ChangeEntry
+            //                                                         {
+            //                                                             ChangedValue = this,
+            //                                                             NewValue = newValue,
+            //                                                             OldValue = _oldVal
+            //                                                         });
 
-                _oldVal = newValue;
-            }
+            //    _oldVal = newValue;
+            //}
 
             base.EndEdit();
         }

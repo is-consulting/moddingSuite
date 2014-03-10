@@ -26,7 +26,7 @@ namespace moddingSuite.BL
 
         public SavFile Read(byte[] data)
         {
-            SavFile ret = new SavFile();
+            var ret = new SavFile();
 
             byte[] buffer = new byte[4];
 
