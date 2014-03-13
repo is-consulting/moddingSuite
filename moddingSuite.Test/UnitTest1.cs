@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using moddingSuite.BL;
 using moddingSuite.BL.DDS;
@@ -50,33 +51,48 @@ namespace moddingSuite.Test
         public void ExportTmsTest()
         {
             var inpath = @"C:\Users\enohka\Desktop\teststuff\leopard2\";
-            var inFile = Path.Combine(inpath, "highdef.tmst_chunk_pc");
+            var inFile = Path.Combine(inpath, "lowdef.tmst_chunk_pc");
 
             var tgvReader = new TgvReader();
 
             var inFileInfo = new FileInfo(inFile);
-            var inFileBuffer = new byte[inFileInfo.Length];
 
-            TgvFile tgv; 
-
+            TgvFile tgv;
 
             using (var fs = new FileStream(inFile, FileMode.Open))
             {
-                fs.Read(inFileBuffer, 0, inFileBuffer.Length);
-                tgv = tgvReader.Read(inFileBuffer);
+                var writer = new TgvDDSWriter();
+
+                int index = 1;
+
+                while (fs.Position < fs.Length)
+                {
+                    var sepBuffer = new byte[4];
+                    fs.Read(sepBuffer, 0, sepBuffer.Length);
+
+                    if (fs.Position >= fs.Length) continue;
+
+                    tgv = tgvReader.Read(fs);
+
+                    byte[] content = writer.CreateDDSFile(tgv);
+
+                    var f = new FileInfo(inFile);
+
+                    var path = Path.Combine(inpath, string.Format("{0}_{1}", f.Name, "export"));
+
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+                    using (var outFs = new FileStream(Path.Combine(path, string.Format("{0}.dds", index)), FileMode.OpenOrCreate))
+                    {
+                        outFs.Write(content, 0, content.Length);
+                        outFs.Flush();
+                    }
+
+                    index++;
+                }
             }
 
-            var writer = new TgvDDSWriter();
-
-            byte[] content = writer.CreateDDSFile(tgv);
-
-            var f = new FileInfo(inFile);
-
-            using (var fs = new FileStream(Path.Combine(inpath, f.Name + ".dds"), FileMode.OpenOrCreate))
-            {
-                fs.Write(content, 0, content.Length);
-                fs.Flush();
-            }
         }
     }
 }

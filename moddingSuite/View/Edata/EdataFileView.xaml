@@ -14,14 +14,16 @@
             <!--<ColumnDefinition Width="5*" />-->
         </Grid.ColumnDefinitions>
         <TextBox Text="{Binding Path=FilterExpression, UpdateSourceTrigger=PropertyChanged}" Margin="5" HorizontalAlignment="Right" Width="200" Grid.Column="1" />
-        <DataGrid Grid.Row="1"  x:Name="dataGrid" Margin="5" ItemsSource="{Binding Path=FilesCollectionView}" IsSynchronizedWithCurrentItem="True"
+        <DataGrid Grid.Row="1"  x:Name="DataGrid" Margin="5" ItemsSource="{Binding Path=FilesCollectionView}" IsSynchronizedWithCurrentItem="True"
                       CanUserResizeRows="False"
                       CanUserAddRows="False"  
                       CanUserDeleteRows="False" 
                       AutoGenerateColumns="False"
                       SelectionMode="Single"
-                      SelectionUnit="FullRow"
-                      >
+                      SelectionUnit="FullRow">
+            <DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DetailsCommand}" CommandParameter="{Binding ElementName=DataGrid, Path=SelectedItem}" />
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" Width="20" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
@@ -31,8 +33,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding Path=Path}" Header="Path" IsReadOnly="True" Width="*" />
-                <DataGridTextColumn Binding="{Binding Path=Offset}" Header="Offset" IsReadOnly="True" />
-                <DataGridTextColumn Binding="{Binding Path=Size}" Header="Size" IsReadOnly="True" />
+                <!--<DataGridTextColumn Binding="{Binding Path=Offset}" Header="Offset" IsReadOnly="True" />-->
+                <DataGridTextColumn Binding="{Binding Path=Size, Converter={StaticResource ByteToKiloByteConverter}}" Header="Size" IsReadOnly="True" Width="0.1*" />
             </DataGrid.Columns>
         </DataGrid>
         <!--<ListView Margin="5" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path=FilesCollectionView}"   >

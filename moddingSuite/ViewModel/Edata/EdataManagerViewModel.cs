@@ -301,22 +301,47 @@ namespace moddingSuite.ViewModel.Edata
             if (sourceTgvFile == null)
                 return;
 
-            Settings.Settings settings = SettingsManager.Load();
+            var dispatcher = Dispatcher.CurrentDispatcher;
+            Action<string> report = msg => StatusText = msg;
 
-            var tgvReader = new TgvReader();
-            var tgv = tgvReader.Read(sourceTgvFile.Manager.GetRawData(sourceTgvFile));
-
-            var writer = new TgvDDSWriter();
-
-            byte[] content = writer.CreateDDSFile(tgv);
-
-            var f = new FileInfo(sourceTgvFile.Path);
-
-            using (var fs = new FileStream(Path.Combine(settings.SavePath, f.Name + ".dds"), FileMode.OpenOrCreate))
+            var s = new Task(() =>
             {
-                fs.Write(content, 0, content.Length);
-                fs.Flush();
-            }
+                try
+                {
+                    dispatcher.Invoke(() => IsUIBusy = true);
+
+                    Settings.Settings settings = SettingsManager.Load();
+
+                    var f = new FileInfo(sourceTgvFile.Path);
+                    var exportPath = Path.Combine(settings.SavePath, f.Name + ".dds");
+
+                    dispatcher.Invoke(report, string.Format("Exporting to {0}...", exportPath));
+
+                    var tgvReader = new TgvReader();
+                    var tgv = tgvReader.Read(sourceTgvFile.Manager.GetRawData(sourceTgvFile));
+
+                    var writer = new TgvDDSWriter();
+
+                    byte[] content = writer.CreateDDSFile(tgv);
+
+                    using (var fs = new FileStream(Path.Combine(settings.SavePath, f.Name + ".dds"), FileMode.OpenOrCreate))
+                    {
+                        fs.Write(content, 0, content.Length);
+                        fs.Flush();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                }
+                finally
+                {
+                    dispatcher.Invoke(report, "Ready");
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                }
+            });
+
+            s.Start();
         }
 
         protected bool IsOfType(EdataFileType type)
@@ -430,17 +455,41 @@ namespace moddingSuite.ViewModel.Edata
             if (ndf == null)
                 return;
 
-            Settings.Settings settings = SettingsManager.Load();
+            var dispatcher = Dispatcher.CurrentDispatcher;
+            Action<string> report = msg => StatusText = msg;
 
-            byte[] buffer = vm.EdataManager.GetRawData(ndf);
-
-            var f = new FileInfo(ndf.Path);
-
-            using (var fs = new FileStream(Path.Combine(settings.SavePath, f.Name), FileMode.OpenOrCreate))
+            var s = new Task(() =>
             {
-                fs.Write(buffer, 0, buffer.Length);
-                fs.Flush();
-            }
+                try
+                {
+                    dispatcher.Invoke(() => IsUIBusy = true);
+
+                    Settings.Settings settings = SettingsManager.Load();
+
+                    var f = new FileInfo(ndf.Path);
+                    var exportPath = Path.Combine(settings.SavePath, f.Name);
+                    dispatcher.Invoke(report, string.Format("Exporting to {0}...", exportPath));
+
+                    byte[] buffer = vm.EdataManager.GetRawData(ndf);
+
+                    using (var fs = new FileStream(exportPath, FileMode.OpenOrCreate))
+                    {
+                        fs.Write(buffer, 0, buffer.Length);
+                        fs.Flush();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                }
+                finally
+                {
+                    dispatcher.Invoke(report, "Ready");
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                }
+            });
+
+            s.Start();
         }
 
         protected void ExportAll()
@@ -528,13 +577,11 @@ namespace moddingSuite.ViewModel.Edata
 
         private void HandleNewFile(string fileName)
         {
-            byte[] headerBuffer;
-
             var type = EdataFileType.Unknown;
 
             using (var fs = new FileStream(fileName, FileMode.Open))
             {
-                headerBuffer = new byte[12];
+                byte[] headerBuffer = new byte[12];
                 fs.Read(headerBuffer, 0, headerBuffer.Length);
 
                 type = EdataManager.GetFileTypeFromHeaderData(headerBuffer);

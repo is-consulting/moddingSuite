@@ -10,68 +10,65 @@ namespace moddingSuite.BL.TGV
 {
     public class TgvReader
     {
-        public TgvFile Read(byte[] data)
+        public TgvFile Read(Stream ms)
         {
             var file = new TgvFile();
 
-            using (var ms = new MemoryStream(data))
+            var buffer = new byte[4];
+
+            ms.Read(buffer, 0, buffer.Length);
+            file.Version = BitConverter.ToUInt32(buffer, 0);
+
+            ms.Read(buffer, 0, buffer.Length);
+            file.IsCompressed = BitConverter.ToInt32(buffer, 0) > 0;
+
+            ms.Read(buffer, 0, buffer.Length);
+            file.Width = BitConverter.ToUInt32(buffer, 0);
+            ms.Read(buffer, 0, buffer.Length);
+            file.Height = BitConverter.ToUInt32(buffer, 0);
+
+            ms.Read(buffer, 0, buffer.Length);
+            file.ImageWidth = BitConverter.ToUInt32(buffer, 0);
+            ms.Read(buffer, 0, buffer.Length);
+            file.ImageHeight = BitConverter.ToUInt32(buffer, 0);
+
+            buffer = new byte[2];
+
+            ms.Read(buffer, 0, buffer.Length);
+            file.MipMapCount = BitConverter.ToUInt16(buffer, 0);
+
+            ms.Read(buffer, 0, buffer.Length);
+            ushort pixelFormatLen = BitConverter.ToUInt16(buffer, 0);
+
+            buffer = new byte[pixelFormatLen];
+
+            ms.Read(buffer, 0, buffer.Length);
+            file.PixelFormatStr = Encoding.ASCII.GetString(buffer);
+
+            ms.Seek(Utils.RoundToNextDivBy4(pixelFormatLen) - pixelFormatLen, SeekOrigin.Current);
+
+            buffer = new byte[16];
+            ms.Read(buffer, 0, buffer.Length);
+            file.SourceChecksum = (byte[])buffer.Clone();
+
+            buffer = new byte[4];
+
+            for (int i = 0; i < file.MipMapCount; i++)
             {
-                var buffer = new byte[4];
-
                 ms.Read(buffer, 0, buffer.Length);
-                file.Version = BitConverter.ToUInt32(buffer, 0);
-
-                ms.Read(buffer, 0, buffer.Length);
-                file.IsCompressed = BitConverter.ToInt32(buffer, 0) > 0;
-
-                ms.Read(buffer, 0, buffer.Length);
-                file.Width = BitConverter.ToUInt32(buffer, 0);
-                ms.Read(buffer, 0, buffer.Length);
-                file.Height = BitConverter.ToUInt32(buffer, 0);
-
-                ms.Read(buffer, 0, buffer.Length);
-                file.ImageWidth = BitConverter.ToUInt32(buffer, 0);
-                ms.Read(buffer, 0, buffer.Length);
-                file.ImageHeight = BitConverter.ToUInt32(buffer, 0);
-
-                buffer = new byte[2];
-
-                ms.Read(buffer, 0, buffer.Length);
-                file.MipMapCount = BitConverter.ToUInt16(buffer, 0);
-
-                ms.Read(buffer, 0, buffer.Length);
-                ushort pixelFormatLen = BitConverter.ToUInt16(buffer, 0);
-
-                buffer = new byte[pixelFormatLen];
-
-                ms.Read(buffer, 0, buffer.Length);
-                file.PixelFormatStr = Encoding.ASCII.GetString(buffer);
-
-                ms.Seek(Utils.RoundToNextDivBy4(pixelFormatLen) - pixelFormatLen, SeekOrigin.Current);
-
-                buffer = new byte[16];
-                ms.Read(buffer, 0, buffer.Length);
-                file.SourceChecksum = (byte[])buffer.Clone();
-
-                buffer = new byte[4];
-
-                for (int i = 0; i < file.MipMapCount; i++)
-                {
-                    ms.Read(buffer, 0, buffer.Length);
-                    uint offset = BitConverter.ToUInt32(buffer, 0);
-                    file.Offsets.Add(offset);
-                }
-
-                for (int i = 0; i < file.MipMapCount; i++)
-                {
-                    ms.Read(buffer, 0, buffer.Length);
-                    uint offset = BitConverter.ToUInt32(buffer, 0);
-                    file.Sizes.Add(offset);
-                }
-
-                for (int i = 0; i < file.MipMapCount; i++)
-                    file.MipMaps.Add(ReadMip(i, data, file));
+                uint offset = BitConverter.ToUInt32(buffer, 0);
+                file.Offsets.Add(offset);
             }
+
+            for (int i = 0; i < file.MipMapCount; i++)
+            {
+                ms.Read(buffer, 0, buffer.Length);
+                uint offset = BitConverter.ToUInt32(buffer, 0);
+                file.Sizes.Add(offset);
+            }
+
+            for (int i = 0; i < file.MipMapCount; i++)
+                file.MipMaps.Add(ReadMip(ms, file, i));
 
             file.Format = TranslatePixelFormat(file.PixelFormatStr);
 
@@ -83,7 +80,90 @@ namespace moddingSuite.BL.TGV
             return file;
         }
 
-        protected TgvMipMap ReadMip(int id, byte[] data, TgvFile file)
+        public TgvFile Read(byte[] data)
+        {
+            using (var ms = new MemoryStream(data))
+                return Read(ms);
+
+            //var file = new TgvFile();
+
+            //using (var ms = new MemoryStream(data))
+            //{
+            //    var buffer = new byte[4];
+
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.Version = BitConverter.ToUInt32(buffer, 0);
+
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.IsCompressed = BitConverter.ToInt32(buffer, 0) > 0;
+
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.Width = BitConverter.ToUInt32(buffer, 0);
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.Height = BitConverter.ToUInt32(buffer, 0);
+
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.ImageWidth = BitConverter.ToUInt32(buffer, 0);
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.ImageHeight = BitConverter.ToUInt32(buffer, 0);
+
+            //    buffer = new byte[2];
+
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.MipMapCount = BitConverter.ToUInt16(buffer, 0);
+
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    ushort pixelFormatLen = BitConverter.ToUInt16(buffer, 0);
+
+            //    buffer = new byte[pixelFormatLen];
+
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.PixelFormatStr = Encoding.ASCII.GetString(buffer);
+
+            //    ms.Seek(Utils.RoundToNextDivBy4(pixelFormatLen) - pixelFormatLen, SeekOrigin.Current);
+
+            //    buffer = new byte[16];
+            //    ms.Read(buffer, 0, buffer.Length);
+            //    file.SourceChecksum = (byte[])buffer.Clone();
+
+            //    buffer = new byte[4];
+
+            //    for (int i = 0; i < file.MipMapCount; i++)
+            //    {
+            //        ms.Read(buffer, 0, buffer.Length);
+            //        uint offset = BitConverter.ToUInt32(buffer, 0);
+            //        file.Offsets.Add(offset);
+            //    }
+
+            //    for (int i = 0; i < file.MipMapCount; i++)
+            //    {
+            //        ms.Read(buffer, 0, buffer.Length);
+            //        uint offset = BitConverter.ToUInt32(buffer, 0);
+            //        file.Sizes.Add(offset);
+            //    }
+
+            //    for (int i = 0; i < file.MipMapCount; i++)
+            //        file.MipMaps.Add(ReadMip(i, data, file));
+            //}
+
+            //file.Format = TranslatePixelFormat(file.PixelFormatStr);
+
+            ////if (file.Width != file.ImageWidth || file.Height != file.ImageHeight)
+            ////{
+            ////    throw new InvalidDataException("something interresting happened here");
+            ////}
+
+            //return file;
+        }
+
+        /// <summary>
+        /// This method is stream and order dependant, don't use outside.
+        /// </summary>
+        /// <param name="ms"></param>
+        /// <param name="file"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private TgvMipMap ReadMip(Stream ms, TgvFile file, int id)
         {
             if (id > file.MipMapCount)
                 throw new ArgumentException("id");
@@ -92,30 +172,34 @@ namespace moddingSuite.BL.TGV
 
             var mipMap = new TgvMipMap(file.Offsets[id], file.Sizes[id], 0);
 
-            using (var ms = new MemoryStream(data, (int)mipMap.Offset, (int)mipMap.Size))
+            byte[] buffer;
+
+            if (file.IsCompressed)
             {
-                var buffer = new byte[4];
+                buffer = new byte[4];
 
-                if (file.IsCompressed)
-                {
-                    ms.Read(buffer, 0, buffer.Length);
-                    if (!Utils.ByteArrayCompare(buffer, zipo))
-                        throw new InvalidDataException("Mipmap has to start with \"ZIPO\"!");
-
-                    ms.Read(buffer, 0, buffer.Length);
-                    mipMap.MipWidth = BitConverter.ToInt32(buffer, 0);
-                }
-
-                buffer = new byte[ms.Length - ms.Position];
                 ms.Read(buffer, 0, buffer.Length);
+                if (!Utils.ByteArrayCompare(buffer, zipo))
+                    throw new InvalidDataException("Mipmap has to start with \"ZIPO\"!");
 
-                if (file.IsCompressed)
-                    buffer = Compressor.Decomp(buffer);
+                ms.Read(buffer, 0, buffer.Length);
+                mipMap.MipWidth = BitConverter.ToInt32(buffer, 0);
 
-                mipMap.Content = buffer;
-
-                return mipMap;
+                buffer = new byte[mipMap.Size - 8];
             }
+            else
+                buffer = new byte[mipMap.Size];
+
+            ms.Read(buffer, 0, buffer.Length);
+
+            ms.Seek(Utils.RoundToNextDivBy4((int)mipMap.Size)-mipMap.Size, SeekOrigin.Current);
+
+            if (file.IsCompressed)
+                buffer = Compressor.Decomp(buffer);
+
+            mipMap.Content = buffer;
+
+            return mipMap;
         }
 
         protected PixelFormats TranslatePixelFormat(string pixelFormat)

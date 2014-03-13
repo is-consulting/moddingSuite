@@ -20,6 +20,8 @@ namespace moddingSuite.ViewModel.Edata
         public EdataManager EdataManager { get; protected set; }
 
         public ICommand CloseCommand { get; set; }
+
+        public ICommand DetailsCommand { get; set; }
         
         public EdataManagerViewModel ParentVm
         {
@@ -34,6 +36,28 @@ namespace moddingSuite.ViewModel.Edata
             _parentVm = parentVm;
 
             CloseCommand = new ActionCommand((x) => ParentVm.CloseFile(this));
+            DetailsCommand = new ActionCommand(DetailsExecute);
+        }
+
+        private void DetailsExecute(object obj)
+        {
+            var file = obj as EdataContentFile;
+                
+            if (file == null)
+                return;
+           
+            switch (file.FileType)
+            {
+                case EdataFileType.Ndfbin:
+                    ParentVm.EditNdfbinCommand.Execute(obj);
+                    break;
+                case EdataFileType.Image:
+                    ParentVm.ExportTextureCommand.Execute(obj);
+                    break;
+                case EdataFileType.Dictionary:
+                    ParentVm.EditTradFileCommand.Execute(obj);
+                    break;
+            }
         }
 
         public string LoadedFile

@@ -48,8 +48,9 @@
         <Extension:LocalisationHashValueConverter x:Key="LocalisationHashValueConverter" />
         <Extension:Color32ValueConverter x:Key="Color32ValueConverter" />
 
-
         <Extension:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+
+        <Extension:ByteToKiloByteConverter x:Key="ByteToKiloByteConverter" />
 
 
         <Extension:EdataFileTypeToImageConverter x:Key="EdataFileTypeToImageConverter" />
