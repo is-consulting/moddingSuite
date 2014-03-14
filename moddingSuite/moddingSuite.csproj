@@ -164,6 +164,7 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfVector.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfWideString.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfZipBlob.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfTrippleInt.cs" />
     <Compile Include="Model\Ndfbin\Types\NdfType.cs" />
     <Compile Include="Model\Ndfbin\Types\NdfTypeManager.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFlatValueWrapper.cs" />

@@ -24,6 +24,8 @@ for each property:
 0C 00 00 00 is a 16 bytes Color A R G B
 0D 00 00 00 is Color 4 bytes A R G B one byte each
 
+0E 00 00 00 is a Tripple int32 12 bytes 4 bytes for each int
+
 11 00 00 00 is an array, following 4 bytes are the length of the array (offset E095 for a good example (string list) 
 12 00 00 00 seems to be a map list first 4bytes arraySize; element: 8byte string type/value; usual object reference 16 byte
 

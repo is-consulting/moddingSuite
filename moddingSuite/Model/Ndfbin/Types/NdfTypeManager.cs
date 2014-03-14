@@ -107,6 +107,9 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.EugInt2:
                     return new NdfEugInt2(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4), pos);
 
+                case NdfType.TrippleInt:
+                    return new NdfTrippleInt(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4), BitConverter.ToInt32(data, 8), pos);
+
                 case NdfType.Hash:
                     return new NdfHash(data, pos);
 
@@ -140,6 +143,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.ObjectReference:
                 case NdfType.EugInt2:
                     return 8;
+                case NdfType.TrippleInt:
                 case NdfType.Vector:
                     return 12;
                 case NdfType.Color128:

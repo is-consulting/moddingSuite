@@ -20,6 +20,7 @@
         Vector = 0x0000000b,
         Color128 = 0x0000000c,
         Color32 = 0x0000000d,
+        TrippleInt = 0x0000000e,
 
         TableString = 0x00000007,
         TableStringFile = 0x0000001C,
