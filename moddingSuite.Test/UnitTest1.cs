@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using moddingSuite.BL;
 using moddingSuite.BL.DDS;
+using moddingSuite.BL.Mesh;
 using moddingSuite.BL.TGV;
 using moddingSuite.Compressing;
 using moddingSuite.Model.Textures;
@@ -94,5 +95,18 @@ namespace moddingSuite.Test
             }
 
         }
+
+        [TestMethod]
+        public void TestMeshReader()
+        {
+            var file = Path.Combine(@"C:\Users\enohka\Desktop\teststuff", "mesh_all.spk");
+
+            var mreader = new MeshReader();
+
+            using (var fs = new FileStream(file, FileMode.Open))
+                mreader.Read(fs);
+
+        }
+
     }
 }

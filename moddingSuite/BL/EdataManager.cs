@@ -36,13 +36,14 @@ namespace moddingSuite.BL
             byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
             byte[] tgvHeader = { 2 };
 
-            _knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>();
-
-            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Ndfbin, ndfbinheader));
-            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Package, edataHeader));
-            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Dictionary, tradHeader));
-            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Save, savHeader));
-            _knownHeaders.Add(new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Image, tgvHeader));
+            _knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>
+                {
+                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Ndfbin, ndfbinheader),
+                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Package, edataHeader),
+                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Dictionary, tradHeader),
+                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Save, savHeader),
+                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Image, tgvHeader)
+                };
         }
 
         /// <summary>
@@ -297,10 +298,6 @@ namespace moddingSuite.BL
         protected string MergePath(IEnumerable<EdataDir> dirs, string fileName)
         {
             var b = new StringBuilder();
-
-            //Parallel.ForEach(dirs, dir =>
-            //    { lock (b) { b.Append(dir.Name); } }
-            //);
 
             foreach (var dir in dirs)
                 b.Append(dir.Name);

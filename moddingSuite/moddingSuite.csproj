@@ -92,6 +92,7 @@
     <Compile Include="BL\ImageService\BlockDXT\BlockDXT5.cs" />
     <Compile Include="BL\ImageService\Color16.cs" />
     <Compile Include="BL\ImageService\ColorBlock.cs" />
+    <Compile Include="BL\Mesh\MeshReader.cs" />
     <Compile Include="BL\Ndf\INdfReader.cs" />
     <Compile Include="BL\Ndf\INdfWriter.cs" />
     <Compile Include="BL\Ndf\NdfbinReader.cs" />
@@ -112,6 +113,11 @@
     <Compile Include="Model\Edata\EdataEntity.cs" />
     <Compile Include="Model\Edata\EdataContentFile.cs" />
     <Compile Include="Model\Edata\EdataFileType.cs" />
+    <Compile Include="Model\Mesh\MeshFile.cs" />
+    <Compile Include="Model\Mesh\MeshHeader.cs" />
+    <Compile Include="Model\Mesh\MeshHeaderEntry.cs" />
+    <Compile Include="Model\Mesh\MeshHeaderEntryWithCount.cs" />
+    <Compile Include="Model\Mesh\MeshSubHeader.cs" />
     <Compile Include="Model\Ndfbin\ChangeManager\ChangeEntry.cs" />
     <Compile Include="Model\Ndfbin\ChangeManager\ChangeManager.cs" />
     <Compile Include="Model\Ndfbin\ChangeManager\Enum.cs" />

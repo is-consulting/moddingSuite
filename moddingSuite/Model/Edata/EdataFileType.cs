@@ -9,6 +9,7 @@ namespace moddingSuite.Model.Edata
         Image,
         Package,
         Save,
+        Mesh,
 
         Unknown
     }
