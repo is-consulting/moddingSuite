@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
+using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Edata;
 using moddingSuite.Model.Mesh;
 using System.Runtime.InteropServices;
@@ -33,7 +34,21 @@ namespace moddingSuite.BL.Mesh
 
             file.MultiMaterialMeshFiles = ReadMeshDictionary(s, file);
 
+            file.TextureBindings = ReadTextureBindings(s, file);
+
             return file;
+        }
+
+        private Model.Ndfbin.NdfBinary ReadTextureBindings(Stream s, MeshFile file)
+        {
+            var buffer = new byte[file.SubHeader.MeshMaterial.Size];
+            
+            s.Seek(file.SubHeader.MeshMaterial.Offset, SeekOrigin.Begin);
+            s.Read(buffer, 0, buffer.Length);
+
+            var ndfReader = new NdfbinReader();
+
+            return ndfReader.Read(buffer);
         }
 
         protected MeshSubHeader ReadSubHeader(Stream ms)
@@ -159,7 +174,7 @@ namespace moddingSuite.BL.Mesh
                     s.Read(buffer, 0, buffer.Length);
                     minp.X = BitConverter.ToSingle(buffer, 0);
                     s.Read(buffer, 0, buffer.Length);
-                    minp.Y = BitConverter.ToSingle(buffer, 0); 
+                    minp.Y = BitConverter.ToSingle(buffer, 0);
                     s.Read(buffer, 0, buffer.Length);
                     minp.Z = BitConverter.ToSingle(buffer, 0);
                     file.MinBoundingBox = minp;

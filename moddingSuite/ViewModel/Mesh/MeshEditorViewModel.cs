@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
 using moddingSuite.Model.Mesh;
+using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
+using moddingSuite.ViewModel.Ndf;
 
 namespace moddingSuite.ViewModel.Mesh
 {
@@ -15,6 +18,8 @@ namespace moddingSuite.ViewModel.Mesh
         private MeshFile _meshFile;
         private ICollectionView _multiMaterialMeshesCollectionView;
         private string _multiMaterialMeshesFilterExpression = string.Empty;
+
+        public ICommand EditTextureBindingsCommand { get; protected  set; }
 
         public ICollectionView MultiMaterialMeshesCollectionView
         {
@@ -49,6 +54,15 @@ namespace moddingSuite.ViewModel.Mesh
         public MeshEditorViewModel(MeshFile file)
         {
             MeshFile = file;
+
+            EditTextureBindingsCommand = new ActionCommand(EditTextureBindingsExecute);
+        }
+
+        private void EditTextureBindingsExecute(object obj)
+        {
+            var ndfEditor = new NdfEditorMainViewModel(MeshFile.TextureBindings);
+
+            DialogProvider.ProvideView(ndfEditor, this);
         }
 
         private void BuildMultiMaterialMeshesCollectionView()

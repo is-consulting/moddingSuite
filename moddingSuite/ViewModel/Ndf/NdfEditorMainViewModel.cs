@@ -48,6 +48,11 @@ namespace moddingSuite.ViewModel.Ndf
 
             //ndfbinManager.Initialize();
 
+            InitializeNdfEditor();
+        }
+
+        private void InitializeNdfEditor()
+        {
             foreach (NdfClass cls in NdfBinary.Classes)
                 Classes.Add(new NdfClassViewModel(cls, this));
 
@@ -70,19 +75,19 @@ namespace moddingSuite.ViewModel.Ndf
             OwnerFile = null;
             EdataFileViewModel = null;
 
-            //var ndfbinManager = new NdfbinManager(content);
-            //NdfbinManager = ndfbinManager;
-
-            //ndfbinManager.Initialize();
-
             var ndfbinReader = new NdfbinReader();
             NdfBinary = ndfbinReader.Read(content);
 
-            foreach (NdfClass cls in NdfBinary.Classes)
-                Classes.Add(new NdfClassViewModel(cls, this));
+            InitializeNdfEditor();
 
-            Strings = NdfBinary.Strings;
-            Trans = NdfBinary.Trans;
+            SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute, () => false);
+        }
+
+        public NdfEditorMainViewModel(NdfBinary ndf)
+        {
+            NdfBinary = ndf;
+
+            InitializeNdfEditor();
 
             SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute, () => false);
         }
