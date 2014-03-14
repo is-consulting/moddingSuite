@@ -113,6 +113,7 @@
     <Compile Include="Model\Edata\EdataEntity.cs" />
     <Compile Include="Model\Edata\EdataContentFile.cs" />
     <Compile Include="Model\Edata\EdataFileType.cs" />
+    <Compile Include="Model\Mesh\MeshContentFile.cs" />
     <Compile Include="Model\Mesh\MeshFile.cs" />
     <Compile Include="Model\Mesh\MeshHeader.cs" />
     <Compile Include="Model\Mesh\MeshHeaderEntry.cs" />

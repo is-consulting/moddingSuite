@@ -15,6 +15,7 @@ namespace moddingSuite.Model.Mesh
         public MeshHeaderEntryWithCount MeshMaterial { get; set; }
         public MeshHeaderEntryWithCount KeyedMeshSubPart { get; set; }
         public MeshHeaderEntryWithCount KeyedMeshSubPartVectors { get; set; }
+        public MeshHeaderEntryWithCount MultiMaterialMeshes { get; set; }
         public MeshHeaderEntryWithCount SingleMaterialMeshes { get; set; }
         public MeshHeaderEntryWithCount Index1DBufferHeaders { get; set; }
         public MeshHeaderEntry Index1DBufferStreams { get; set; }

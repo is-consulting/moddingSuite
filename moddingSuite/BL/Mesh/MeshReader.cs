@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 using moddingSuite.Model.Edata;
 using moddingSuite.Model.Mesh;
 using System.Runtime.InteropServices;
@@ -30,7 +31,7 @@ namespace moddingSuite.BL.Mesh
             file.Header = ReadHeader(s);
             file.SubHeader = ReadSubHeader(s);
 
-            var col = ReadEdatV2Dictionary(s, file);
+            var col = ReadMeshDictionary(s, file);
 
             Console.WriteLine("asd: {0}", col.Count);
 
@@ -52,6 +53,7 @@ namespace moddingSuite.BL.Mesh
 
             shead.KeyedMeshSubPart = ReadSubHeaderEntryWithCount(ms);
             shead.KeyedMeshSubPartVectors = ReadSubHeaderEntryWithCount(ms);
+            shead.MultiMaterialMeshes = ReadSubHeaderEntryWithCount(ms);
             shead.SingleMaterialMeshes = ReadSubHeaderEntryWithCount(ms);
             shead.Index1DBufferHeaders = ReadSubHeaderEntryWithCount(ms);
             shead.Index1DBufferStreams = ReadSubHeaderEntry(ms);
@@ -132,9 +134,9 @@ namespace moddingSuite.BL.Mesh
             return head;
         }
 
-        protected ObservableCollection<EdataContentFile> ReadEdatV2Dictionary(Stream s, MeshFile f)
+        protected ObservableCollection<MeshContentFile> ReadMeshDictionary(Stream s, MeshFile f)
         {
-            var files = new ObservableCollection<EdataContentFile>();
+            var files = new ObservableCollection<MeshContentFile>();
             var dirs = new List<EdataDir>();
             var endings = new List<long>();
 
@@ -151,28 +153,44 @@ namespace moddingSuite.BL.Mesh
 
                 if (fileGroupId == 0)
                 {
-                    var file = new EdataContentFile(new EdataManager(string.Empty));
+                    var file = new MeshContentFile();
                     s.Read(buffer, 0, 4);
-                    file.FileEntrySize = BitConverter.ToInt32(buffer, 0);
+                    file.FileEntrySize = BitConverter.ToUInt32(buffer, 0);
 
-                    buffer = new byte[8];
+                    var minp = new Point3D();
                     s.Read(buffer, 0, buffer.Length);
-                    file.Offset = BitConverter.ToInt64(buffer, 0);
+                    minp.X = BitConverter.ToSingle(buffer, 0);
+                    s.Read(buffer, 0, buffer.Length);
+                    minp.Y = BitConverter.ToSingle(buffer, 0); 
+                    s.Read(buffer, 0, buffer.Length);
+                    minp.Z = BitConverter.ToSingle(buffer, 0);
+                    file.MinBoundingBox = minp;
+
+                    var maxp = new Point3D();
+                    s.Read(buffer, 0, buffer.Length);
+                    maxp.X = BitConverter.ToSingle(buffer, 0);
+                    s.Read(buffer, 0, buffer.Length);
+                    maxp.Y = BitConverter.ToSingle(buffer, 0);
+                    s.Read(buffer, 0, buffer.Length);
+                    maxp.Z = BitConverter.ToSingle(buffer, 0);
+                    file.MinBoundingBox = maxp;
 
                     s.Read(buffer, 0, buffer.Length);
-                    file.Size = BitConverter.ToInt64(buffer, 0);
+                    file.Flags = BitConverter.ToUInt32(buffer, 0);
 
-                    var checkSum = new byte[16];
-                    s.Read(checkSum, 0, checkSum.Length);
-                    file.Checksum = checkSum;
+                    buffer = new byte[2];
+
+                    s.Read(buffer, 0, buffer.Length);
+                    file.MultiMaterialMeshIndex = BitConverter.ToUInt16(buffer, 0);
+
+                    s.Read(buffer, 0, buffer.Length);
+                    file.HierarchicalASEModelSkeletonIndex = BitConverter.ToUInt16(buffer, 0);
 
                     file.Name = Utils.ReadString(s);
                     file.Path = MergePath(dirs, file.Name);
 
                     if (file.Name.Length % 2 == 0)
                         s.Seek(1, SeekOrigin.Current);
-
-                    file.Id = id++;
 
                     files.Add(file);
 
