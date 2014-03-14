@@ -89,6 +89,9 @@
                 <Button ToolTip="Edit ndf file" Command="{Binding EditNdfbinCommand}"  Style="{DynamicResource ButtonStyle1}">
                     <Image Source="{StaticResource OpenDetailsIcon}" />
                 </Button>
+                <Button ToolTip="Edit mesh file" Command="{Binding EditMeshCommand}"  Style="{DynamicResource ButtonStyle1}">
+                    <Image Source="{StaticResource MeshFileIcon}" />
+                </Button>
                 <Button ToolTip="Edit dictionary" Command="{Binding EditTradFileCommand}"  Style="{DynamicResource ButtonStyle1}">
                     <Image Source="{StaticResource OpenDictionayIcon}" />
                 </Button>

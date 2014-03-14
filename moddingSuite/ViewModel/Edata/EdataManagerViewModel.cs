@@ -19,6 +19,7 @@ using moddingSuite.View.Ndfbin;
 using moddingSuite.ViewModel.About;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Media;
+using moddingSuite.ViewModel.Mesh;
 using moddingSuite.ViewModel.Ndf;
 using moddingSuite.ViewModel.Trad;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -29,6 +30,7 @@ using moddingSuite.BL.TGV;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Text;
+using moddingSuite.BL.Mesh;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -95,6 +97,7 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand ChangeWargamePathCommand { get; set; }
         public ICommand EditNdfbinCommand { get; set; }
         public ICommand EditTradFileCommand { get; set; }
+        public ICommand EditMeshCommand { get; set; }
         public ICommand PlayMovieCommand { get; set; }
         public ICommand AboutUsCommand { get; set; }
 
@@ -149,6 +152,51 @@ namespace moddingSuite.ViewModel.Edata
 
             EditTradFileCommand = new ActionCommand(EditTradFileExecute, () => IsOfType(EdataFileType.Dictionary));
             EditNdfbinCommand = new ActionCommand(EditNdfbinExecute, () => IsOfType(EdataFileType.Ndfbin));
+            EditMeshCommand = new ActionCommand(EditMeshExecute, () => IsOfType(EdataFileType.Mesh));
+        }
+
+        private void EditMeshExecute(object obj)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+            if (vm == null)
+                return;
+
+            var mesh = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+            if (mesh == null)
+                return;
+
+            var dispatcher = Dispatcher.CurrentDispatcher;
+
+            Action<ViewModelBase, ViewModelBase> open = DialogProvider.ProvideView;
+            Action<string> report = msg => StatusText = msg;
+
+            var s = new Task(() =>
+            {
+                try
+                {
+                    dispatcher.Invoke(() => IsUIBusy = true);
+                    dispatcher.Invoke(report, "Reading Mesh package...");
+
+                    var reader = new MeshReader();
+                    var meshfile = reader.Read(vm.EdataManager.GetRawData(mesh));
+
+                    var detailsVm = new MeshEditorViewModel(meshfile);
+
+                    dispatcher.Invoke(open, detailsVm, this);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                }
+                finally
+                {
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                    dispatcher.Invoke(report, "Ready");
+                }
+            });
+
+            s.Start();
+
         }
 
         private void ReplaceRawExecute(object obj)

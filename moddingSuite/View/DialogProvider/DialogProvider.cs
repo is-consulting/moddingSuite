@@ -8,6 +8,7 @@ using System.Windows;
 using moddingSuite.Model.Ndfbin;
 using moddingSuite.View.Common;
 using moddingSuite.View.Edata;
+using moddingSuite.View.Mesh;
 using moddingSuite.View.Ndfbin;
 using moddingSuite.View.Ndfbin.Viewer;
 using moddingSuite.View.VersionManager;
@@ -15,6 +16,7 @@ using moddingSuite.ViewModel;
 using moddingSuite.ViewModel.About;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
+using moddingSuite.ViewModel.Mesh;
 using moddingSuite.ViewModel.Ndf;
 using moddingSuite.ViewModel.Trad;
 using moddingSuite.ViewModel.VersionManager;
@@ -44,6 +46,8 @@ namespace moddingSuite.View.DialogProvider
             Maps.Add(new ViewMap<EdataManagerView, EdataManagerViewModel>());
 
             Maps.Add(new ViewMap<NdfbinView, NdfEditorMainViewModel>());
+            Maps.Add(new ViewMap<MeshView, MeshEditorViewModel>());
+
             Maps.Add(new ViewMap<InstanceWindowView, NdfClassViewModel>());
             Maps.Add(new ViewMap<ListEditorWindow, ListEditorViewModel>());
 

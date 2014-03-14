@@ -21,6 +21,8 @@
         <BitmapImage UriSource="View\Images\google_code-26.png" x:Key="ScriptIcon" />
         <BitmapImage UriSource="View\Images\question-26.png" x:Key="UnknownFileIcon" />
         <BitmapImage UriSource="View\Images\package-16.png" x:Key="PackageFileIcon" />
+        <BitmapImage UriSource="View\Images\3d_printer-26.png" x:Key="MeshFileIcon" />
+
 
         <BitmapImage UriSource="View\Images\refresh_shield-26.png" x:Key="CreateHashIcon" />
 
@@ -37,6 +39,8 @@
 
         <BitmapImage UriSource="View\Images\export-26.png" x:Key="ExportIcon" />
         <BitmapImage UriSource="View\Images\import-26.png" x:Key="ImportIcon" />
+
+       
 
         <!--Thanks to Mitchellnolte!!!-->
         <ImageBrush ImageSource="View\Images\about.jpg" x:Key="SplashScreenArt" />

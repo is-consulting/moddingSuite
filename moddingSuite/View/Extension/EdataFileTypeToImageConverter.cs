@@ -23,6 +23,9 @@ namespace moddingSuite.View.Extension
                     return Application.Current.Resources["PackageFileIcon"] as BitmapImage;
                 case EdataFileType.Image:
                     return Application.Current.Resources["TextureIcon"] as BitmapImage;
+                case EdataFileType.Mesh:
+                    return Application.Current.Resources["MeshFileIcon"] as BitmapImage;
+                    
                 default:
                     return Application.Current.Resources["UnknownFileIcon"] as BitmapImage;
             }

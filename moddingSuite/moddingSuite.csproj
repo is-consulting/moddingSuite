@@ -186,6 +186,7 @@
     <Compile Include="ViewModel\Edata\EdataManagerViewModel.cs" />
     <Compile Include="ViewModel\Base\ActionCommand.cs" />
     <Compile Include="ViewModel\Base\ViewModelBase.cs" />
+    <Compile Include="ViewModel\Mesh\MeshEditorViewModel.cs" />
     <Compile Include="ViewModel\Ndf\AddCollectionItemViewModel.cs" />
     <Compile Include="ViewModel\Ndf\ListEditorViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfEditorMainViewModel.cs" />
@@ -218,6 +219,9 @@
     <Compile Include="View\Extension\Masking.cs" />
     <Compile Include="View\Common\MoviePlaybackView.xaml.cs">
       <DependentUpon>MoviePlaybackView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Mesh\MeshView.xaml.cs">
+      <DependentUpon>MeshView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Ndfbin\ValueEditing\BlobEditingTemplate.xaml.cs">
       <DependentUpon>BlobEditingTemplate.xaml</DependentUpon>
@@ -307,6 +311,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\Common\MoviePlaybackView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Mesh\MeshView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -520,6 +528,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\Generic_Sorting2-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\3d_printer-26.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

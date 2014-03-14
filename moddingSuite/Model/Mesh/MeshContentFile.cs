@@ -14,7 +14,7 @@ namespace moddingSuite.Model.Mesh
         public Point3D MaxBoundingBox { get; set; }
         public uint Flags { get; set; }
         public ushort MultiMaterialMeshIndex { get; set; }
-        public ushort HierarchicalASEModelSkeletonIndex { get; set; }
+        public ushort HierarchicalAseModelSkeletonIndex { get; set; }
 
         public string Name { get; set; }
         public string Path { get; set; }

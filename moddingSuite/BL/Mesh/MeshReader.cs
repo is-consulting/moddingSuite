@@ -31,9 +31,7 @@ namespace moddingSuite.BL.Mesh
             file.Header = ReadHeader(s);
             file.SubHeader = ReadSubHeader(s);
 
-            var col = ReadMeshDictionary(s, file);
-
-            Console.WriteLine("asd: {0}", col.Count);
+            file.MultiMaterialMeshFiles = ReadMeshDictionary(s, file);
 
             return file;
         }
@@ -173,7 +171,7 @@ namespace moddingSuite.BL.Mesh
                     maxp.Y = BitConverter.ToSingle(buffer, 0);
                     s.Read(buffer, 0, buffer.Length);
                     maxp.Z = BitConverter.ToSingle(buffer, 0);
-                    file.MinBoundingBox = maxp;
+                    file.MaxBoundingBox = maxp;
 
                     s.Read(buffer, 0, buffer.Length);
                     file.Flags = BitConverter.ToUInt32(buffer, 0);
@@ -184,7 +182,7 @@ namespace moddingSuite.BL.Mesh
                     file.MultiMaterialMeshIndex = BitConverter.ToUInt16(buffer, 0);
 
                     s.Read(buffer, 0, buffer.Length);
-                    file.HierarchicalASEModelSkeletonIndex = BitConverter.ToUInt16(buffer, 0);
+                    file.HierarchicalAseModelSkeletonIndex = BitConverter.ToUInt16(buffer, 0);
 
                     file.Name = Utils.ReadString(s);
                     file.Path = MergePath(dirs, file.Name);

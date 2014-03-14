@@ -35,6 +35,7 @@ namespace moddingSuite.BL
             byte[] tradHeader = { 0x54, 0x52, 0x41, 0x44 };
             byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
             byte[] tgvHeader = { 2 };
+            byte[] meshHeader = { 0x4D, 0x45, 0x53, 0x48 };
 
             _knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>
                 {
@@ -42,7 +43,8 @@ namespace moddingSuite.BL
                     new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Package, edataHeader),
                     new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Dictionary, tradHeader),
                     new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Save, savHeader),
-                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Image, tgvHeader)
+                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Image, tgvHeader),
+                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Mesh, meshHeader),
                 };
         }
 
@@ -116,10 +118,10 @@ namespace moddingSuite.BL
             var buffer = new byte[Marshal.SizeOf(typeof(EdataHeader))];
 
             using (var fs = File.Open(FilePath, FileMode.Open))
-                fs.Read(buffer,0,buffer.Length);
+                fs.Read(buffer, 0, buffer.Length);
 
             header = Utils.ByteArrayToStructure<EdataHeader>(buffer);
-            
+
             if (header.Version > 2)
                 throw new NotSupportedException(string.Format("Edata version {0} not supported", header.Version));
 
@@ -581,7 +583,7 @@ namespace moddingSuite.BL
 
         private static List<KeyValuePair<EdataFileType, byte[]>> _knownHeaders;
 
-        public static List<KeyValuePair<EdataFileType, byte[]>> KnownHeaders
+        public static IEnumerable<KeyValuePair<EdataFileType, byte[]>> KnownHeaders
         {
             get
             {
@@ -597,11 +599,14 @@ namespace moddingSuite.BL
                 {
                     var tmp = new byte[knownHeader.Value.Length];
                     Array.Copy(headerData, tmp, knownHeader.Value.Length);
-                    headerData = tmp;
-                }
+                    //headerData = tmp;
 
-                if (Utils.ByteArrayCompare(headerData, knownHeader.Value))
-                    return knownHeader.Key;
+                    if (Utils.ByteArrayCompare(tmp, knownHeader.Value))
+                        return knownHeader.Key;
+                }
+                else
+                    if (Utils.ByteArrayCompare(headerData, knownHeader.Value))
+                        return knownHeader.Key;
             }
 
             return EdataFileType.Unknown;

@@ -22,7 +22,7 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand CloseCommand { get; set; }
 
         public ICommand DetailsCommand { get; set; }
-        
+
         public EdataManagerViewModel ParentVm
         {
             get
@@ -42,10 +42,10 @@ namespace moddingSuite.ViewModel.Edata
         private void DetailsExecute(object obj)
         {
             var file = obj as EdataContentFile;
-                
+
             if (file == null)
                 return;
-           
+
             switch (file.FileType)
             {
                 case EdataFileType.Ndfbin:
@@ -56,6 +56,9 @@ namespace moddingSuite.ViewModel.Edata
                     break;
                 case EdataFileType.Dictionary:
                     ParentVm.EditTradFileCommand.Execute(obj);
+                    break;
+                case EdataFileType.Mesh:
+                    ParentVm.EditMeshCommand.Execute(obj);
                     break;
             }
         }
