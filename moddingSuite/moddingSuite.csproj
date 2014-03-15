@@ -192,6 +192,7 @@
     <Compile Include="ViewModel\Ndf\NdfEditorMainViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfClassViewModel.cs" />
     <Compile Include="ViewModel\Ndf\NdfObjectViewModel.cs" />
+    <Compile Include="ViewModel\Ndf\ReferenceSearchResultViewModel.cs" />
     <Compile Include="ViewModel\Trad\TradFileViewModel.cs" />
     <Compile Include="ViewModel\VersionManager\VersionFileViewModel.cs" />
     <Compile Include="ViewModel\VersionManager\VersionInfoViewModel.cs" />
@@ -279,6 +280,9 @@
     </Compile>
     <Compile Include="View\Common\TradFileView.xaml.cs">
       <DependentUpon>TradFileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\Viewer\ReferenceSearchResultView.xaml.cs">
+      <DependentUpon>ReferenceSearchResultView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SpinningWheel\Enums\RotateDirection.cs" />
     <Compile Include="View\SpinningWheel\SpinningWheel.cs" />
@@ -397,6 +401,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Ndfbin\Viewer\ReferenceSearchResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\VersionManager\VersionManagerView.xaml">
       <SubType>Designer</SubType>
@@ -530,6 +538,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\3d_printer-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\google_web_search-26.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

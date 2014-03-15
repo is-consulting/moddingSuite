@@ -40,8 +40,8 @@
         <BitmapImage UriSource="View\Images\export-26.png" x:Key="ExportIcon" />
         <BitmapImage UriSource="View\Images\import-26.png" x:Key="ImportIcon" />
 
+        <BitmapImage UriSource="View\Images\google_web_search-26.png" x:Key="SearchIcon" />
        
-
         <!--Thanks to Mitchellnolte!!!-->
         <ImageBrush ImageSource="View\Images\about.jpg" x:Key="SplashScreenArt" />
 

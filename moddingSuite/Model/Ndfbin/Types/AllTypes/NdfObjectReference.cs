@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
@@ -41,7 +42,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public NdfObject Instance
         {
-            get { return Class.Instances.SingleOrDefault(x => x.Id == InstanceId); }
+            get { return Class == null ? null : Class.Instances.SingleOrDefault(x => x.Id == InstanceId); }
             set
             {
                 if (!Class.Instances.Contains(value))
@@ -70,7 +71,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
             refereceData.AddRange(BitConverter.GetBytes(InstanceId));
 
-            refereceData.AddRange(_isDead ? new byte[] {0xFF, 0xFF, 0xFF, 0xFF} : BitConverter.GetBytes(Class.Id));
+            refereceData.AddRange(_isDead ? new byte[] { 0xFF, 0xFF, 0xFF, 0xFF } : BitConverter.GetBytes(Class.Id));
 
             return refereceData.ToArray();
         }

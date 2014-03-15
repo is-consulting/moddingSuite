@@ -56,6 +56,8 @@ namespace moddingSuite.View.DialogProvider
 
             Maps.Add(new ViewMap<AboutView, AboutViewModel>());
 
+            Maps.Add(new ViewMap<ReferenceSearchResultView, ReferenceSearchResultViewModel>());
+
             Maps.Add(new ViewMap<VersionManagerView, VersionManagerViewModel>());
         }
 

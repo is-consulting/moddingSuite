@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,6 +13,8 @@ using System.Windows.Threading;
 using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Edata;
 using moddingSuite.Model.Ndfbin;
+using moddingSuite.Model.Ndfbin.Types;
+using moddingSuite.Model.Ndfbin.Types.AllTypes;
 using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
@@ -51,21 +54,6 @@ namespace moddingSuite.ViewModel.Ndf
             InitializeNdfEditor();
         }
 
-        private void InitializeNdfEditor()
-        {
-            foreach (NdfClass cls in NdfBinary.Classes)
-                Classes.Add(new NdfClassViewModel(cls, this));
-
-            Strings = NdfBinary.Strings;
-            Trans = NdfBinary.Trans;
-
-            SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute); //, () => NdfbinManager.ChangeManager.HasChanges);
-            OpenInstanceCommand = new ActionCommand(OpenInstanceExecute);
-            AddStringCommand = new ActionCommand(AddStringExecute);
-            DeleteStringCommand = new ActionCommand(DeleteStringExecute);
-        }
-
-
         /// <summary>
         ///     Virtual call
         /// </summary>
@@ -92,6 +80,92 @@ namespace moddingSuite.ViewModel.Ndf
             SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute, () => false);
         }
 
+        private void InitializeNdfEditor()
+        {
+            foreach (NdfClass cls in NdfBinary.Classes)
+                Classes.Add(new NdfClassViewModel(cls, this));
+
+            Strings = NdfBinary.Strings;
+            Trans = NdfBinary.Trans;
+
+            SaveNdfbinCommand = new ActionCommand(SaveNdfbinExecute); //, () => NdfbinManager.ChangeManager.HasChanges);
+            OpenInstanceCommand = new ActionCommand(OpenInstanceExecute);
+            AddStringCommand = new ActionCommand(AddStringExecute);
+            DeleteStringCommand = new ActionCommand(DeleteStringExecute);
+
+            FindAllReferencesCommand = new ActionCommand(FindAllReferencesExecute);
+        }
+
+        private void FindAllReferencesExecute(object obj)
+        {
+            var cls = ClassesCollectionView.CurrentItem as NdfClassViewModel;
+
+            if (cls == null)
+                return;
+
+            var inst = cls.InstancesCollectionView.CurrentItem as NdfObjectViewModel;
+
+            if (inst == null)
+                return;
+
+            var result = new List<NdfPropertyValue>();
+
+            Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
+            Action<string> report = msg => StatusText = msg;
+
+            var s = new Task(() =>
+            {
+                try
+                {
+                    //dispatcher.Invoke(() => IsUIBusy = true);
+                    dispatcher.Invoke(report, string.Format("Searching for references..."));
+
+                    foreach (var instance in NdfBinary.Instances)
+                        foreach (var propertyValue in instance.PropertyValues)
+                            GetValue(propertyValue, inst, result, propertyValue);
+
+                    var resultVm = new ReferenceSearchResultViewModel(result, this);
+
+                    dispatcher.Invoke(() => DialogProvider.ProvideView(resultVm, this));
+                    dispatcher.Invoke(report, string.Format("{0} references found", result.Count));
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(string.Format("Error while saving Ndfbin file: {0}", ex));
+                    dispatcher.Invoke(report, "Error while searching");
+                }
+            });
+
+            s.Start();
+        }
+
+        private void GetValue(IValueHolder valueHolder, NdfObjectViewModel inst, List<NdfPropertyValue> result, NdfPropertyValue propertyValue)
+        {
+            switch (valueHolder.Value.Type)
+            {
+                case NdfType.ObjectReference:
+                    var ndfObjectReference = valueHolder.Value as NdfObjectReference;
+                    if (ndfObjectReference != null && ndfObjectReference.Instance == inst.Object)
+                        result.Add(propertyValue);
+                    break;
+                case NdfType.List:
+                case NdfType.MapList:
+                    var ndfCollection = valueHolder.Value as NdfCollection;
+                    if (ndfCollection != null)
+                        foreach (var col in ndfCollection)
+                            GetValue(col, inst, result, propertyValue);
+                    break;
+                case NdfType.Map:
+                    var map = valueHolder.Value as NdfMap;
+                    if (map != null)
+                    {
+                        GetValue(map.Key, inst, result, propertyValue);
+                        GetValue(map.Value as IValueHolder, inst, result, propertyValue);
+                    }
+                    break;
+            }
+        }
+
         public NdfBinary NdfBinary { get; protected set; }
 
         protected EdataFileViewModel EdataFileViewModel { get; set; }
@@ -101,6 +175,7 @@ namespace moddingSuite.ViewModel.Ndf
         public ICommand OpenInstanceCommand { get; set; }
         public ICommand AddStringCommand { get; set; }
         public ICommand DeleteStringCommand { get; set; }
+        public ICommand FindAllReferencesCommand { get; set; }
 
         public string Title
         {
@@ -254,7 +329,7 @@ namespace moddingSuite.ViewModel.Ndf
             if (clas == null || ClassesFilterExpression == string.Empty)
                 return true;
 
-            string[] parts = ClassesFilterExpression.Split(new[] {":"}, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = ClassesFilterExpression.Split(new[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
 
             int cls;
 
@@ -300,7 +375,7 @@ namespace moddingSuite.ViewModel.Ndf
         private void SaveNdfbinExecute(object obj)
         {
             Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
-            Action<string> report = (msg) => StatusText = msg;
+            Action<string> report = msg => StatusText = msg;
 
             var s = new Task(() =>
                 {
@@ -375,7 +450,7 @@ namespace moddingSuite.ViewModel.Ndf
 
         private void AddStringExecute(object obj)
         {
-            Strings.Add(new NdfStringReference {Id = Strings.Count, Value = "<New string>"});
+            Strings.Add(new NdfStringReference { Id = Strings.Count, Value = "<New string>" });
             StringCollectionView.MoveCurrentToLast();
         }
     }
