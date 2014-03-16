@@ -12,6 +12,7 @@ for each property:
 01 00 00 00 maybe its an Int8
 02 00 00 00 is int			<- pretty sure thats singed int
 03 00 00 00 is uint			<- cant confirm 8 bytes long for that i suspect uint32
+04 00 00 00 is a c++ time64_t
 05 00 00 00 is single float (4 bytes)
 06 00 00 00 is double float (8bytes)
 07 00 00 00 is string with a 4 bytes STRG table reference

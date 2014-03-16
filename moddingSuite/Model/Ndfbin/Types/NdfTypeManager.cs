@@ -113,6 +113,9 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.Hash:
                     return new NdfHash(data, pos);
 
+                case NdfType.Time64:
+                    return new NdfTime64(new DateTime(1970, 1, 1).AddSeconds(BitConverter.ToUInt32(data, 0)), pos);
+
                 case NdfType.Unset:
                     return new NdfNull(pos);
 
@@ -142,6 +145,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.LocalisationHash:
                 case NdfType.ObjectReference:
                 case NdfType.EugInt2:
+                case NdfType.Time64:
                     return 8;
                 case NdfType.TrippleInt:
                 case NdfType.Vector:
