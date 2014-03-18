@@ -37,6 +37,13 @@ namespace moddingSuite.ViewModel.Ndf
 
             var vm = new NdfClassViewModel(propVal.Instance.Class, this);
 
+            NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == propVal.Instance.Id);
+
+            if (inst == null)
+                return;
+
+            vm.InstancesCollectionView.MoveCurrentTo(inst);
+
             DialogProvider.ProvideView(vm, Editor);
         }
     }

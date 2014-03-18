@@ -443,18 +443,18 @@ namespace moddingSuite.BL.Ndf
                 if (propertyId == 0xABABABAB)
                     break;
 
-                var prop = new NdfPropertyValue(instance);
+                var propVal = new NdfPropertyValue(instance);
 
-                prop.Property = cls.Properties.SingleOrDefault(x => x.Id == propertyId);
+                propVal.Property = cls.Properties.SingleOrDefault(x => x.Id == propertyId);
 
-                if (prop.Property != null)
-                    instance.PropertyValues.Add(prop);
+                if (propVal.Property != null)
+                    instance.PropertyValues.Add(propVal);
 
                 //throw new InvalidDataException("Found a value for a property which doens't exist in this class.");
 
-                NdfValueWrapper res = ReadValue(ms, prop, owner);
+                NdfValueWrapper res = ReadValue(ms, propVal, owner);
 
-                prop.Value = res;
+                propVal.Value = res;
             }
 
             owner.AddEmptyProperties(instance);

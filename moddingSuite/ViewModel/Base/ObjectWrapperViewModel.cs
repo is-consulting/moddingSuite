@@ -2,12 +2,12 @@
 
 namespace moddingSuite.ViewModel.Base
 {
-    public class ObjectWrapperViewModel<T> : ViewModelBase 
+    public abstract class ObjectWrapperViewModel<T> : ViewModelBase 
         where T : ViewModelBase
     {
         private ViewModelBase _parentVm;
 
-        public ObjectWrapperViewModel(T obj, ViewModelBase parentVm)
+        protected ObjectWrapperViewModel(T obj, ViewModelBase parentVm)
         {
             if (obj == null)
                 throw new ArgumentException("obj");

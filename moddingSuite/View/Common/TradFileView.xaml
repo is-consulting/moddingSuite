@@ -12,18 +12,26 @@
                 <Button ToolTip="Save changes back" Command="{Binding Path=SaveCommand}" Style="{StaticResource ButtonStyle1}">
                     <Image Source="{StaticResource SaveIcon}"  />
                 </Button>
-                <Separator></Separator>
-                <Button ToolTip="Save changes back" Command="{Binding Path=CreateHashCommand}" Style="{StaticResource ButtonStyle1}" >
+                <Separator />
+                <Button ToolTip="Add new entry" Command="{Binding Path=AddEntryCommand}" Style="{StaticResource ButtonStyle1}" >
+                    <Image Source="{StaticResource AddRowIcon}"  />
+                </Button>
+                <Button ToolTip="Remove entry" Command="{Binding Path=RemoveEntryCommand}" Style="{StaticResource ButtonStyle1}" >
+                    <Image Source="{StaticResource DeleteRowIcon}"  />
+                </Button>
+                <Separator />
+                <Button ToolTip="Calculate new hash" Command="{Binding Path=CreateHashCommand}" Style="{StaticResource ButtonStyle1}" >
                     <Image Source="{StaticResource CreateHashIcon}"  />
                 </Button>
+                
             </ToolBar>
             <TextBox Text="{Binding Path=FilterExpression, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Margin="5" />
         </Grid>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Path=EntriesCollectionView}" Margin="5"
             IsSynchronizedWithCurrentItem="True"
                       CanUserResizeRows="False"
-                      CanUserAddRows="True"  
-                      CanUserDeleteRows="True" 
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
                       AutoGenerateColumns="False"
                       SelectionMode="Extended"
                       SelectionUnit="FullRow">

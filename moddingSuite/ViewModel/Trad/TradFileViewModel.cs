@@ -24,6 +24,8 @@ namespace moddingSuite.ViewModel.Trad
         {
             SaveCommand = new ActionCommand(SaveCommandExecute);
             CreateHashCommand = new ActionCommand(CreateHashExecute, CreateHashCanExecute);
+            AddEntryCommand = new ActionCommand(AddEntryExecute);
+            RemoveEntryCommand = new ActionCommand(RemoveEntryExecute);
 
             OwnerFile = owner;
             OwnerVm = contentFile;
@@ -42,6 +44,8 @@ namespace moddingSuite.ViewModel.Trad
 
         public ICommand SaveCommand { get; protected set; }
         public ICommand CreateHashCommand { get; protected set; }
+        public ICommand AddEntryCommand { get; set; }
+        public ICommand RemoveEntryCommand { get; set; }
 
 
         public ObservableCollection<TradEntry> Entries
@@ -106,6 +110,11 @@ namespace moddingSuite.ViewModel.Trad
             if (item == null || !item.UserCreated)
                 return;
 
+            CalculateHash(item);
+        }
+
+        private static void CalculateHash(TradEntry item)
+        {
             item.Hash = Utils.CreateLocalisationHash(Utils.GenerateCoupon(8, new Random()));
         }
 
@@ -137,6 +146,32 @@ namespace moddingSuite.ViewModel.Trad
                 return true;
 
             return false;
+        }
+
+        private void RemoveEntryExecute(object obj)
+        {
+            var entry = EntriesCollectionView.CurrentItem as TradEntry;
+
+            if (entry == null)
+                return;
+
+            Entries.Remove(entry);
+        }
+
+        private void AddEntryExecute(object obj)
+        {
+            var newEntry = new TradEntry {Content = "<New entry>", UserCreated = true};
+
+            CalculateHash(newEntry);
+
+            int newIndex;
+
+            if (Entries.Count > 1)
+                newIndex = Entries.Count - 1;
+            else
+                newIndex = Entries.Count;
+
+            Entries.Insert(newIndex, newEntry);
         }
     }
 }

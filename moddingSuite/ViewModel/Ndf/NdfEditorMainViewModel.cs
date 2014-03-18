@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -94,6 +95,94 @@ namespace moddingSuite.ViewModel.Ndf
             DeleteStringCommand = new ActionCommand(DeleteStringExecute);
 
             FindAllReferencesCommand = new ActionCommand(FindAllReferencesExecute);
+            CopyInstanceCommand = new ActionCommand(CopyInstanceExecute);
+        }
+
+        private void CopyInstanceExecute(object obj)
+        {
+            var cls = ClassesCollectionView.CurrentItem as NdfClassViewModel;
+
+            if (cls == null)
+                return;
+
+            var inst = cls.InstancesCollectionView.CurrentItem as NdfObjectViewModel;
+
+            if (inst == null)
+                return;
+
+            if (!inst.Object.IsTopObject)
+            {
+                MessageBox.Show("You can only create a copy of a top object.", "Information", MessageBoxButton.OK);
+                return;
+            }
+
+            CopyInstance(inst.Object);
+        }
+
+        private NdfObject CopyInstance(NdfObject instToCopy)
+        {
+            NdfObject newInst = instToCopy.Class.Manager.CreateInstanceOf(instToCopy.Class);
+
+            foreach (var propertyValue in instToCopy.PropertyValues)
+            {
+                if (propertyValue.Type == NdfType.Unset)
+                    continue;
+
+                var receiver = newInst.PropertyValues.Single(x => x.Property == propertyValue.Property);
+
+                receiver.Value = GetCopiedValue(propertyValue);
+            }
+
+            instToCopy.Class.Instances.Add(newInst);
+
+            var cls = Classes.SingleOrDefault(x => x.Object == instToCopy.Class);
+
+            cls.Instances.Add(new NdfObjectViewModel(newInst, cls.ParentVm));
+
+            return newInst;
+        }
+
+        private NdfValueWrapper GetCopiedValue(IValueHolder toCopy)
+        {
+            NdfValueWrapper copiedValue = null;
+
+            switch (toCopy.Value.Type)
+            {
+                case NdfType.ObjectReference:
+                    var origInst = toCopy.Value as NdfObjectReference;
+
+                    if (origInst != null && !origInst.Instance.IsTopObject)
+                        copiedValue = new NdfObjectReference(origInst.Class, CopyInstance(origInst.Instance).Id, 0);
+                    else
+                    {
+                        bool validVal;
+                        copiedValue = NdfTypeManager.GetValue(toCopy.Value.GetBytes(out validVal), toCopy.Value.Type, toCopy.Manager, 0);
+                    }
+
+                    break;
+                case NdfType.List:
+                case NdfType.MapList:
+                    var copiedItems = new List<CollectionItemValueHolder>();
+                    var collection = toCopy.Value as NdfCollection;
+                    if (collection != null)
+                        copiedItems.AddRange(collection.Select(entry => new CollectionItemValueHolder(GetCopiedValue(entry), toCopy.Manager, 0)));
+                    copiedValue = new NdfCollection(copiedItems, 0);
+                    break;
+
+                case NdfType.Map:
+                    var map = toCopy.Value as NdfMap;
+                    if (map != null)
+                        copiedValue = new NdfMap(new MapValueHolder(GetCopiedValue(map.Key), toCopy.Manager, 0),
+                            new MapValueHolder(GetCopiedValue(map.Value as IValueHolder), toCopy.Manager, 0), 0, toCopy.Manager);
+                    break;
+
+                default:
+                    bool valid;
+                    copiedValue = NdfTypeManager.GetValue(toCopy.Value.GetBytes(out valid), toCopy.Value.Type, toCopy.Manager, 0);
+                    break;
+            }
+
+            return copiedValue;
         }
 
         private void FindAllReferencesExecute(object obj)
@@ -176,6 +265,7 @@ namespace moddingSuite.ViewModel.Ndf
         public ICommand AddStringCommand { get; set; }
         public ICommand DeleteStringCommand { get; set; }
         public ICommand FindAllReferencesCommand { get; set; }
+        public ICommand CopyInstanceCommand { get; set; }
 
         public string Title
         {

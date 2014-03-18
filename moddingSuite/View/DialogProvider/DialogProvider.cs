@@ -68,6 +68,12 @@ namespace moddingSuite.View.DialogProvider
             if (map == null)
                 return;
 
+            var viewInstance = Activator.CreateInstance(map.ViewType) as Window;
+
+            if (viewInstance == null)
+                throw new InvalidOperationException(string.Format("Can not create an instance of {0}", map.ViewType));
+
+
             Window parentView = null;
 
             if (parentVm != null)
@@ -75,15 +81,14 @@ namespace moddingSuite.View.DialogProvider
                 var parent = RegisteredViews.SingleOrDefault(x => x.ViewModel == parentVm);
 
                 if (parent != null)
+                {
                     parentView = parent.View;
+
+                    if (Application.Current.Windows.OfType<Window>().Any(x => Equals(x, parentView)))
+                        viewInstance.Owner = parentView;
+                }
             }
-
-            var viewInstance = Activator.CreateInstance(map.ViewType) as Window;
-
-            if (viewInstance == null)
-                throw new InvalidOperationException(string.Format("Can not create an instance of {0}", map.ViewType));
-
-            viewInstance.Owner = parentView;
+            
             viewInstance.DataContext = vm;
 
             RegisteredViews.Add(new ViewInstance(viewInstance, vm));

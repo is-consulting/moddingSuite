@@ -86,9 +86,23 @@
                                 <Button ToolTip="Find out what references this instance" Command="{Binding FindAllReferencesCommand}">
                                     <Image Source="{StaticResource SearchIcon}" SnapsToDevicePixels="True" />
                                 </Button>
-                                <Button ToolTip="Add instance of current class" Command="{Binding SelectedValue.AddInstanceCommand, ElementName=classGrid}" SnapsToDevicePixels="True">
-                                    <Image Source="{StaticResource AddPropIcon}" SnapsToDevicePixels="True" />
-                                </Button>
+                                <Menu>
+                                    <MenuItem>
+                                        <MenuItem.Header>
+                                            <Image Source="{StaticResource AddPropIcon}" />
+                                        </MenuItem.Header>
+                                        <MenuItem Header="Add"  ToolTip="Add instance of current class" Command="{Binding SelectedValue.AddInstanceCommand, ElementName=classGrid}">
+                                            <MenuItem.Icon>
+                                                <Image Source="{StaticResource AddPropIcon}" SnapsToDevicePixels="True" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Create copy" ToolTip="Add copy of current class" Command="{Binding CopyInstanceCommand}">
+                                            <MenuItem.Icon>
+                                                <Image Source="{StaticResource CopyIcon}" SnapsToDevicePixels="True" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </MenuItem>
+                                </Menu>
                                 <Button ToolTip="Set remove selected instance" Command="{Binding SelectedValue.RemoveInstanceCommand, ElementName=classGrid}" SnapsToDevicePixels="True">
                                     <Image Source="{StaticResource DeletePropIcon}" SnapsToDevicePixels="True"  />
                                 </Button>
