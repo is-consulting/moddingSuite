@@ -10,8 +10,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
     {
         private int _value2;
 
-        public NdfEugInt2(int value1, int value2, long offset)
-            : base(NdfType.EugInt2, value1, offset)
+        public NdfEugInt2(int value1, int value2)
+            : base(NdfType.EugInt2, value1)
         {
             Value2 = value2;
         }
@@ -26,22 +26,12 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             }
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            try
-            {
-                var value = new List<byte>();
-                value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value)));
-                value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value2)));
-                return value.ToArray();
-            }
-            catch (Exception)
-            {
-                valid = false;
-                return new byte[0];
-            }
+            var value = new List<byte>();
+            value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value)));
+            value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value2)));
+            return value.ToArray();
         }
 
         public override byte[] GetNdfText()

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Ionic.Zlib;
 
-namespace moddingSuite.Compressing
+namespace moddingSuite.BL.Compressing
 {
     public static class Compressor
     {

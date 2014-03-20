@@ -4,8 +4,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfNull : NdfValueWrapper
     {
-        public NdfNull(long offset)
-            : base(NdfType.Unset, offset)
+        public NdfNull()
+            : base(NdfType.Unset)
         {
         }
 
@@ -14,13 +14,10 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             return "null";
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = false;
-
-            return new byte[0];
+            throw new InvalidOperationException("Null is not to be saved");
         }
-
 
         public override byte[] GetNdfText()
         {

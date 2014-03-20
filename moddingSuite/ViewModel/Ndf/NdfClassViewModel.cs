@@ -137,7 +137,7 @@ namespace moddingSuite.ViewModel.Ndf
                     continue;
                 }
 
-                if (propVal.Value.ToString().Contains(expr.Value) || propVal.BinValue.ToLower().Contains(expr.Value))
+                if (propVal.Value.ToString().Contains(expr.Value))
                     continue;
 
                 return false;

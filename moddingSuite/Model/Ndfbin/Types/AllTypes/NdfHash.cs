@@ -9,16 +9,13 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfHash : NdfFlatValueWrapper
     {
-        public NdfHash(byte[] value, long offset)
-            : base(NdfType.Hash, value, offset)
+        public NdfHash(byte[] value)
+            : base(NdfType.Hash, value)
         {
-            
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
             return Value;
         }
 

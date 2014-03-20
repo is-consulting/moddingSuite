@@ -16,7 +16,7 @@ namespace moddingSuite.Model.Ndfbin.ChangeManager
                 if (ChangedValue == null)
                     return null;
 
-                return NdfTypeManager.GetValue(OldValue, ChangedValue.Value.Type, ChangedValue.Manager, 0);
+                return NdfTypeManager.GetValue(OldValue, ChangedValue.Value.Type, ChangedValue.Manager);
             }
         }
 

@@ -8,30 +8,19 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfTime64 : NdfFlatValueWrapper
     {
-        public NdfTime64(DateTime value, long pos)
-            : base(NdfType.Time64, value, pos)
+        public NdfTime64(DateTime value)
+            : base(NdfType.Time64, value)
         {
-
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
+            var unixdt = new DateTime(1970, 1, 1);
+            var msdt = (DateTime)Value;
 
-            try
-            {
-                var unixdt = new DateTime(1970, 1, 1);
-                var msdt = (DateTime) Value;
+            ulong res = (ulong)msdt.Subtract(unixdt).TotalSeconds;
 
-                ulong res = (ulong)msdt.Subtract(unixdt).TotalSeconds;
-
-                return BitConverter.GetBytes(res);
-            }
-            catch
-            {
-                valid = false;
-                return new byte[0];
-            }
+            return BitConverter.GetBytes(res);
         }
 
         public override byte[] GetNdfText()

@@ -5,7 +5,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Data;
-using moddingSuite.Settings;
+using moddingSuite.BL;
+using moddingSuite.Model.Settings;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
 
@@ -73,7 +74,7 @@ namespace moddingSuite.ViewModel.VersionManager
 
         protected void Initialize()
         {
-            Settings.Settings s = SettingsManager.Load();
+            Settings s = SettingsManager.Load();
 
             if (!Directory.Exists(s.WargamePath))
                 return;

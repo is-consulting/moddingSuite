@@ -5,7 +5,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfColor128 : NdfFlatValueWrapper
     {
-        public NdfColor128(byte[] value, long offset) : base(NdfType.Color128, value, offset)
+        public NdfColor128(byte[] value) : base(NdfType.Color128, value)
         {
         }
 
@@ -19,10 +19,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             }
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
             return Value;
         }
 

@@ -58,9 +58,7 @@ namespace moddingSuite.ViewModel.Ndf
 
         private void GetValueForType()
         {
-            Wrapper =
-                new CollectionItemValueHolder(
-                    NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(Type)], Type, Manager, 0), Manager, 0);
+            Wrapper = new CollectionItemValueHolder(NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(Type)], Type, Manager), Manager);
         }
 
         private void CancelCommandExecute(object obj)

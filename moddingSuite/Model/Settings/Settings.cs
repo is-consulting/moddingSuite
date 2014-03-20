@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using moddingSuite.ViewModel.Base;
 
-namespace moddingSuite.Settings
+namespace moddingSuite.Model.Settings
 {
     public class Settings : ViewModelBase
     {

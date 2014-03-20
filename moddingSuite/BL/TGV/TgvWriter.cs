@@ -1,5 +1,5 @@
-﻿using moddingSuite.BL.DDS;
-using moddingSuite.Compressing;
+﻿using moddingSuite.BL.Compressing;
+using moddingSuite.BL.DDS;
 using moddingSuite.Model.Textures;
 using moddingSuite.Util;
 using System;

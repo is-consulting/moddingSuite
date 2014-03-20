@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using moddingSuite.Compressing;
-using moddingSuite.Settings;
+using moddingSuite.BL;
+using moddingSuite.BL.Compressing;
 using moddingSuite.ViewModel.Base;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
@@ -16,8 +13,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         public ICommand ExportRawCommand { get; set; }
         public ICommand ExportKdTreeCommand { get; set; }
 
-        public NdfBlob(byte[] value, long offset)
-            : base(NdfType.Blob, value, offset)
+        public NdfBlob(byte[] value)
+            : base(NdfType.Blob, value)
         {
             ExportRawCommand = new ActionCommand(ExportRawExecute);
             ExportKdTreeCommand = new ActionCommand(ExportKdTreeExecute);
@@ -25,8 +22,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         private void ExportKdTreeExecute(object obj)
         {
-            bool valid;
-            var data = GetBytes(out valid);
+            var data = GetBytes();
 
             using (var ms = new MemoryStream(data))
             {
@@ -69,21 +65,17 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         {
             Settings.Settings settings = SettingsManager.Load();
 
-            bool valid;
-            var buffer = GetBytes(out valid);
+            var buffer = GetBytes();
 
-            if (valid)
-                using (var fs = new FileStream(Path.Combine(settings.SavePath, string.Format("blobdump_{0}", DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ff"))), FileMode.OpenOrCreate))
-                {
-                    fs.Write(buffer, 0, buffer.Length);
-                    fs.Flush();
-                }
+            using (var fs = new FileStream(Path.Combine(settings.SavePath, string.Format("blobdump_{0}", DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ff"))), FileMode.OpenOrCreate))
+            {
+                fs.Write(buffer, 0, buffer.Length);
+                fs.Flush();
+            }
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
             var val = new List<byte>();
             val.AddRange(BitConverter.GetBytes((uint)((byte[])Value).Length));
             val.AddRange((byte[])Value);

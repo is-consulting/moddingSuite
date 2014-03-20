@@ -6,14 +6,13 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfWideString : NdfFlatValueWrapper
     {
-        public NdfWideString(string value, long offset)
-            : base(NdfType.WideString, value, offset)
+        public NdfWideString(string value)
+            : base(NdfType.WideString, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
             var data = new List<byte>();
 
             var val = (string) Value;

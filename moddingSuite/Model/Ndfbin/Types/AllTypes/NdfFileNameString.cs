@@ -2,7 +2,7 @@
 {
     public class NdfFileNameString : NdfString
     {
-        public NdfFileNameString(NdfStringReference value, long offset) : base(value, offset)
+        public NdfFileNameString(NdfStringReference value) : base(value)
         {
             Type = NdfType.TableStringFile;
         }

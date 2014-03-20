@@ -6,16 +6,14 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfString : NdfFlatValueWrapper
     {
-        public NdfString(NdfStringReference value, long offset)
-            : base(NdfType.TableString, value, offset)
+        public NdfString(NdfStringReference value)
+            : base(NdfType.TableString, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            return BitConverter.GetBytes(((NdfStringReference) Value).Id);
+            return BitConverter.GetBytes(((NdfStringReference)Value).Id);
         }
 
         public override byte[] GetNdfText()

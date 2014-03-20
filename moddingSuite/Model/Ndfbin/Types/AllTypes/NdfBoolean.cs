@@ -6,24 +6,14 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfBoolean : NdfFlatValueWrapper
     {
-        public NdfBoolean(bool value, long offset)
-            : base(NdfType.Boolean, value, offset)
+        public NdfBoolean(bool value)
+            : base(NdfType.Boolean, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            try
-            {
-                return BitConverter.GetBytes(Convert.ToBoolean(Value));
-            }
-            catch (Exception)
-            {
-                valid = false;
-                return new byte[0];
-            }
+            return BitConverter.GetBytes(Convert.ToBoolean(Value));
         }
 
         public override byte[] GetNdfText()

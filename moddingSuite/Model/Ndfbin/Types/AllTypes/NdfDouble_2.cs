@@ -2,7 +2,7 @@
 {
     public class NdfDouble_2 : NdfDouble
     {
-        public NdfDouble_2(double value, long offset) : base(value, offset)
+        public NdfDouble_2(double value) : base(value)
         {
             Type = NdfType.Float64_2;
         }

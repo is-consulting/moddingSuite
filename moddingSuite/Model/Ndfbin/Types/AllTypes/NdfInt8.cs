@@ -6,24 +6,14 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfInt8 : NdfFlatValueWrapper
     {
-        public NdfInt8(byte value, long offset)
-            : base(NdfType.Int8, value, offset)
+        public NdfInt8(byte value)
+            : base(NdfType.Int8, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            try
-            {
-                return new byte[1] {(byte) Value};
-            }
-            catch (Exception)
-            {
-                valid = false;
-                return new byte[0];
-            }
+            return new byte[1] { (byte)Value };
         }
 
         public override byte[] GetNdfText()

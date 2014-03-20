@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Media.Media3D;
-using moddingSuite.BL;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
 using System.Drawing;
 
@@ -23,7 +23,7 @@ namespace moddingSuite.Model.Ndfbin.Types
             return NdfType.Unknown;
         }
 
-        public static NdfValueWrapper GetValue(byte[] data, NdfType type, NdfBinary mgr, long pos)
+        public static NdfValueWrapper GetValue(byte[] data, NdfType type, NdfBinary mgr)
         {
             //if (data.Length != SizeofType(type))
             //    return null;
@@ -31,40 +31,40 @@ namespace moddingSuite.Model.Ndfbin.Types
             switch (type)
             {
                 case NdfType.Boolean:
-                    return new NdfBoolean(BitConverter.ToBoolean(data, 0), pos);
+                    return new NdfBoolean(BitConverter.ToBoolean(data, 0));
                 case NdfType.Int8:
-                    return new NdfInt8(data[0], pos);
+                    return new NdfInt8(data[0]);
                 case NdfType.Int16:
-                    return new NdfInt16(BitConverter.ToInt16(data, 0), pos);
+                    return new NdfInt16(BitConverter.ToInt16(data, 0));
                 case NdfType.UInt16:
-                    return new NdfUInt16(BitConverter.ToUInt16(data, 0), pos);
+                    return new NdfUInt16(BitConverter.ToUInt16(data, 0));
                 case NdfType.Int32:
-                    return new NdfInt32(BitConverter.ToInt32(data, 0), pos);
+                    return new NdfInt32(BitConverter.ToInt32(data, 0));
                 case NdfType.UInt32:
-                    return new NdfUInt32(BitConverter.ToUInt32(data, 0), pos);
+                    return new NdfUInt32(BitConverter.ToUInt32(data, 0));
                 case NdfType.Float32:
-                    return new NdfSingle(BitConverter.ToSingle(data, 0), pos);
+                    return new NdfSingle(BitConverter.ToSingle(data, 0));
                 case NdfType.Float64:
-                    return new NdfDouble(BitConverter.ToDouble(data, 0), pos);
+                    return new NdfDouble(BitConverter.ToDouble(data, 0));
                 case NdfType.Float64_2:
-                    return new NdfDouble_2(BitConverter.ToDouble(data, 0), pos);
+                    return new NdfDouble_2(BitConverter.ToDouble(data, 0));
                 case NdfType.TableStringFile:
                     int id = BitConverter.ToInt32(data, 0);
-                    return new NdfFileNameString(mgr.Strings[id], pos);
+                    return new NdfFileNameString(mgr.Strings[id]);
                 case NdfType.TableString:
                     int id2 = BitConverter.ToInt32(data, 0);
-                    return new NdfString(mgr.Strings[id2], pos);
+                    return new NdfString(mgr.Strings[id2]);
                 case NdfType.Color32:
-                    return new NdfColor32(Color.FromArgb(data[3], data[0], data[1], data[2]), pos);
+                    return new NdfColor32(Color.FromArgb(data[3], data[0], data[1], data[2]));
                 case NdfType.Color128:
-                    return new NdfColor128(data, pos);
+                    return new NdfColor128(data);
                 case NdfType.Vector:
                     byte[] px = data.Take(4).ToArray();
                     byte[] py = data.Skip(4).Take(4).ToArray();
                     byte[] pz = data.Skip(8).ToArray();
                     return new NdfVector(new Point3D(BitConverter.ToSingle(px, 0),
                                                      BitConverter.ToSingle(py, 0),
-                                                     BitConverter.ToSingle(pz, 0)), pos);
+                                                     BitConverter.ToSingle(pz, 0)));
 
                 case NdfType.ObjectReference:
                     uint instId = BitConverter.ToUInt32(data.Take(4).ToArray(), 0);
@@ -75,49 +75,49 @@ namespace moddingSuite.Model.Ndfbin.Types
                     if (clsId <= mgr.Classes.Count)
                         cls = mgr.Classes[(int)clsId];
 
-                    return new NdfObjectReference(cls, instId, pos, cls == null);
+                    return new NdfObjectReference(cls, instId, cls == null);
 
                 case NdfType.Map:
-                    return new NdfMap(new MapValueHolder(null, mgr, 0), new MapValueHolder(null, mgr, 0), pos, mgr);
+                    return new NdfMap(new MapValueHolder(null, mgr), new MapValueHolder(null, mgr), mgr);
 
                 case NdfType.Guid:
-                    return new NdfGuid(new Guid(data), pos);
+                    return new NdfGuid(new Guid(data));
 
                 case NdfType.WideString:
-                    return new NdfWideString(Encoding.Unicode.GetString(data), 0);
+                    return new NdfWideString(Encoding.Unicode.GetString(data));
 
                 case NdfType.TransTableReference:
                     int id3 = BitConverter.ToInt32(data, 0);
-                    return new NdfTrans(mgr.Trans[id3], pos);
+                    return new NdfTrans(mgr.Trans[id3]);
 
                 case NdfType.LocalisationHash:
-                    return new NdfLocalisationHash(data, 0);
+                    return new NdfLocalisationHash(data);
 
                 case NdfType.List:
-                    return new NdfCollection(0);
+                    return new NdfCollection();
                 case NdfType.MapList:
-                    return new NdfMapList(0);
+                    return new NdfMapList();
 
                 case NdfType.Blob:
-                    return new NdfBlob(data, pos);
+                    return new NdfBlob(data);
 
                 case NdfType.ZipBlob:
-                    return new NdfZipBlob(data, pos);
+                    return new NdfZipBlob(data);
 
                 case NdfType.EugInt2:
-                    return new NdfEugInt2(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4), pos);
+                    return new NdfEugInt2(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4));
 
                 case NdfType.TrippleInt:
-                    return new NdfTrippleInt(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4), BitConverter.ToInt32(data, 8), pos);
+                    return new NdfTrippleInt(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4), BitConverter.ToInt32(data, 8));
 
                 case NdfType.Hash:
-                    return new NdfHash(data, pos);
+                    return new NdfHash(data);
 
                 case NdfType.Time64:
-                    return new NdfTime64(new DateTime(1970, 1, 1).AddSeconds(BitConverter.ToUInt32(data, 0)), pos);
+                    return new NdfTime64(new DateTime(1970, 1, 1).AddSeconds(BitConverter.ToUInt32(data, 0)));
 
                 case NdfType.Unset:
-                    return new NdfNull(pos);
+                    return new NdfNull();
 
                 default:
                     return null;
@@ -173,7 +173,7 @@ namespace moddingSuite.Model.Ndfbin.Types
             }
         }
 
-        public static NdfType[] GetTypeSelection()
+        public static IEnumerable<NdfType> GetTypeSelection()
         {
             return new[]
                        {
@@ -198,7 +198,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                            NdfType.Float64_2,
                            NdfType.Vector,
                            NdfType.Color128,
-                           NdfType.MapList,
+                           NdfType.MapList
                        };
         }
     }

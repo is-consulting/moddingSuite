@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using moddingSuite.Compressing;
+using moddingSuite.BL.Compressing;
 using moddingSuite.Model.Ndfbin;
 using moddingSuite.Model.Ndfbin.Types;
-using moddingSuite.Util;
 
 namespace moddingSuite.BL.Ndf
 {
@@ -117,14 +116,12 @@ namespace moddingSuite.BL.Ndf
 
                 foreach (NdfPropertyValue propertyValue in instance.PropertyValues)
                 {
-                    bool valid;
-
                     if (propertyValue.Type == NdfType.Unset)
                         continue;
 
-                    byte[] valueBytes = propertyValue.Value.GetBytes(out valid);
+                    byte[] valueBytes = propertyValue.Value.GetBytes();
 
-                    if (propertyValue.Value.Type == NdfType.Unset || !valid)
+                    if (propertyValue.Value.Type == NdfType.Unset)
                         continue;
 
                     objectPart.AddRange(BitConverter.GetBytes(propertyValue.Property.Id));

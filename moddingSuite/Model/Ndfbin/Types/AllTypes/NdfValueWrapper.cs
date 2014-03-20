@@ -6,10 +6,9 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
     {
         private NdfType _type;
 
-        protected NdfValueWrapper(NdfType type, long offset)
+        protected NdfValueWrapper(NdfType type)
         {
             Type = type;
-            OffSet = offset;
         }
 
         public NdfType Type
@@ -22,14 +21,12 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             }
         }
 
-        public long OffSet { get; set; }
-
         #region INdfScriptSerializable Members
 
         public abstract byte[] GetNdfText();
 
         #endregion
 
-        public abstract byte[] GetBytes(out bool valid);
+        public abstract byte[] GetBytes();
     }
 }

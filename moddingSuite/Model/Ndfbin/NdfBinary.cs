@@ -36,7 +36,7 @@ namespace moddingSuite.Model.Ndfbin
         public ObservableCollection<NdfTranReference> Trans { get; set; }
         public List<NdfObject> Instances { get; set; }
 
-        public List<uint> TopObjects { get; set; }
+        public HashSet<uint> TopObjects { get; set; }
         public List<uint> Import { get; set; }
         public List<uint> Export { get; set; }
 
@@ -73,7 +73,7 @@ namespace moddingSuite.Model.Ndfbin
                     instance.PropertyValues.Add(new NdfPropertyValue(instance)
                         {
                             Property = property,
-                            Value = new NdfNull(0)
+                            Value = new NdfNull()
                         });
         }
     }

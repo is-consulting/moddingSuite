@@ -6,14 +6,14 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfDouble : NdfFlatValueWrapper
     {
-        public NdfDouble(double value, long offset)
-            : base(NdfType.Float64, value, offset)
+        public NdfDouble(double value)
+            : base(NdfType.Float64, value)
         {
         }
 
         public new double Value
         {
-            get { return (double) base.Value; }
+            get { return (double)base.Value; }
             set
             {
                 base.Value = value;
@@ -21,19 +21,9 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             }
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            try
-            {
-                return BitConverter.GetBytes(Convert.ToDouble(Value));
-            }
-            catch (Exception)
-            {
-                valid = false;
-                return new byte[0];
-            }
+            return BitConverter.GetBytes(Convert.ToDouble(Value));
         }
 
         public override string ToString()

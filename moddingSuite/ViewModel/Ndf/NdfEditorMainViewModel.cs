@@ -112,7 +112,7 @@ namespace moddingSuite.ViewModel.Ndf
 
             if (!inst.Object.IsTopObject)
             {
-                MessageBox.Show("You can only create a copy of a top object.", "Information", MessageBoxButton.OK);
+                MessageBox.Show("You can only create a copy of an top object.", "Information", MessageBoxButton.OK);
                 return;
             }
 
@@ -137,7 +137,7 @@ namespace moddingSuite.ViewModel.Ndf
 
             var cls = Classes.SingleOrDefault(x => x.Object == instToCopy.Class);
 
-            cls.Instances.Add(new NdfObjectViewModel(newInst, cls.ParentVm));
+            if (cls != null) cls.Instances.Add(new NdfObjectViewModel(newInst, cls.ParentVm));
 
             return newInst;
         }
@@ -152,11 +152,10 @@ namespace moddingSuite.ViewModel.Ndf
                     var origInst = toCopy.Value as NdfObjectReference;
 
                     if (origInst != null && !origInst.Instance.IsTopObject)
-                        copiedValue = new NdfObjectReference(origInst.Class, CopyInstance(origInst.Instance).Id, 0);
+                        copiedValue = new NdfObjectReference(origInst.Class, CopyInstance(origInst.Instance).Id);
                     else
                     {
-                        bool validVal;
-                        copiedValue = NdfTypeManager.GetValue(toCopy.Value.GetBytes(out validVal), toCopy.Value.Type, toCopy.Manager, 0);
+                        copiedValue = NdfTypeManager.GetValue(toCopy.Value.GetBytes(), toCopy.Value.Type, toCopy.Manager);
                     }
 
                     break;
@@ -165,20 +164,19 @@ namespace moddingSuite.ViewModel.Ndf
                     var copiedItems = new List<CollectionItemValueHolder>();
                     var collection = toCopy.Value as NdfCollection;
                     if (collection != null)
-                        copiedItems.AddRange(collection.Select(entry => new CollectionItemValueHolder(GetCopiedValue(entry), toCopy.Manager, 0)));
-                    copiedValue = new NdfCollection(copiedItems, 0);
+                        copiedItems.AddRange(collection.Select(entry => new CollectionItemValueHolder(GetCopiedValue(entry), toCopy.Manager)));
+                    copiedValue = new NdfCollection(copiedItems);
                     break;
 
                 case NdfType.Map:
                     var map = toCopy.Value as NdfMap;
                     if (map != null)
-                        copiedValue = new NdfMap(new MapValueHolder(GetCopiedValue(map.Key), toCopy.Manager, 0),
-                            new MapValueHolder(GetCopiedValue(map.Value as IValueHolder), toCopy.Manager, 0), 0, toCopy.Manager);
+                        copiedValue = new NdfMap(new MapValueHolder(GetCopiedValue(map.Key), toCopy.Manager),
+                            new MapValueHolder(GetCopiedValue(map.Value as IValueHolder), toCopy.Manager), toCopy.Manager);
                     break;
 
                 default:
-                    bool valid;
-                    copiedValue = NdfTypeManager.GetValue(toCopy.Value.GetBytes(out valid), toCopy.Value.Type, toCopy.Manager, 0);
+                    copiedValue = NdfTypeManager.GetValue(toCopy.Value.GetBytes(), toCopy.Value.Type, toCopy.Manager);
                     break;
             }
 

@@ -1,12 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
-using moddingSuite.Compressing;
+using moddingSuite.BL.Compressing;
 using moddingSuite.Model.Ndfbin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
 
@@ -58,7 +57,7 @@ namespace moddingSuite.BL.Ndf
                 ndf.Trans = ReadTrans(ms, ndf);
 
 
-                ndf.TopObjects = ReadUIntList(ms, ndf, "TOPO");
+                ndf.TopObjects = new HashSet<uint>(ReadUIntList(ms, ndf, "TOPO"));
                 ndf.Import = ReadUIntList(ms, ndf, "IMPR");
                 ndf.Export = ReadUIntList(ms, ndf, "EXPR");
 
@@ -171,7 +170,7 @@ namespace moddingSuite.BL.Ndf
                 var entry = new NdfFooterEntry();
 
                 ms.Read(qwdbuffer, 0, qwdbuffer.Length);
-                entry.Name = Encoding.ASCII.GetString(qwdbuffer).TrimEnd('\0'); ;
+                entry.Name = Encoding.ASCII.GetString(qwdbuffer).TrimEnd('\0'); 
 
                 ms.Read(qwdbuffer, 0, qwdbuffer.Length);
                 entry.Offset = BitConverter.ToInt64(qwdbuffer, 0);
@@ -443,9 +442,10 @@ namespace moddingSuite.BL.Ndf
                 if (propertyId == 0xABABABAB)
                     break;
 
-                var propVal = new NdfPropertyValue(instance);
-
-                propVal.Property = cls.Properties.SingleOrDefault(x => x.Id == propertyId);
+                var propVal = new NdfPropertyValue(instance)
+                    {
+                        Property = cls.Properties.SingleOrDefault(x => x.Id == propertyId)
+                    };
 
                 if (propVal.Property != null)
                     instance.PropertyValues.Add(propVal);
@@ -467,6 +467,7 @@ namespace moddingSuite.BL.Ndf
         /// </summary>
         /// <param name="ms"></param>
         /// <param name="prop"></param>
+        /// <param name="binary"></param>
         /// <returns>A NdfValueWrapper Instance.</returns>
         protected NdfValueWrapper ReadValue(Stream ms, NdfPropertyValue prop, NdfBinary binary)
         {
@@ -505,50 +506,45 @@ namespace moddingSuite.BL.Ndf
                     break;
             }
 
-            if (type == NdfType.List || type == NdfType.MapList)
+            switch (type)
             {
-                NdfCollection lstValue;
+                case NdfType.MapList:
+                case NdfType.List:
+                    {
+                        NdfCollection lstValue = type == NdfType.List ? new NdfCollection() : new NdfMapList();
 
-                if (type == NdfType.List)
-                    lstValue = new NdfCollection(ms.Position);
-                else
-                    lstValue = new NdfMapList(ms.Position);
+                        for (int i = 0; i < contBufferlen; i++)
+                        {
+                            CollectionItemValueHolder res;
+                            if (type == NdfType.List)
+                                res = new CollectionItemValueHolder(ReadValue(ms, prop, binary), binary);
+                            else
+                                res = new CollectionItemValueHolder(
+                                    new NdfMap(
+                                        new MapValueHolder(ReadValue(ms, prop, binary), binary),
+                                        new MapValueHolder(ReadValue(ms, prop, binary), binary),
+                                        binary), binary);
 
-                for (int i = 0; i < contBufferlen; i++)
-                {
-                    CollectionItemValueHolder res;
-                    if (type == NdfType.List)
-                        res = new CollectionItemValueHolder(ReadValue(ms, prop, binary), binary,
-                                                            prop.InstanceOffset);
-                    else
-                        res = new CollectionItemValueHolder(
-                            new NdfMap(
-                                new MapValueHolder(ReadValue(ms, prop, binary), binary, prop.InstanceOffset),
-                                new MapValueHolder(ReadValue(ms, prop, binary), binary, prop.InstanceOffset),
-                                ms.Position, binary),
-                            binary, prop.InstanceOffset);
+                            lstValue.Add(res);
+                        }
 
-                    lstValue.Add(res);
-                }
+                        value = lstValue;
+                    }
+                    break;
+                case NdfType.Map:
+                    value = new NdfMap(
+                        new MapValueHolder(ReadValue(ms, prop, binary), binary),
+                        new MapValueHolder(ReadValue(ms, prop, binary), binary),
+                        binary);
+                    break;
+                default:
+                    {
+                        var contBuffer = new byte[contBufferlen];
+                        ms.Read(contBuffer, 0, contBuffer.Length);
 
-                value = lstValue;
-            }
-            else if (type == NdfType.Map)
-            {
-                value = new NdfMap(
-                    new MapValueHolder(ReadValue(ms, prop, binary), binary, prop.InstanceOffset),
-                    new MapValueHolder(ReadValue(ms, prop, binary), binary, prop.InstanceOffset),
-                    ms.Position, binary);
-            }
-            else
-            {
-                var contBuffer = new byte[contBufferlen];
-                ms.Read(contBuffer, 0, contBuffer.Length);
-
-                if (prop != null)
-                    prop.ValueData = contBuffer;
-
-                value = NdfTypeManager.GetValue(contBuffer, type, binary, ms.Position - contBuffer.Length);
+                        value = NdfTypeManager.GetValue(contBuffer, type, binary);
+                    }
+                    break;
             }
 
             return value;

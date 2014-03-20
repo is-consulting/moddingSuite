@@ -11,8 +11,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         private int _value2;
         private int _value3;
 
-        public NdfTrippleInt(int value1, int value2, int value3, long offset)
-            : base(NdfType.TrippleInt, value1, offset)
+        public NdfTrippleInt(int value1, int value2, int value3)
+            : base(NdfType.TrippleInt, value1)
         {
             Value2 = value2;
             Value3 = value3;
@@ -38,23 +38,13 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             }
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            try
-            {
-                var value = new List<byte>();
-                value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value)));
-                value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value2)));
-                value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value3)));
-                return value.ToArray();
-            }
-            catch (Exception)
-            {
-                valid = false;
-                return new byte[0];
-            }
+            var value = new List<byte>();
+            value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value)));
+            value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value2)));
+            value.AddRange(BitConverter.GetBytes(Convert.ToInt32(Value3)));
+            return value.ToArray();
         }
 
         public override byte[] GetNdfText()

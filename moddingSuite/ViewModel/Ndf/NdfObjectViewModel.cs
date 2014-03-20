@@ -77,7 +77,7 @@ namespace moddingSuite.ViewModel.Ndf
             if (type == NdfType.Unset || type == NdfType.Unknown)
                 return;
 
-            item.Value = NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, item.Manager, 0);
+            item.Value = NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, item.Manager);
         }
 
         private bool AddPropertyCanExecute()
@@ -105,7 +105,7 @@ namespace moddingSuite.ViewModel.Ndf
                                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
-                item.Value = NdfTypeManager.GetValue(new byte[0], NdfType.Unset, item.Manager, 0);
+                item.Value = NdfTypeManager.GetValue(new byte[0], NdfType.Unset, item.Manager);
         }
 
         private bool RemovePropertyCanExecute()

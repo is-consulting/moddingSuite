@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using moddingSuite.Settings;
+using moddingSuite.BL;
 
 namespace moddingSuite.Util
 {

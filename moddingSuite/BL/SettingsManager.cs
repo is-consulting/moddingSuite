@@ -2,12 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
+using moddingSuite.Model.Settings;
 
-namespace moddingSuite.Settings
+namespace moddingSuite.BL
 {
     public static class SettingsManager
     {
-        public static string SettingsPath =
+        public static readonly string SettingsPath =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "edataFileManager", "settings.xml");
 
         //private static Settings LastLoadedSettings { get; set; }

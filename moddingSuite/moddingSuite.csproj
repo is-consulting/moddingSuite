@@ -175,8 +175,8 @@
     <Compile Include="Model\Textures\TgvMipMap.cs" />
     <Compile Include="Model\Trad\TradEntry.cs" />
     <Compile Include="BL\TradManager.cs" />
-    <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="BL\SettingsManager.cs" />
+    <Compile Include="Model\Settings\Settings.cs" />
     <Compile Include="Util\Utils.cs" />
     <Compile Include="ViewModel\About\AboutViewModel.cs" />
     <Compile Include="ViewModel\Base\ObjectWrapperViewModel.cs" />
@@ -310,7 +310,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Compressing\Compressing.cs" />
+    <Compile Include="BL\Compressing\Compressing.cs" />
     <Compile Include="View\Edata\EdataManagerView.xaml.cs">
       <DependentUpon>EdataManagerView.xaml</DependentUpon>
       <SubType>Code</SubType>

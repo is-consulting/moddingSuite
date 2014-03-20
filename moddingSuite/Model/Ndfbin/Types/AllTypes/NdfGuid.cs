@@ -4,15 +4,13 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfGuid : NdfFlatValueWrapper
     {
-        public NdfGuid(Guid value, long offset)
-            : base(NdfType.Guid, value, offset)
+        public NdfGuid(Guid value)
+            : base(NdfType.Guid, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
             return Guid.Parse(Value.ToString()).ToByteArray();
         }
 

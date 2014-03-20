@@ -9,10 +9,9 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using moddingSuite.BL;
-using moddingSuite.BL.DDS;
 using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Edata;
-using moddingSuite.Settings;
+using moddingSuite.Model.Settings;
 using moddingSuite.View.Common;
 using moddingSuite.View.DialogProvider;
 using moddingSuite.View.Ndfbin;
@@ -25,11 +24,7 @@ using moddingSuite.ViewModel.Trad;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using System.Threading.Tasks;
 using System.Windows.Threading;
-using System.Threading;
 using moddingSuite.BL.TGV;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.Text;
 using moddingSuite.BL.Mesh;
 
 namespace moddingSuite.ViewModel.Edata
@@ -55,7 +50,7 @@ namespace moddingSuite.ViewModel.Edata
         {
             InitializeCommands();
 
-            Settings.Settings settings = SettingsManager.Load();
+            Settings settings = SettingsManager.Load();
 
             var failedFiles = new List<FileInfo>();
 
@@ -108,7 +103,7 @@ namespace moddingSuite.ViewModel.Edata
 
         protected void OpenFilesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            Settings.Settings set = SettingsManager.Load();
+            Settings set = SettingsManager.Load();
             set.LastOpenedFiles.Clear();
             set.LastOpenedFiles.AddRange(OpenFiles.Select(x => x.LoadedFile).ToList());
             SettingsManager.Save(set);
@@ -211,7 +206,7 @@ namespace moddingSuite.ViewModel.Edata
             if (file == null)
                 return;
 
-            Settings.Settings settings = SettingsManager.Load();
+            Settings settings = SettingsManager.Load();
 
             var openfDlg = new OpenFileDialog
             {
@@ -230,7 +225,7 @@ namespace moddingSuite.ViewModel.Edata
 
                 var dispatcher = Dispatcher.CurrentDispatcher;
 
-                Action<string> report = (msg) => StatusText = msg;
+                Action<string> report = msg => StatusText = msg;
 
                 var s = new Task(() =>
                     {
@@ -274,7 +269,7 @@ namespace moddingSuite.ViewModel.Edata
             var data = destTgvFile.Manager.GetRawData(destTgvFile);
             var tgv = tgvReader.Read(data);
 
-            Settings.Settings settings = SettingsManager.Load();
+            Settings settings = SettingsManager.Load();
 
             var openfDlg = new OpenFileDialog
             {
@@ -358,7 +353,7 @@ namespace moddingSuite.ViewModel.Edata
                 {
                     dispatcher.Invoke(() => IsUIBusy = true);
 
-                    Settings.Settings settings = SettingsManager.Load();
+                    Settings settings = SettingsManager.Load();
 
                     var f = new FileInfo(sourceTgvFile.Path);
                     var exportPath = Path.Combine(settings.SavePath, f.Name + ".dds");
@@ -478,7 +473,7 @@ namespace moddingSuite.ViewModel.Edata
             if (ndf == null)
                 return;
 
-            Settings.Settings settings = SettingsManager.Load();
+            Settings settings = SettingsManager.Load();
 
             byte[] content = new NdfbinReader().GetUncompressedNdfbinary(ndf.Manager.GetRawData(ndf));
 
@@ -512,7 +507,7 @@ namespace moddingSuite.ViewModel.Edata
                 {
                     dispatcher.Invoke(() => IsUIBusy = true);
 
-                    Settings.Settings settings = SettingsManager.Load();
+                    Settings settings = SettingsManager.Load();
 
                     var f = new FileInfo(ndf.Path);
                     var exportPath = Path.Combine(settings.SavePath, f.Name);
@@ -563,7 +558,7 @@ namespace moddingSuite.ViewModel.Edata
 
         protected void ChangeExportPathExecute(object obj)
         {
-            Settings.Settings settings = SettingsManager.Load();
+            Settings settings = SettingsManager.Load();
 
             var folderDlg = new FolderBrowserDialog
                                 {
@@ -581,7 +576,7 @@ namespace moddingSuite.ViewModel.Edata
 
         protected void ChangeWargamePathExecute(object obj)
         {
-            Settings.Settings settings = SettingsManager.Load();
+            Settings settings = SettingsManager.Load();
 
             var folderDlg = new FolderBrowserDialog
             {
@@ -599,7 +594,7 @@ namespace moddingSuite.ViewModel.Edata
 
         protected void OpenFileExecute(object obj)
         {
-            Settings.Settings settings = SettingsManager.Load();
+            Settings settings = SettingsManager.Load();
 
             var openfDlg = new OpenFileDialog
                                {
@@ -625,11 +620,11 @@ namespace moddingSuite.ViewModel.Edata
 
         private void HandleNewFile(string fileName)
         {
-            var type = EdataFileType.Unknown;
+            EdataFileType type;
 
             using (var fs = new FileStream(fileName, FileMode.Open))
             {
-                byte[] headerBuffer = new byte[12];
+                var headerBuffer = new byte[12];
                 fs.Read(headerBuffer, 0, headerBuffer.Length);
 
                 type = EdataManager.GetFileTypeFromHeaderData(headerBuffer);
@@ -671,7 +666,7 @@ namespace moddingSuite.ViewModel.Edata
             if (ndf == null)
                 return;
 
-            Settings.Settings settings = SettingsManager.Load();
+            Settings settings = SettingsManager.Load();
 
             byte[] buffer = vm.EdataManager.GetRawData(ndf);
 

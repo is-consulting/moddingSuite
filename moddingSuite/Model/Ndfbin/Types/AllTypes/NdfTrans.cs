@@ -6,16 +6,14 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfTrans : NdfFlatValueWrapper
     {
-        public NdfTrans(NdfTranReference value, long offset)
-            : base(NdfType.TransTableReference, value, offset)
+        public NdfTrans(NdfTranReference value)
+            : base(NdfType.TransTableReference, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            return BitConverter.GetBytes(((NdfTranReference) Value).Id);
+            return BitConverter.GetBytes(((NdfTranReference)Value).Id);
         }
 
 

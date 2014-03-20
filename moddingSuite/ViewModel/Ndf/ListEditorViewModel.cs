@@ -101,8 +101,7 @@ namespace moddingSuite.ViewModel.Ndf
                     Single();
 
             var wrapper =
-                new CollectionItemValueHolder(
-                    NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, NdfbinManager, 0), NdfbinManager, 0);
+                new CollectionItemValueHolder(NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, NdfbinManager), NdfbinManager);
 
             if (IsInsertMode)
             {

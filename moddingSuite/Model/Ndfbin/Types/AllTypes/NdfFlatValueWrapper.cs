@@ -6,8 +6,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
     {
         private object _value;
 
-        protected NdfFlatValueWrapper(NdfType type, object value, long offset)
-            : base(type, offset)
+        protected NdfFlatValueWrapper(NdfType type, object value)
+            : base(type)
         {
             Value = value;
         }

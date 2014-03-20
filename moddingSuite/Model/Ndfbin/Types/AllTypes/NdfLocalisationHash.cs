@@ -5,8 +5,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfLocalisationHash : NdfFlatValueWrapper
     {
-        public NdfLocalisationHash(byte[] value, long offset)
-            : base(NdfType.LocalisationHash, value, offset)
+        public NdfLocalisationHash(byte[] value)
+            : base(NdfType.LocalisationHash, value)
         {
         }
 
@@ -20,10 +20,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             }
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
             return Value;
         }
 

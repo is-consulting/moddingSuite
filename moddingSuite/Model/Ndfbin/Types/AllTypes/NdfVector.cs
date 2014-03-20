@@ -8,15 +8,13 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfVector : NdfFlatValueWrapper
     {
-        public NdfVector(Point3D value, long offset)
-            : base(NdfType.Vector, value, offset)
+        public NdfVector(Point3D value)
+            : base(NdfType.Vector, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
             var pt = (Point3D) Value;
 
             var vector = new List<byte>();

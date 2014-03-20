@@ -2,10 +2,10 @@
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using moddingSuite.BL;
+using moddingSuite.BL.Compressing;
 using moddingSuite.BL.DDS;
 using moddingSuite.BL.Mesh;
 using moddingSuite.BL.TGV;
-using moddingSuite.Compressing;
 using moddingSuite.Model.Textures;
 
 namespace moddingSuite.Test

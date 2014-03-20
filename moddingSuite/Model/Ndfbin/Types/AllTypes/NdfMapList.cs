@@ -5,27 +5,20 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfMapList : NdfCollection
     {
-        public NdfMapList(long offset) : base(offset)
+        public NdfMapList()
         {
             Type = NdfType.MapList;
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            bool itemValid;
-
             var data = new List<byte>();
 
             data.AddRange(BitConverter.GetBytes(InnerList.Count));
 
             foreach (CollectionItemValueHolder valueHolder in InnerList)
             {
-                byte[] valueDat = valueHolder.Value.GetBytes(out itemValid);
-
-                if (!itemValid)
-                    continue;
+                byte[] valueDat = valueHolder.Value.GetBytes();
 
                 //if (valueHolder.Value.Type == NdfType.ObjectReference || valueHolder.Value.Type == NdfType.TransTableReference)
                 //    data.AddRange(BitConverter.GetBytes((uint)NdfType.Reference));

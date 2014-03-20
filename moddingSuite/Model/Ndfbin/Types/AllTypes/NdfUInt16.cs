@@ -6,24 +6,14 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfUInt16 : NdfFlatValueWrapper
     {
-        public NdfUInt16(ushort value, long offset)
-            : base(NdfType.UInt16, value, offset)
+        public NdfUInt16(ushort value)
+            : base(NdfType.UInt16, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            try
-            {
-                return BitConverter.GetBytes(Convert.ToUInt16(Value));
-            }
-            catch (Exception)
-            {
-                valid = false;
-                return new byte[0];
-            }
+            return BitConverter.GetBytes(Convert.ToUInt16(Value));
         }
 
         public override byte[] GetNdfText()

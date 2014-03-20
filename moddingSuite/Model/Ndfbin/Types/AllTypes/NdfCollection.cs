@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
-using moddingSuite.BL;
 using moddingSuite.BL.Ndf;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
@@ -15,20 +14,20 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         private readonly ObservableCollection<CollectionItemValueHolder> _innerList =
             new ObservableCollection<CollectionItemValueHolder>();
 
-        public NdfCollection(long offset)
-            : base(NdfType.List, offset)
+        public NdfCollection()
+            : base(NdfType.List)
         {
         }
 
-        public NdfCollection(IEnumerable<CollectionItemValueHolder> list, long offset)
-            : this(offset)
+        public NdfCollection(IEnumerable<CollectionItemValueHolder> list)
+            : this()
         {
             if (list != null)
                 foreach (CollectionItemValueHolder wrapper in list)
                     InnerList.Add(wrapper);
         }
 
-        public ObservableCollection<CollectionItemValueHolder> InnerList
+        protected ObservableCollection<CollectionItemValueHolder> InnerList
         {
             get { return _innerList; }
         }
@@ -48,8 +47,6 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public void RemoveAt(int index)
         {
-            CollectionItemValueHolder el = InnerList[index];
-
             InnerList.RemoveAt(index);
 
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
@@ -203,22 +200,15 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             return string.Format("Collection[{0}]", InnerList.Count);
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
-            bool itemValid;
-
             var data = new List<byte>();
 
             data.AddRange(BitConverter.GetBytes(InnerList.Count));
 
             foreach (CollectionItemValueHolder valueHolder in InnerList)
             {
-                byte[] valueDat = valueHolder.Value.GetBytes(out itemValid);
-
-                if (!itemValid)
-                    continue;
+                byte[] valueDat = valueHolder.Value.GetBytes();
 
                 if (valueHolder.Value.Type == NdfType.ObjectReference ||
                     valueHolder.Value.Type == NdfType.TransTableReference)

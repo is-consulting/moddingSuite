@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
@@ -11,8 +10,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         private NdfClass _class;
         private uint _instanceId;
 
-        public NdfObjectReference(NdfClass cls, uint instance, long offset, bool isDead = false)
-            : base(NdfType.ObjectReference, offset)
+        public NdfObjectReference(NdfClass cls, uint instance, bool isDead = false)
+            : base(NdfType.ObjectReference)
         {
             Class = cls;
             InstanceId = instance;
@@ -63,10 +62,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             return string.Format("{0} : {1} ({2}) - {3}", Class.Id, InstanceId, Instance.IsTopObject, Class.Name);
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
             var refereceData = new List<byte>();
 
             refereceData.AddRange(BitConverter.GetBytes(InstanceId));

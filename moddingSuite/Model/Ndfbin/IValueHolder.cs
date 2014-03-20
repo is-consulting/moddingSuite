@@ -8,7 +8,5 @@ namespace moddingSuite.Model.Ndfbin
         NdfValueWrapper Value { get; set; }
 
         NdfBinary Manager { get; }
-
-        long InstanceOffset { get; }
     }
 }

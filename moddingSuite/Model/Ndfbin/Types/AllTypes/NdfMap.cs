@@ -15,8 +15,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         private NdfType _keyType = NdfType.Unset;
         private NdfType _valueType = NdfType.Unset;
 
-        public NdfMap(MapValueHolder key, MapValueHolder value, long offset, NdfBinary mgr)
-            : base(NdfType.Map, value, offset)
+        public NdfMap(MapValueHolder key, MapValueHolder value, NdfBinary mgr)
+            : base(NdfType.Map, value)
         {
             Key = key;
             Manager = mgr;
@@ -78,32 +78,26 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             if (keyOrValue)
                 Key =
                     new MapValueHolder(
-                        NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(KeyType)], KeyType, Manager, 0),
-                        Manager, 0);
+                        NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(KeyType)], KeyType, Manager), Manager);
             else
                 Value =
                     new MapValueHolder(
-                        NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(ValueType)], ValueType, Manager, 0),
-                        Manager, 0);
+                        NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(ValueType)], ValueType, Manager), Manager);
 
             OnPropertyChanged("IsKeyNull");
             OnPropertyChanged("IsValueNull");
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = false;
 
             if (Key.Value == null || ((MapValueHolder) Value).Value == null)
                 return new byte[0];
 
             var mapdata = new List<byte>();
 
-            List<byte> key = Key.Value.GetBytes(out valid).ToList();
-            List<byte> value = ((MapValueHolder) Value).Value.GetBytes(out valid).ToList();
-
-            if (!valid)
-                return new byte[0];
+            List<byte> key = Key.Value.GetBytes().ToList();
+            List<byte> value = ((MapValueHolder) Value).Value.GetBytes().ToList();
 
             if (Key.Value.Type == NdfType.ObjectReference || Key.Value.Type == NdfType.TransTableReference)
                 mapdata.AddRange(BitConverter.GetBytes((uint) NdfType.Reference));

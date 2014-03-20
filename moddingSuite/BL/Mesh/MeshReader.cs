@@ -156,7 +156,6 @@ namespace moddingSuite.BL.Mesh
             s.Seek(f.SubHeader.Dictionary.Offset, SeekOrigin.Begin);
 
             long dirEnd = f.SubHeader.Dictionary.Offset + f.SubHeader.Dictionary.Size;
-            uint id = 0;
 
             while (s.Position < dirEnd)
             {

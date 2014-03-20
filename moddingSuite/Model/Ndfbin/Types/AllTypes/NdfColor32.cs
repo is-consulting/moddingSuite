@@ -5,15 +5,13 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
     public class NdfColor32 : NdfFlatValueWrapper
     {
-        public NdfColor32(Color value, long offset)
-            : base(NdfType.Color32, value, offset)
+        public NdfColor32(Color value)
+            : base(NdfType.Color32, value)
         {
         }
 
-        public override byte[] GetBytes(out bool valid)
+        public override byte[] GetBytes()
         {
-            valid = true;
-
             var col = (Color) Value;
 
             var colorArray = new[] { col.R, col.G, col.B, col.A};
