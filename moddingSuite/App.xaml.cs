@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows;
 using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Edata;
+using moddingSuite.ViewModel.UnhandledException;
 using moddingSuite.ViewModel.VersionManager;
 
 namespace moddingSuite
@@ -44,6 +45,9 @@ namespace moddingSuite
         {
             e.Handled = true;
 
+            var vm = new UnhandledExceptionViewModel(e.Exception);
+            DialogProvider.ProvideView(vm);
+
             Exception excep = e.Exception;
 
             while (excep != null)
@@ -51,7 +55,6 @@ namespace moddingSuite
                 Trace.TraceError("Unhandeled exception occoured: {0}", e.Exception.ToString());
                 excep = excep.InnerException;
             }
-
         }
     }
 }

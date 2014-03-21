@@ -180,6 +180,8 @@
     <Compile Include="Util\Utils.cs" />
     <Compile Include="ViewModel\About\AboutViewModel.cs" />
     <Compile Include="ViewModel\Base\ObjectWrapperViewModel.cs" />
+    <Compile Include="ViewModel\Ndf\ObjectCopyResultViewModel.cs" />
+    <Compile Include="ViewModel\UnhandledException\UnhandledExceptionViewModel.cs" />
     <Compile Include="ViewModel\Filter\FilterDiscriminator.cs" />
     <Compile Include="ViewModel\Filter\PropertyFilterExpression.cs" />
     <Compile Include="ViewModel\Media\MoviePlaybackViewModel.cs" />
@@ -281,6 +283,9 @@
     </Compile>
     <Compile Include="View\Common\TradFileView.xaml.cs">
       <DependentUpon>TradFileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\Viewer\ObjectCopyResultView.xaml.cs">
+      <DependentUpon>ObjectCopyResultView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Ndfbin\Viewer\ReferenceSearchResultView.xaml.cs">
       <DependentUpon>ReferenceSearchResultView.xaml</DependentUpon>
@@ -402,6 +407,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Ndfbin\Viewer\ObjectCopyResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Ndfbin\Viewer\ReferenceSearchResultView.xaml">
       <SubType>Designer</SubType>
@@ -545,6 +554,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\copy-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\exception.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\error-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\donate.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

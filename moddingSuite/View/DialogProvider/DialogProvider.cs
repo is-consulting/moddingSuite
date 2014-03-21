@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using moddingSuite.Model.Ndfbin;
 using moddingSuite.View.Common;
 using moddingSuite.View.Edata;
 using moddingSuite.View.Mesh;
 using moddingSuite.View.Ndfbin;
 using moddingSuite.View.Ndfbin.Viewer;
 using moddingSuite.View.VersionManager;
-using moddingSuite.ViewModel;
 using moddingSuite.ViewModel.About;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
 using moddingSuite.ViewModel.Mesh;
 using moddingSuite.ViewModel.Ndf;
 using moddingSuite.ViewModel.Trad;
+using moddingSuite.ViewModel.UnhandledException;
 using moddingSuite.ViewModel.VersionManager;
 
 namespace moddingSuite.View.DialogProvider
@@ -28,18 +24,6 @@ namespace moddingSuite.View.DialogProvider
         private static IList<ViewInstance> _registeredViews = new List<ViewInstance>();
 
         private static IList<IViewMap> _maps = new List<IViewMap>();
-
-        public static IList<ViewInstance> RegisteredViews
-        {
-            get { return _registeredViews; }
-            set { _registeredViews = value; }
-        }
-
-        public static IList<IViewMap> Maps
-        {
-            get { return _maps; }
-            set { _maps = value; }
-        }
 
         static DialogProvider()
         {
@@ -57,13 +41,28 @@ namespace moddingSuite.View.DialogProvider
             Maps.Add(new ViewMap<AboutView, AboutViewModel>());
 
             Maps.Add(new ViewMap<ReferenceSearchResultView, ReferenceSearchResultViewModel>());
+            Maps.Add(new ViewMap<ObjectCopyResultView, ObjectCopyResultViewModel>());
 
             Maps.Add(new ViewMap<VersionManagerView, VersionManagerViewModel>());
+
+            Maps.Add(new ViewMap<UnhandledExceptionView, UnhandledExceptionViewModel>());
+        }
+
+        public static IList<ViewInstance> RegisteredViews
+        {
+            get { return _registeredViews; }
+            set { _registeredViews = value; }
+        }
+
+        public static IList<IViewMap> Maps
+        {
+            get { return _maps; }
+            set { _maps = value; }
         }
 
         public static void ProvideView(ViewModelBase vm, ViewModelBase parentVm = null)
         {
-            var map = Maps.SingleOrDefault(x => x.ViewModelType == vm.GetType());
+            IViewMap map = Maps.SingleOrDefault(x => x.ViewModelType == vm.GetType());
 
             if (map == null)
                 return;
@@ -74,21 +73,19 @@ namespace moddingSuite.View.DialogProvider
                 throw new InvalidOperationException(string.Format("Can not create an instance of {0}", map.ViewType));
 
 
-            Window parentView = null;
-
             if (parentVm != null)
             {
-                var parent = RegisteredViews.SingleOrDefault(x => x.ViewModel == parentVm);
+                ViewInstance parent = RegisteredViews.SingleOrDefault(x => x.ViewModel == parentVm);
 
                 if (parent != null)
                 {
-                    parentView = parent.View;
+                    Window parentView = parent.View;
 
                     if (Application.Current.Windows.OfType<Window>().Any(x => Equals(x, parentView)))
                         viewInstance.Owner = parentView;
                 }
             }
-            
+
             viewInstance.DataContext = vm;
 
             RegisteredViews.Add(new ViewInstance(viewInstance, vm));

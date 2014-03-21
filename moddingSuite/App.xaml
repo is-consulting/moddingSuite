@@ -41,8 +41,12 @@
         <BitmapImage UriSource="View\Images\import-26.png" x:Key="ImportIcon" />
 
         <BitmapImage UriSource="View\Images\google_web_search-26.png" x:Key="SearchIcon" />
-        
+        <BitmapImage UriSource="View\Images\error-32.png" x:Key="ErrorIcon" />
+        <BitmapImage UriSource="View\Images\donate.gif" x:Key="DonateIcon" />
+
         <BitmapImage UriSource="View\Images\copy-26.png" x:Key="CopyIcon" />
+
+        <BitmapImage UriSource="View\Images\exception.png" x:Key="ExceptionArt" />
 
 
         <!--Thanks to Mitchellnolte!!!-->
@@ -119,6 +123,12 @@
         </Style>
 
 <!-- -->
+
+        <SolidColorBrush x:Key="AboutBackground" >
+            <SolidColorBrush.Color>
+                <Color A="40" R="255" G="255" B="255" />
+            </SolidColorBrush.Color>
+        </SolidColorBrush>
 
         <SolidColorBrush x:Key="ToolBarBackground" >
             <SolidColorBrush.Color>

@@ -1,0 +1,24 @@
+﻿<Window x:Class="moddingSuite.View.Ndfbin.Viewer.ObjectCopyResultView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Copied instances" Height="380" Width="408" Icon="{StaticResource CopyIcon}" WindowStyle="SingleBorderWindow">
+    <Grid>
+        <DataGrid x:Name="ResultGrid" Grid.Column="1" Margin="5" ItemsSource="{Binding NewInstances}" 
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="False"
+                      RowHeaderWidth="0"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+            <DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DetailsCommand}" CommandParameter="{Binding ElementName=ResultGrid, Path=SelectedItem}" />
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Class.Name}" Header="Class" IsReadOnly="True" Width="*" />
+                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Instance" IsReadOnly="True" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

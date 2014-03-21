@@ -22,5 +22,10 @@ namespace moddingSuite.View.Common
         {
             System.Diagnostics.Process.Start("http://www.gnu.org/licenses/gpl-3.0.en.html");
         }
+
+        private void UIElement_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XP3SV7QWZ9UEG");
+        }
     }
 }

@@ -15,28 +15,36 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        
-        <Label Content="Wargame Modding suite" FontSize="18" />
-        <Label Content="v0.7.0" FontSize="16" Grid.Column="1" VerticalAlignment="Center" />
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Wargame Modding suite" FontSize="18" />
+
+ 
+            <Label Content="v0.7.5" FontSize="16" Grid.Column="1" VerticalAlignment="Center" />
 
             <Image Source="{StaticResource GplIcon}" Grid.Column="1" Grid.Row="1" Height="30" MouseUp="ImageMouseUp1" Cursor="Hand" />
 
-            <Label Grid.Row="1" Margin="20 0 0 0" Content="by enohka - Team WTF?" />
-        
-        
-        
-            <ListBox Grid.Row="2" Grid.ColumnSpan="2" Background="Transparent">
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label  Margin="20 0 0 0" Content="by enohka - Team WTF?" />
+                <Image Source="{StaticResource DonateIcon}" Cursor="Hand" MouseUp="UIElement_OnMouseUp" Margin="5" Grid.Column="2" SnapsToDevicePixels="True"/>
+            </Grid>
+
+            <ListBox Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource AboutBackground}">
                 <ListBoxItem>Big thanks to Hob Gadling this Software wouldnt exist without you. Have a look at his awesome mod: http://hobmod.com</ListBoxItem>
                 <ListBoxItem>Big thanks to my helpers DM, Darkmill and Kamrat Roger who made great tutorials and were pioneers in exploring.</ListBoxItem>
                 <ListBoxItem>Big thanks to Mitchellnolte who donated the awesome artwork to the project! Visit his store at: http://mitchellnolte.deviantart.com/</ListBoxItem>
@@ -47,7 +55,7 @@
                 <ListBoxItem>Thanks to the Wargame:EE DAT Unpacker by Giovanni Condello.</ListBoxItem>
             </ListBox>
         </Grid>
-        
+
         <Button Content="Close" Grid.Row="1" HorizontalAlignment="Right" Margin="5" Width="70" Click="ButtonClick1"  />
     </Grid>
 </Window>

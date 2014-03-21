@@ -24,8 +24,7 @@ namespace moddingSuite.ViewModel.Ndf
 {
     public class NdfEditorMainViewModel : ViewModelBase
     {
-        private readonly ObservableCollection<NdfClassViewModel> _classes =
-            new ObservableCollection<NdfClassViewModel>();
+        private readonly ObservableCollection<NdfClassViewModel> _classes = new ObservableCollection<NdfClassViewModel>();
 
         private ICollectionView _classesCollectionView;
         private string _classesFilterExpression = string.Empty;
@@ -56,7 +55,7 @@ namespace moddingSuite.ViewModel.Ndf
         }
 
         /// <summary>
-        ///     Virtual call
+        /// Virtual call
         /// </summary>
         /// <param name="content"></param>
         public NdfEditorMainViewModel(byte[] content)
@@ -116,12 +115,21 @@ namespace moddingSuite.ViewModel.Ndf
                 return;
             }
 
+            _copyInstanceResults = new List<NdfObject>();
+
             CopyInstance(inst.Object);
+
+            var resultViewModel = new ObjectCopyResultViewModel(_copyInstanceResults, this);
+            DialogProvider.ProvideView(resultViewModel, this);
         }
+
+        private List<NdfObject> _copyInstanceResults;
 
         private NdfObject CopyInstance(NdfObject instToCopy)
         {
-            NdfObject newInst = instToCopy.Class.Manager.CreateInstanceOf(instToCopy.Class);
+            NdfObject newInst = instToCopy.Class.Manager.CreateInstanceOf(instToCopy.Class, instToCopy.IsTopObject);
+            
+            _copyInstanceResults.Add(newInst);
 
             foreach (var propertyValue in instToCopy.PropertyValues)
             {
@@ -154,9 +162,7 @@ namespace moddingSuite.ViewModel.Ndf
                     if (origInst != null && !origInst.Instance.IsTopObject)
                         copiedValue = new NdfObjectReference(origInst.Class, CopyInstance(origInst.Instance).Id);
                     else
-                    {
                         copiedValue = NdfTypeManager.GetValue(toCopy.Value.GetBytes(), toCopy.Value.Type, toCopy.Manager);
-                    }
 
                     break;
                 case NdfType.List:

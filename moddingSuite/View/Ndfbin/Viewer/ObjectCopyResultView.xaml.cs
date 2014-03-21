@@ -12,21 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace moddingSuite.View.Common
+namespace moddingSuite.View.Ndfbin.Viewer
 {
     /// <summary>
-    /// Interaction logic for UnhandledExceptionView.xaml
+    /// Interaction logic for ObjectCopyResultView.xaml
     /// </summary>
-    public partial class UnhandledExceptionView : Window
+    public partial class ObjectCopyResultView : Window
     {
-        public UnhandledExceptionView()
+        public ObjectCopyResultView()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
     }
 }
