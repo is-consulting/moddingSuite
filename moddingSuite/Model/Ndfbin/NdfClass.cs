@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using moddingSuite.BL;
 using moddingSuite.ViewModel.Base;
 
 namespace moddingSuite.Model.Ndfbin
@@ -13,10 +11,6 @@ namespace moddingSuite.Model.Ndfbin
         private string _name;
         private readonly ObservableCollection<NdfObject> _instances = new ObservableCollection<NdfObject>();
         private readonly ObservableCollection<NdfProperty> _properties = new ObservableCollection<NdfProperty>();
-
-#if DEBUG
-        private long _offset;
-#endif
 
         public int Id
         {
@@ -48,23 +42,12 @@ namespace moddingSuite.Model.Ndfbin
             get { return _instances; }
         }
 
-#if DEBUG
-        public long Offset
-        {
-            get { return _offset; }
-            set
-            {
-                _offset = value;
-                OnPropertyChanged(() => Offset);
-            }
-        }
-#endif
-
         public NdfBinary Manager { get; protected set; }
 
-        public NdfClass(NdfBinary mgr)
+        public NdfClass(NdfBinary mgr, int id)
         {
             Manager = mgr;
+            Id = id;
         }
 
         public override string ToString()

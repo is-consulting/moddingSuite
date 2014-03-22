@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace moddingSuite.Model.Ndfbin.ChangeManager
 {
-    public enum ChangeType
+    public abstract class ChangeEntryBase
     {
-        Flat,
-        List,
     }
 }

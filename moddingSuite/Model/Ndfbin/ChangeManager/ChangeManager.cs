@@ -9,38 +9,21 @@ namespace moddingSuite.Model.Ndfbin.ChangeManager
 {
     public class ChangeManager
     {
-        private readonly ObservableCollection<ChangeEntry> _changes = new ObservableCollection<ChangeEntry>();
+        private readonly ObservableCollection<ChangeEntryBase> _changes = new ObservableCollection<ChangeEntryBase>();
 
         public ChangeManager()
         {
-            RevertChange = new ActionCommand(ReverChangeExeCute, () => false);
+
         }
 
-        public ObservableCollection<ChangeEntry> Changes
+        public ObservableCollection<ChangeEntryBase> Changes
         {
             get { return _changes; }
         }
 
-        public ICommand RevertChange { get; protected set; }
-
         public bool HasChanges
         {
             get { return Changes.Count > 0; }
-        }
-
-        protected void ReverChangeExeCute(object obj)
-        {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(Changes);
-
-            var item = cv.CurrentItem as ChangeEntry;
-
-            if (item == null)
-                return;
-
-            throw new NotImplementedException();
-
-            //Changes.Remove(item);
-            //item.ChangedValue.Value = NdfTypeManager.GetValue(item.OldValue, item.ChangedValue.Value.Type, item.ChangedValue.Manager, item.ChangedValue.Value.OffSet);
         }
     }
 }

@@ -53,6 +53,7 @@
                 <ListBoxItem>Uses the Iconic DotNetZip Libary released under the Ms-PL license.</ListBoxItem>
                 <ListBoxItem>Fragments of the DDS implementation are from SharpDX, have a look at this awesome project: http://sharpdx.org/</ListBoxItem>
                 <ListBoxItem>Thanks to the Wargame:EE DAT Unpacker by Giovanni Condello.</ListBoxItem>
+                <ListBoxItem>Also bis thanks to Elouda for your support.</ListBoxItem>
             </ListBox>
         </Grid>
 

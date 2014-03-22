@@ -17,10 +17,6 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             get { return _value; }
             set
             {
-                if (value == null)
-                {
-                    Trace.TraceInformation("value is null, why that");
-                }
                 _value = value;
                 OnPropertyChanged("Value");
             }

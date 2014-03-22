@@ -41,7 +41,12 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public NdfObject Instance
         {
-            get { return Class == null ? null : Class.Instances.SingleOrDefault(x => x.Id == InstanceId); }
+            get
+            {
+                if (Class == null) return null;
+
+                return Class.Instances.FirstOrDefault(o => o.Id == InstanceId);
+            }
             set
             {
                 if (!Class.Instances.Contains(value))

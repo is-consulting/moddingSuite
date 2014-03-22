@@ -1,5 +1,4 @@
-﻿using moddingSuite.BL;
-using moddingSuite.Model.Ndfbin.Types.AllTypes;
+﻿using moddingSuite.Model.Ndfbin.Types.AllTypes;
 
 namespace moddingSuite.Model.Ndfbin
 {

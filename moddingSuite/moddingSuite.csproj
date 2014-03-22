@@ -120,6 +120,7 @@
     <Compile Include="Model\Mesh\MeshHeaderEntryWithCount.cs" />
     <Compile Include="Model\Mesh\MeshSubHeader.cs" />
     <Compile Include="Model\Ndfbin\ChangeManager\ChangeEntry.cs" />
+    <Compile Include="Model\Ndfbin\ChangeManager\ChangeEntryBase.cs" />
     <Compile Include="Model\Ndfbin\ChangeManager\ChangeManager.cs" />
     <Compile Include="Model\Ndfbin\ChangeManager\Enum.cs" />
     <Compile Include="Model\Ndfbin\CollectionItemValueHolder.cs" />

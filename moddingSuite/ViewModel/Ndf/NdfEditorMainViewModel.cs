@@ -238,7 +238,7 @@ namespace moddingSuite.ViewModel.Ndf
             {
                 case NdfType.ObjectReference:
                     var ndfObjectReference = valueHolder.Value as NdfObjectReference;
-                    if (ndfObjectReference != null && ndfObjectReference.Instance == inst.Object)
+                    if (ndfObjectReference != null && ndfObjectReference.InstanceId == inst.Object.Id)
                         result.Add(propertyValue);
                     break;
                 case NdfType.List:

@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using moddingSuite.Util;
 using moddingSuite.ViewModel.Base;
 
 namespace moddingSuite.Model.Ndfbin
@@ -9,9 +8,6 @@ namespace moddingSuite.Model.Ndfbin
         private int _id;
         private string _name;
         private NdfClass _class;
-#if DEBUG
-        private long _offset;
-#endif
 
         public int Id
         {
@@ -43,17 +39,10 @@ namespace moddingSuite.Model.Ndfbin
             }
         }
 
-#if DEBUG
-        public long Offset
+        public NdfProperty(int id)
         {
-            get { return _offset; }
-            set
-            {
-                _offset = value;
-                OnPropertyChanged(() => Offset);
-            }
+            Id = id;
         }
-#endif
 
         public override string ToString()
         {
