@@ -7,6 +7,7 @@ using moddingSuite.BL.DDS;
 using moddingSuite.BL.Mesh;
 using moddingSuite.BL.TGV;
 using moddingSuite.Model.Textures;
+using moddingSuite.Util;
 
 namespace moddingSuite.Test
 {
@@ -105,8 +106,16 @@ namespace moddingSuite.Test
 
             using (var fs = new FileStream(file, FileMode.Open))
                 mreader.Read(fs);
-
         }
 
+        [TestMethod]
+        public void TestHash()
+        {
+            const string toHash = "Leopard2A6";
+
+            var hash = Utils.CreateLocalisationHash(toHash, toHash.Length);
+
+            Console.WriteLine("{0}", Utils.ByteArrayToBigEndianHexByteString(hash));
+        }
     }
 }

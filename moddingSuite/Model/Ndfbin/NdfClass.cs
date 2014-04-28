@@ -6,13 +6,13 @@ namespace moddingSuite.Model.Ndfbin
 {
     public class NdfClass : ViewModelBase
     {
-        private int _id;
+        private uint _id;
 
         private string _name;
         private readonly ObservableCollection<NdfObject> _instances = new ObservableCollection<NdfObject>();
         private readonly ObservableCollection<NdfProperty> _properties = new ObservableCollection<NdfProperty>();
 
-        public int Id
+        public uint Id
         {
             get { return _id; }
             set
@@ -44,7 +44,7 @@ namespace moddingSuite.Model.Ndfbin
 
         public NdfBinary Manager { get; protected set; }
 
-        public NdfClass(NdfBinary mgr, int id)
+        public NdfClass(NdfBinary mgr, uint id)
         {
             Manager = mgr;
             Id = id;

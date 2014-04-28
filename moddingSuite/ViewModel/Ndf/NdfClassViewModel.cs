@@ -41,7 +41,7 @@ namespace moddingSuite.ViewModel.Ndf
             }
         }
 
-        public int Id
+        public uint Id
         {
             get { return Object.Id; }
             set

@@ -95,6 +95,26 @@ namespace moddingSuite.ViewModel.Ndf
 
             FindAllReferencesCommand = new ActionCommand(FindAllReferencesExecute);
             CopyInstanceCommand = new ActionCommand(CopyInstanceExecute);
+            MakeTopObjectCommand = new ActionCommand(MakeTopObjectExecute);
+        }
+
+        private void MakeTopObjectExecute(object obj)
+        {
+            var cls = ClassesCollectionView.CurrentItem as NdfClassViewModel;
+
+            if (cls == null)
+                return;
+
+            var inst = cls.InstancesCollectionView.CurrentItem as NdfObjectViewModel;
+
+            if (inst == null)
+                return;
+
+            if (!inst.Object.IsTopObject)
+            {
+                NdfBinary.TopObjects.Add(inst.Object.Id);
+                inst.Object.IsTopObject = true;
+            }
         }
 
         private void CopyInstanceExecute(object obj)
@@ -270,6 +290,7 @@ namespace moddingSuite.ViewModel.Ndf
         public ICommand DeleteStringCommand { get; set; }
         public ICommand FindAllReferencesCommand { get; set; }
         public ICommand CopyInstanceCommand { get; set; }
+        public ICommand MakeTopObjectCommand { get; set; }
 
         public string Title
         {

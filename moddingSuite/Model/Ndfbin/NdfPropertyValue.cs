@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
+using moddingSuite.Model.Ndfbin.ChangeManager;
 using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
 using moddingSuite.Util;
@@ -11,7 +13,7 @@ using moddingSuite.ViewModel.Ndf;
 
 namespace moddingSuite.Model.Ndfbin
 {
-    public class NdfPropertyValue : ViewModelBase, IValueHolder
+    public class NdfPropertyValue : ViewModelBase, IValueHolder, IEditableObject
     {
         private NdfObject _instance;
         private NdfProperty _property;
@@ -23,8 +25,6 @@ namespace moddingSuite.Model.Ndfbin
 
             DetailsCommand = new ActionCommand(DetailsCommandExecute);
         }
-
-        public ICommand DetailsCommand { get; set; }
 
         public NdfType Type
         {
@@ -75,6 +75,8 @@ namespace moddingSuite.Model.Ndfbin
         }
 
         #endregion
+
+        public ICommand DetailsCommand { get; set; }
 
         public void DetailsCommandExecute(object obj)
         {
@@ -146,6 +148,62 @@ namespace moddingSuite.Model.Ndfbin
             var editor = new ListEditorViewModel(refe, Manager);
 
             DialogProvider.ProvideView(editor);
+        }
+
+
+        private byte[] _oldVal;
+        private bool _dirty;
+
+        public void BeginEdit()
+        {
+            if (_dirty)
+                return;
+
+            _oldVal = Value.GetBytes();
+
+            _dirty = true;
+        }
+
+        public void CancelEdit()
+        {
+            _dirty = false;
+        }
+
+        public void EndEdit()
+        {
+            if (!_dirty)
+                return;
+
+            var newVal = Value.GetBytes();
+
+            if (newVal != null && _oldVal != null && Utils.ByteArrayCompare(newVal, _oldVal))
+                return;
+
+            ChangeEntryBase change = null;
+
+            switch (Value.Type)
+            {
+                case NdfType.Map:
+                    var map = Value as NdfMap;
+                    change = new MapChangeEntry(this, map.Key, map.Value as MapValueHolder);
+
+                    break;
+
+                case NdfType.ObjectReference:
+                    var refe = Value as NdfObjectReference;
+                    change = new ObjectReferenceChangeEntry(this, refe.Class.Id, refe.InstanceId);
+
+                    break;
+
+                default:
+                    change = new FlatChangeEntry(this, Value);
+
+                    break;
+            }
+
+            Manager.ChangeManager.AddChange(change);
+
+            _dirty = false;
         }
     }
 }

@@ -4,11 +4,16 @@ using moddingSuite.ViewModel.Base;
 
 namespace moddingSuite.Model.Ndfbin.ChangeManager
 {
-    public class ChangeEntry : ViewModelBase
+    public class FlatChangeEntry : ChangeEntryBase
     {
-        private IValueHolder _changedValue;
         private NdfValueWrapper _newValue;
-        
+
+        public FlatChangeEntry(NdfPropertyValue affectedPropertyValue, NdfValueWrapper newValue)
+            : base(affectedPropertyValue)
+        {
+            NewValue = newValue;
+        }
+
         public NdfValueWrapper NewValue
         {
             get { return _newValue; }
@@ -19,14 +24,5 @@ namespace moddingSuite.Model.Ndfbin.ChangeManager
             }
         }
 
-        public IValueHolder ChangedValue
-        {
-            get { return _changedValue; }
-            set
-            {
-                _changedValue = value;
-                OnPropertyChanged(() => ChangedValue);
-            }
-        }
     }
 }

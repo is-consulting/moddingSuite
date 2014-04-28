@@ -25,15 +25,15 @@
                 <Button ToolTip="Save changes back" Command="{Binding Path=SaveNdfbinCommand}" Style="{StaticResource ButtonStyle1}">
                     <Image Source="{StaticResource SaveIcon}"  />
                 </Button>
-                <!--<ToggleButton x:Name="changesButton" ToolTip="View pending changes" Style="{StaticResource ToggleButtonStyle1}">
+                <Separator />
+                <ToggleButton x:Name="ChangesButton" ToolTip="View pending changes" Style="{StaticResource ToggleButtonStyle1}">
                     <Image Source="{StaticResource ViewChanges}"  />
-                </ToggleButton>-->
+                </ToggleButton>
             </ToolBar>
-            <!--<Popup IsOpen="{Binding ElementName=changesButton, Path=IsChecked}" 
-                               PlacementTarget="{Binding ElementName=changesButton}"
+            <Popup IsOpen="{Binding ElementName=ChangesButton, Path=IsChecked}" 
+                               PlacementTarget="{Binding ElementName=ChangesButton}"
                                PopupAnimation="Slide" 
                                Placement="Bottom" 
-                                
                                AllowsTransparency="True" StaysOpen="False">
                 <DataGrid ItemsSource="{Binding Path=NdfBinary.ChangeManager.Changes}"
                       IsSynchronizedWithCurrentItem="True"
@@ -43,24 +43,17 @@
                       AutoGenerateColumns="False"
                       SelectionMode="Single"
                       SelectionUnit="FullRow">
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem  Header="Revert" Command="{Binding Path=.NdfBinary.ChangeManager.RevertChange}" />
-                            <MenuItem  Header="Follow" Command="{Binding Path=NdfBinary.ChangeManager.FollowChange}" Visibility="Hidden" />
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=ChangedValue.Property.Class.Name}" Header="Class" IsReadOnly="True"/>
-                        <DataGridTextColumn Binding="{Binding Path=ChangedValue.Property.Name}" Header="Property" IsReadOnly="True" />
-                        <DataGridTextColumn Binding="{Binding Path=ChangedValue.Instance.Id}" Header="Instance" IsReadOnly="True" />
-                        <DataGridTextColumn Binding="{Binding Path=ChangedValue.Value.Type}" Header="Type" IsReadOnly="True" />
-
-                        <DataGridTextColumn Binding="{Binding Path=OldValueDisplay}" Header="Old" IsReadOnly="True" />
-                        <DataGridTextColumn Binding="{Binding Path=ChangedValue.Value}" Header="New" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Path=AffectedPropertyValue.Property.Class}" Header="Class" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding Path=AffectedPropertyValue.Property}" Header="Property" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Path=AffectedPropertyValue.Instance.Id}" Header="Instance" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Path=AffectedPropertyValue.Value.Type}" Header="Type" IsReadOnly="True" />
+                        <!--<DataGridTextColumn Binding="{Binding Path=OldValueDisplay}" Header="Old" IsReadOnly="True" />-->
+                        <DataGridTextColumn Binding="{Binding Path=NewValue.Value}" Header="New" IsReadOnly="True" />
 
                     </DataGrid.Columns>
                 </DataGrid>
-            </Popup>-->
+            </Popup>
 
             <TabControl Grid.Row="1">
                 <TabItem Header="Classes">
@@ -83,6 +76,10 @@
                             <Label>Classes</Label>
                             <ToolBar Grid.Column="2" SnapsToDevicePixels="True">
                                 <TextBox  VerticalAlignment="Top" Width="150" Margin="5" Text="{Binding Path=ClassesFilterExpression, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <Button ToolTip="Make top object" Command="{Binding  MakeTopObjectCommand}">
+                                    <Image Source="{StaticResource ImportIcon}" SnapsToDevicePixels="True" />
+                                </Button>
                                 <Button ToolTip="Find out what references this instance" Command="{Binding FindAllReferencesCommand}">
                                     <Image Source="{StaticResource SearchIcon}" SnapsToDevicePixels="True" />
                                 </Button>
@@ -103,7 +100,7 @@
                                         </MenuItem>
                                     </MenuItem>
                                 </Menu>
-                                <Button ToolTip="Set remove selected instance" Command="{Binding SelectedValue.RemoveInstanceCommand, ElementName=classGrid}" SnapsToDevicePixels="True">
+                                <Button ToolTip="Remove selected instance" Command="{Binding SelectedValue.RemoveInstanceCommand, ElementName=classGrid}" SnapsToDevicePixels="True">
                                     <Image Source="{StaticResource DeletePropIcon}" SnapsToDevicePixels="True"  />
                                 </Button>
                             </ToolBar>

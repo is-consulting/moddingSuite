@@ -119,10 +119,12 @@
     <Compile Include="Model\Mesh\MeshHeaderEntry.cs" />
     <Compile Include="Model\Mesh\MeshHeaderEntryWithCount.cs" />
     <Compile Include="Model\Mesh\MeshSubHeader.cs" />
-    <Compile Include="Model\Ndfbin\ChangeManager\ChangeEntry.cs" />
+    <Compile Include="Model\Ndfbin\ChangeManager\FlatChangeEntry.cs" />
     <Compile Include="Model\Ndfbin\ChangeManager\ChangeEntryBase.cs" />
-    <Compile Include="Model\Ndfbin\ChangeManager\ChangeManager.cs" />
+    <Compile Include="Model\Ndfbin\ChangeManager\MapChangeEntry.cs" />
+    <Compile Include="Model\Ndfbin\ChangeManager\NdfChangeManager.cs" />
     <Compile Include="Model\Ndfbin\ChangeManager\Enum.cs" />
+    <Compile Include="Model\Ndfbin\ChangeManager\ObjectReferenceChangeEntry.cs" />
     <Compile Include="Model\Ndfbin\CollectionItemValueHolder.cs" />
     <Compile Include="Model\Ndfbin\INdfScriptSerializable.cs" />
     <Compile Include="Model\Ndfbin\IValueHolder.cs" />
@@ -442,6 +444,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Model\Ndfbin\ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

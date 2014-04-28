@@ -7,13 +7,12 @@ using moddingSuite.ViewModel.Base;
 
 namespace moddingSuite.Model.Ndfbin.ChangeManager
 {
-    public class ChangeManager
+    public class NdfChangeManager
     {
         private readonly ObservableCollection<ChangeEntryBase> _changes = new ObservableCollection<ChangeEntryBase>();
 
-        public ChangeManager()
+        public NdfChangeManager()
         {
-
         }
 
         public ObservableCollection<ChangeEntryBase> Changes
@@ -24,6 +23,11 @@ namespace moddingSuite.Model.Ndfbin.ChangeManager
         public bool HasChanges
         {
             get { return Changes.Count > 0; }
+        }
+
+        public void AddChange(ChangeEntryBase change)
+        {
+            Changes.Add(change);
         }
     }
 }

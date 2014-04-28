@@ -7,7 +7,7 @@
         x:Class="moddingSuite.View.Edata.EdataManagerView"
         Height="565.855" Width="1008.364"  Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}" WindowStartupLocation="CenterScreen">
     <Grid>
-        <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Panel.ZIndex="1000" Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Margin="0 0 0 20">
+        <!--<UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Panel.ZIndex="1000" Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Margin="0 0 0 20">
             <view:SpinningWheel IsSpinning="True" 
                               DotRadius="7" 
                               Speed="1.25"
@@ -16,7 +16,7 @@
                               SymmetricalArrange="True"
                               Direction="CW"
                               x:Name="wheel" />
-        </UniformGrid>
+        </UniformGrid>-->
 
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
@@ -36,8 +36,9 @@
 
                 </MenuItem>
                 <MenuItem Header="_Settings">
-                    <MenuItem Header="Change export _path" Command="{Binding Path=ChangeExportPathCommand}" />
+                    <MenuItem Header="Change _export path" Command="{Binding Path=ChangeExportPathCommand}" />
                     <MenuItem Header="Change _Wargame path" Command="{Binding Path=ChangeWargamePathCommand}" />
+                    <MenuItem Header="Change _Python path" Command="{Binding Path=ChangePythonPathCommand}" />
                 </MenuItem>
             </Menu>
 

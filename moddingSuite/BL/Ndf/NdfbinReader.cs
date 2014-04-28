@@ -198,7 +198,7 @@ namespace moddingSuite.BL.Ndf
 
             ms.Seek(classEntry.Offset, SeekOrigin.Begin);
 
-            int i = 0;
+            uint i = 0;
             var buffer = new byte[4];
 
             while (ms.Position < classEntry.Offset + classEntry.Size)
@@ -246,7 +246,7 @@ namespace moddingSuite.BL.Ndf
 
                 ms.Read(buffer, 0, buffer.Length);
 
-                NdfClass cls = owner.Classes.Single(x => x.Id == BitConverter.ToInt32(buffer, 0));
+                NdfClass cls = owner.Classes.Single(x => x.Id == BitConverter.ToUInt32(buffer, 0));
                 property.Class = cls;
 
                 cls.Properties.Add(property);

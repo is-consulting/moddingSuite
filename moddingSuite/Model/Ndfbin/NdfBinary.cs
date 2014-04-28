@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using moddingSuite.Model.Ndfbin.ChangeManager;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
 using moddingSuite.ViewModel.Base;
 
@@ -40,6 +41,13 @@ namespace moddingSuite.Model.Ndfbin
         public List<uint> Import { get; set; }
         public List<uint> Export { get; set; }
 
+        public NdfChangeManager ChangeManager { get; protected set; }
+
+        public NdfBinary()
+        {
+            ChangeManager = new NdfChangeManager();
+        }
+
         public NdfObject CreateInstanceOf(NdfClass cls, bool isTopLevelInstance = true)
         {
             var newId = (uint)Instances.Count();
@@ -51,7 +59,10 @@ namespace moddingSuite.Model.Ndfbin
             Instances.Add(inst);
 
             if (isTopLevelInstance)
+            {
                 TopObjects.Add(inst.Id);
+                inst.IsTopObject = true;
+            }
 
             return inst;
         }

@@ -90,6 +90,7 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand CloseFileCommand { get; set; }
         public ICommand ChangeExportPathCommand { get; set; }
         public ICommand ChangeWargamePathCommand { get; set; }
+        public ICommand ChangePythonPathCommand { get; set; }
         public ICommand EditNdfbinCommand { get; set; }
         public ICommand EditTradFileCommand { get; set; }
         public ICommand EditMeshCommand { get; set; }
@@ -135,6 +136,7 @@ namespace moddingSuite.ViewModel.Edata
 
             ChangeExportPathCommand = new ActionCommand(ChangeExportPathExecute);
             ChangeWargamePathCommand = new ActionCommand(ChangeWargamePathExecute);
+            ChangePythonPathCommand = new ActionCommand(ChangePythonPathExecute);
 
             ExportNdfCommand = new ActionCommand(ExportNdfExecute, () => IsOfType(EdataFileType.Ndfbin));
             ExportRawCommand = new ActionCommand(ExportRawExecute);
@@ -149,6 +151,7 @@ namespace moddingSuite.ViewModel.Edata
             EditNdfbinCommand = new ActionCommand(EditNdfbinExecute, () => IsOfType(EdataFileType.Ndfbin));
             EditMeshCommand = new ActionCommand(EditMeshExecute, () => IsOfType(EdataFileType.Mesh));
         }
+
 
         private void EditMeshExecute(object obj)
         {
@@ -587,6 +590,24 @@ namespace moddingSuite.ViewModel.Edata
             if (folderDlg.ShowDialog() == DialogResult.OK)
             {
                 settings.WargamePath = folderDlg.SelectedPath;
+                SettingsManager.Save(settings);
+            }
+        }
+
+        private void ChangePythonPathExecute(object obj)
+        {
+            Settings settings = SettingsManager.Load();
+
+            var folderDlg = new FolderBrowserDialog
+            {
+                SelectedPath = settings.PythonPath,
+                RootFolder = Environment.SpecialFolder.MyComputer,
+                ShowNewFolderButton = true,
+            };
+
+            if (folderDlg.ShowDialog() == DialogResult.OK)
+            {
+                settings.PythonPath = folderDlg.SelectedPath;
                 SettingsManager.Save(settings);
             }
         }

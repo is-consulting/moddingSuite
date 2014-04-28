@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace moddingSuite.ViewModel.Base
 {
-    public class ViewModelBase : INotifyPropertyChanged, IEditableObject
+    public class ViewModelBase : INotifyPropertyChanged
     {
         private bool _isUiBusy = false;
 
@@ -39,21 +39,6 @@ namespace moddingSuite.ViewModel.Base
                 _isUiBusy = value;
                 OnPropertyChanged(() => IsUIBusy);
             }
-        }
-
-        public virtual void BeginEdit()
-        {
-            //throw new NotImplementedException();
-        }
-
-        public virtual void CancelEdit()
-        {
-            //throw new NotImplementedException();
-        }
-
-        public virtual void EndEdit()
-        {
-            //throw new NotImplementedException();
         }
     }
 }

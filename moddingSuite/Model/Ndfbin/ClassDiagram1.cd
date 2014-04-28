@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="FullSignature">
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfBlob" Collapsed="true">
+    <Position X="10" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAEAAAAAAAAAAAAAIAAACAAAAAAAAAAAAAABAgAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfBlob.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfBoolean" Collapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfBoolean.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfCollection" Collapsed="true">
+    <Position X="2.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEKAAEAAAICAABAUCAAAlASwAAAAABAECEAAAABQIAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.161" />
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfColor128" Collapsed="true">
+    <Position X="8" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfColor128.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfColor32" Collapsed="true">
+    <Position X="8" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfColor32.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfDouble" Collapsed="true">
+    <Position X="15.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfDouble.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfDouble_2" Collapsed="true">
+    <Position X="17.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfDouble_2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfEugInt2" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAEAAAAAEAAAAAACAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfEugInt2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfFileNameString" Collapsed="true">
+    <Position X="6" Y="5.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfFileNameString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfFlatValueWrapper" Collapsed="true">
+    <Position X="11.5" Y="2.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfFlatValueWrapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfGuid" Collapsed="true">
+    <Position X="15.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfGuid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfHash" Collapsed="true">
+    <Position X="15.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfHash.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfInt16" Collapsed="true">
+    <Position X="10" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfInt16.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfInt32" Collapsed="true">
+    <Position X="13.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfInt32.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfInt8" Collapsed="true">
+    <Position X="13.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfInt8.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfLocalisationHash" Collapsed="true">
+    <Position X="8" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfLocalisationHash.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfMap" Collapsed="true">
+    <Position X="15.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BACAAAAAAAAAAAQEAACAAACACBAQjAAAAAgAAABAEAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfMapList" Collapsed="true">
+    <Position X="2.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfMapList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfNull" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfNull.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfObjectReference" Collapsed="true">
+    <Position X="4.5" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAAIAAgCAAAAAAgAAQAAAAAAAQBA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfObjectReference.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfSingle" Collapsed="true">
+    <Position X="13.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfSingle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfString" Collapsed="true">
+    <Position X="8" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfTime64" Collapsed="true">
+    <Position X="15.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfTime64.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfTrans" Collapsed="true">
+    <Position X="15.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfTrans.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfTrippleInt" Collapsed="true">
+    <Position X="10" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAGAAAAAEAAAAAACAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfTrippleInt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfUInt16" Collapsed="true">
+    <Position X="13.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfUInt16.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfUInt32" Collapsed="true">
+    <Position X="13.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfUInt32.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfUnkown" Collapsed="true">
+    <Position X="8" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfUnkown.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfValueWrapper" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAQAAAAAAACAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfValueWrapper.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfVector" Collapsed="true">
+    <Position X="8" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfVector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfWideString" Collapsed="true">
+    <Position X="10" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfWideString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Ndfbin.Types.AllTypes.NdfZipBlob" Collapsed="true">
+    <Position X="13.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Ndfbin\Types\AllTypes\NdfZipBlob.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

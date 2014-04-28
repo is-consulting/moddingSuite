@@ -10,6 +10,7 @@ namespace moddingSuite.Model.Settings
         private string _savePath = @"C:\";
         private int _lastHighlightedFileIndex;
         private string _wargamePath;
+        private string _pythonPath;
 
         public string SavePath
         {
@@ -47,6 +48,12 @@ namespace moddingSuite.Model.Settings
         {
             get { return _wargamePath; }
             set { _wargamePath = value; OnPropertyChanged(() => WargamePath); }
+        }
+
+        public string PythonPath
+        {
+            get { return _pythonPath; }
+            set { _pythonPath = value; OnPropertyChanged(() => PythonPath); }
         }
     }
 }
