@@ -46,8 +46,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                     return new NdfSingle(BitConverter.ToSingle(data, 0));
                 case NdfType.Float64:
                     return new NdfDouble(BitConverter.ToDouble(data, 0));
-                case NdfType.Float64_2:
-                    return new NdfDouble_2(BitConverter.ToDouble(data, 0));
+
                 case NdfType.TableStringFile:
                     int id = BitConverter.ToInt32(data, 0);
                     return new NdfFileNameString(mgr.Strings[id]);
@@ -106,6 +105,8 @@ namespace moddingSuite.Model.Ndfbin.Types
 
                 case NdfType.EugInt2:
                     return new NdfEugInt2(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4));
+                case NdfType.EugFloat2:
+                    return new NdfEugFloat2(BitConverter.ToSingle(data, 0), BitConverter.ToSingle(data, 4));
 
                 case NdfType.TrippleInt:
                     return new NdfTrippleInt(BitConverter.ToInt32(data, 0), BitConverter.ToInt32(data, 4), BitConverter.ToInt32(data, 8));
@@ -142,9 +143,11 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.Color32:
                 case NdfType.WideString:
                     return 4;
+                case NdfType.Float64:
                 case NdfType.LocalisationHash:
                 case NdfType.ObjectReference:
                 case NdfType.EugInt2:
+                case NdfType.EugFloat2:
                 case NdfType.Time64:
                     return 8;
                 case NdfType.TrippleInt:
@@ -157,14 +160,9 @@ namespace moddingSuite.Model.Ndfbin.Types
 
                 case NdfType.Map:
                     return 0;
+
                 case NdfType.List:
                 case NdfType.MapList:
-                    return 4;
-
-                case NdfType.Float64:
-                case NdfType.Float64_2:
-                    return 8;
-
                 case NdfType.TransTableReference:
                     return 4;
 
@@ -195,7 +193,6 @@ namespace moddingSuite.Model.Ndfbin.Types
                            NdfType.UInt16,
                            NdfType.Color32,
                            NdfType.Float64,
-                           NdfType.Float64_2,
                            NdfType.Vector,
                            NdfType.Color128,
                            NdfType.MapList

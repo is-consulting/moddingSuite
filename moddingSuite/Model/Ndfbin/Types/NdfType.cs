@@ -12,11 +12,12 @@
         UInt32 = 0x00000003,
         Float32 = 0x00000005,
         Float64 = 0x00000006,
-        Float64_2 = 33,
+        //Float64_2 = 33,
 
         Time64 = 0x00000004,
 
         EugInt2 = 0x0000001F,
+        EugFloat2 = 0x00000021,
 
         Guid = 26,
         Vector = 0x0000000b,

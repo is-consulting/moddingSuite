@@ -145,7 +145,7 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfCollection.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfColor32.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfDouble.cs" />
-    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfDouble_2.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfEugFloat2.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfEugInt2.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFileNameString.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfGuid.cs" />
@@ -232,6 +232,9 @@
     </Compile>
     <Compile Include="View\Ndfbin\ValueEditing\BlobEditingTemplate.xaml.cs">
       <DependentUpon>BlobEditingTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\FloatPairEditingTemplate.xaml.cs">
+      <DependentUpon>FloatPairEditingTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Ndfbin\ValueEditing\LocaleHashEditingTemplate.xaml.cs">
       <DependentUpon>LocaleHashEditingTemplate.xaml</DependentUpon>
@@ -334,6 +337,10 @@
     <Page Include="View\Ndfbin\ValueEditing\BlobEditingTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\FloatPairEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Ndfbin\ValueEditing\LocaleHashEditingTemplate.xaml">
       <SubType>Designer</SubType>

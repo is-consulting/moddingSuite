@@ -26,7 +26,6 @@ namespace moddingSuite.View.Extension
             {
                 case NdfType.Float32:
                 case NdfType.Float64:
-                case NdfType.Float64_2:
                     return element.FindResource("FloatEditingTemplate") as DataTemplate;
                 case NdfType.UInt16:
                 case NdfType.UInt32:
@@ -64,6 +63,9 @@ namespace moddingSuite.View.Extension
 
                 case NdfType.Blob:
                     return element.FindResource("BlobEditingTemplate") as DataTemplate;
+
+                case NdfType.EugFloat2:
+                    return element.FindResource("FloatPairEditingTemplate") as DataTemplate;
 
                 case NdfType.List:
                     return null;

@@ -112,7 +112,11 @@
         <DataTemplate x:Key="BlobEditingTemplate">
             <ValueEditing:BlobEditingTemplate />
         </DataTemplate>
-
+        
+        <DataTemplate x:Key="FloatPairEditingTemplate">
+            <ValueEditing:FloatPairEditingTemplate />
+        </DataTemplate>
+        
 
         <Style TargetType="Image">
             <Style.Triggers>
