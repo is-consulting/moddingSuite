@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using moddingSuite.BL;
 using moddingSuite.BL.Ndf;
+using moddingSuite.BL.Scenario;
 using moddingSuite.Model.Edata;
 using moddingSuite.Model.Settings;
 using moddingSuite.View.Common;
@@ -94,6 +95,7 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand EditNdfbinCommand { get; set; }
         public ICommand EditTradFileCommand { get; set; }
         public ICommand EditMeshCommand { get; set; }
+        public ICommand EditScenarioCommand { get; set; }
         public ICommand PlayMovieCommand { get; set; }
         public ICommand AboutUsCommand { get; set; }
 
@@ -150,8 +152,51 @@ namespace moddingSuite.ViewModel.Edata
             EditTradFileCommand = new ActionCommand(EditTradFileExecute, () => IsOfType(EdataFileType.Dictionary));
             EditNdfbinCommand = new ActionCommand(EditNdfbinExecute, () => IsOfType(EdataFileType.Ndfbin));
             EditMeshCommand = new ActionCommand(EditMeshExecute, () => IsOfType(EdataFileType.Mesh));
+            EditScenarioCommand = new ActionCommand(EditScenarioExecute, () => IsOfType(EdataFileType.Scenario));
         }
 
+        private void EditScenarioExecute(object obj)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+            if (vm == null)
+                return;
+
+            var scenario = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+            if (scenario == null)
+                return;
+
+            var dispatcher = Dispatcher.CurrentDispatcher;
+
+            Action<ViewModelBase, ViewModelBase> open = DialogProvider.ProvideView;
+            Action<string> report = msg => StatusText = msg;
+
+            var s = new Task(() =>
+            {
+                try
+                {
+                    dispatcher.Invoke(() => IsUIBusy = true);
+                    dispatcher.Invoke(report, "Reading scenario...");
+
+                    var reader = new ScenarioReader();
+                    var scenarioFile = reader.Read(vm.EdataManager.GetRawData(scenario));
+
+                    var detailsVm = new NdfEditorMainViewModel(scenarioFile.NdfBinary);
+
+                    dispatcher.Invoke(open, detailsVm, this);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                }
+                finally
+                {
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                    dispatcher.Invoke(report, "Ready");
+                }
+            });
+
+            s.Start();
+        }
 
         private void EditMeshExecute(object obj)
         {

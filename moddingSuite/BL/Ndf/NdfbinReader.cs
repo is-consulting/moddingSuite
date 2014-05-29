@@ -435,13 +435,19 @@ namespace moddingSuite.BL.Ndf
                         Property = cls.Properties.SingleOrDefault(x => x.Id == propertyId)
                     };
 
-                if (propVal.Property != null)
-                    instance.PropertyValues.Add(propVal);
-                //else
-                //throw new InvalidDataException("Found a value for a property which doens't exist in this class.");
+                if (propVal.Property == null)
+                    // throw new InvalidDataException("Found a value for a property which doens't exist in this class.");
+                    foreach (var c in owner.Classes) 
+                        foreach (var p in c.Properties)
+                            if (p.Id == propertyId)
+                            {
+                                propVal.Property = p;
+                                break;
+                            }
+
+                instance.PropertyValues.Add(propVal);
 
                 NdfValueWrapper res = ReadValue(ms, owner);
-
                 propVal.Value = res;
             }
 
@@ -497,24 +503,24 @@ namespace moddingSuite.BL.Ndf
             {
                 case NdfType.MapList:
                 case NdfType.List:
-                        NdfCollection lstValue = type == NdfType.List ? new NdfCollection() : new NdfMapList();
+                    NdfCollection lstValue = type == NdfType.List ? new NdfCollection() : new NdfMapList();
 
-                        for (int i = 0; i < contBufferlen; i++)
-                        {
-                            CollectionItemValueHolder res;
-                            if (type == NdfType.List)
-                                res = new CollectionItemValueHolder(ReadValue(ms, binary), binary);
-                            else
-                                res = new CollectionItemValueHolder(
-                                    new NdfMap(
-                                        new MapValueHolder(ReadValue(ms, binary), binary),
-                                        new MapValueHolder(ReadValue(ms, binary), binary),
-                                        binary), binary);
+                    for (int i = 0; i < contBufferlen; i++)
+                    {
+                        CollectionItemValueHolder res;
+                        if (type == NdfType.List)
+                            res = new CollectionItemValueHolder(ReadValue(ms, binary), binary);
+                        else
+                            res = new CollectionItemValueHolder(
+                                new NdfMap(
+                                    new MapValueHolder(ReadValue(ms, binary), binary),
+                                    new MapValueHolder(ReadValue(ms, binary), binary),
+                                    binary), binary);
 
-                            lstValue.Add(res);
-                        }
+                        lstValue.Add(res);
+                    }
 
-                        value = lstValue;
+                    value = lstValue;
                     break;
                 case NdfType.Map:
                     value = new NdfMap(

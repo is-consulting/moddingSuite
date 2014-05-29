@@ -10,6 +10,7 @@ namespace moddingSuite.Model.Edata
         Package,
         Save,
         Mesh,
+        Scenario,
 
         Unknown
     }

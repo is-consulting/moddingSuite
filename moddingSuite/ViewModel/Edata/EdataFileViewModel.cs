@@ -60,6 +60,9 @@ namespace moddingSuite.ViewModel.Edata
                 case EdataFileType.Mesh:
                     ParentVm.EditMeshCommand.Execute(obj);
                     break;
+                case EdataFileType.Scenario:
+                    ParentVm.EditScenarioCommand.Execute(obj);
+                    break;
             }
         }
 

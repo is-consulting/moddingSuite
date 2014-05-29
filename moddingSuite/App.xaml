@@ -46,6 +46,9 @@
 
         <BitmapImage UriSource="View\Images\copy-26.png" x:Key="CopyIcon" />
 
+        <BitmapImage UriSource="View\Images\puzzle-26.png" x:Key="ScenarioIcon" />
+
+
         <BitmapImage UriSource="View\Images\exception.png" x:Key="ExceptionArt" />
 
 

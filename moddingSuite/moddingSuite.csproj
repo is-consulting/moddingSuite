@@ -98,6 +98,8 @@
     <Compile Include="BL\Ndf\NdfbinReader.cs" />
     <Compile Include="BL\Ndf\NdfbinWriter.cs" />
     <Compile Include="BL\Ndf\NdfTextWriter.cs" />
+    <Compile Include="BL\Scenario\ScenarioReader.cs" />
+    <Compile Include="BL\Scenario\ScenarioWriter.cs" />
     <Compile Include="BL\TGV\TgvBitmapReader.cs" />
     <Compile Include="BL\TGV\TgvDDSReader.cs" />
     <Compile Include="BL\TGV\TgvDDSWriter.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFlatValueWrapper.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfValueWrapper.cs" />
     <Compile Include="Model\Sav\SavFile.cs" />
+    <Compile Include="Model\Scenario\ScenarioFile.cs" />
     <Compile Include="Model\Textures\TgvFile.cs" />
     <Compile Include="Model\Textures\TgvMipMap.cs" />
     <Compile Include="Model\Trad\TradEntry.cs" />
@@ -574,6 +577,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\donate.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\puzzle-26.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

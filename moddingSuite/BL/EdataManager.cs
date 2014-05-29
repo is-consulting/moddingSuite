@@ -36,6 +36,7 @@ namespace moddingSuite.BL
             byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
             byte[] tgvHeader = { 2 };
             byte[] meshHeader = { 0x4D, 0x45, 0x53, 0x48 };
+            byte[] scenarioHeader = {0x53, 0x43, 0x45, 0x4E, 0x41, 0x52, 0x49, 0x4F, 0x0D, 0x0A};
 
             _knownHeaders = new List<KeyValuePair<EdataFileType, byte[]>>
                 {
@@ -45,6 +46,7 @@ namespace moddingSuite.BL
                     new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Save, savHeader),
                     new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Image, tgvHeader),
                     new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Mesh, meshHeader),
+                    new KeyValuePair<EdataFileType, byte[]>(EdataFileType.Scenario, scenarioHeader),
                 };
         }
 
