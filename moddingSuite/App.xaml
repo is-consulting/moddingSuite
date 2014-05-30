@@ -119,7 +119,10 @@
         <DataTemplate x:Key="FloatPairEditingTemplate">
             <ValueEditing:FloatPairEditingTemplate />
         </DataTemplate>
-        
+
+        <DataTemplate x:Key="VectorEditingTemplate">
+            <ValueEditing:VectorEditingTemplate />
+        </DataTemplate>
 
         <Style TargetType="Image">
             <Style.Triggers>

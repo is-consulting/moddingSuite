@@ -249,6 +249,9 @@
     <Compile Include="View\Ndfbin\ValueEditing\TransTableReferenceEditingTemplate.xaml.cs">
       <DependentUpon>TransTableReferenceEditingTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Ndfbin\ValueEditing\VectorEditingTemplate.xaml.cs">
+      <DependentUpon>VectorEditingTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Ndfbin\Viewer\AddCollectionItemView.xaml.cs">
       <DependentUpon>AddCollectionItemView.xaml</DependentUpon>
     </Compile>
@@ -358,6 +361,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Ndfbin\ValueEditing\TransTableReferenceEditingTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\ValueEditing\VectorEditingTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
