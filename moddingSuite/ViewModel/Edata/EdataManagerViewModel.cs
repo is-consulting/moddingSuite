@@ -21,6 +21,7 @@ using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Media;
 using moddingSuite.ViewModel.Mesh;
 using moddingSuite.ViewModel.Ndf;
+using moddingSuite.ViewModel.Scenario;
 using moddingSuite.ViewModel.Trad;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using System.Threading.Tasks;
@@ -177,10 +178,9 @@ namespace moddingSuite.ViewModel.Edata
                     dispatcher.Invoke(() => IsUIBusy = true);
                     dispatcher.Invoke(report, "Reading scenario...");
 
-                    var reader = new ScenarioReader();
-                    var scenarioFile = reader.Read(vm.EdataManager.GetRawData(scenario));
+                 
 
-                    var detailsVm = new NdfEditorMainViewModel(scenarioFile.NdfBinary);
+                    var detailsVm = new ScenarioEditorViewModel(scenario, vm);
 
                     dispatcher.Invoke(open, detailsVm, this);
                 }

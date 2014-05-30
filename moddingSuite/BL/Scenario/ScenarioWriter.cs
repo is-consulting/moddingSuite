@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Scenario;
 
 namespace moddingSuite.BL.Scenario
@@ -11,13 +12,16 @@ namespace moddingSuite.BL.Scenario
     {
         public const int Version = 4;
 
-        public byte[] CreateScenarioFile(ScenarioFile file)
+        public byte[] Write(ScenarioFile file)
         {
             var scenarioData = new List<byte>();
 
             scenarioData.AddRange(Encoding.ASCII.GetBytes("SCENARIO\r\n"));
             scenarioData.AddRange(BitConverter.GetBytes(Version));
             scenarioData.AddRange(BitConverter.GetBytes(file.ContentFiles.Count));
+
+            var ndfBinWriter = new NdfbinWriter();
+            file.ContentFiles[1] =  ndfBinWriter.Write(file.NdfBinary, false);
 
             foreach (var contentFile in file.ContentFiles)
             {

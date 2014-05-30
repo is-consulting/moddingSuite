@@ -187,6 +187,7 @@
     <Compile Include="ViewModel\About\AboutViewModel.cs" />
     <Compile Include="ViewModel\Base\ObjectWrapperViewModel.cs" />
     <Compile Include="ViewModel\Ndf\ObjectCopyResultViewModel.cs" />
+    <Compile Include="ViewModel\Scenario\ScenarioEditorViewModel.cs" />
     <Compile Include="ViewModel\UnhandledException\UnhandledExceptionViewModel.cs" />
     <Compile Include="ViewModel\Filter\FilterDiscriminator.cs" />
     <Compile Include="ViewModel\Filter\PropertyFilterExpression.cs" />
@@ -298,6 +299,9 @@
     </Compile>
     <Compile Include="View\Ndfbin\Viewer\ReferenceSearchResultView.xaml.cs">
       <DependentUpon>ReferenceSearchResultView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Scenario\ScenarioView.xaml.cs">
+      <DependentUpon>ScenarioView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SpinningWheel\Enums\RotateDirection.cs" />
     <Compile Include="View\SpinningWheel\SpinningWheel.cs" />
@@ -426,6 +430,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Ndfbin\Viewer\ReferenceSearchResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Scenario\ScenarioView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

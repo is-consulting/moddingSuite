@@ -49,6 +49,16 @@ namespace moddingSuite.BL.Ndf
                 outStream.Write(data, 0, data.Length);
         }
 
+        public byte[] Write(NdfBinary ndf, bool compressed)
+        {
+            using (var ms = new MemoryStream())
+            {
+                Write(ms, ndf, compressed);
+
+                return ms.ToArray();
+            }
+        }
+
         protected byte[] GetCompiledContent(NdfBinary ndf)
         {
             var footer = new NdfFooter();

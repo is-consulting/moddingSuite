@@ -499,19 +499,11 @@ namespace moddingSuite.ViewModel.Ndf
                         dispatcher.Invoke(() => IsUIBusy = true);
                         dispatcher.Invoke(report, string.Format("Saving back changes..."));
 
-                        byte[] newFile;
-
                         var writer = new NdfbinWriter();
-                        using (var ms = new MemoryStream())
-                        {
-                            writer.Write(ms, NdfBinary, NdfBinary.Header.IsCompressedBody);
-                            newFile = ms.ToArray();
-                        }
-
+                        byte[] newFile = writer.Write(NdfBinary, NdfBinary.Header.IsCompressedBody);
                         dispatcher.Invoke(report, string.Format("Recompiling of {0} finished! ", EdataFileViewModel.EdataManager.FilePath));
 
                         EdataFileViewModel.EdataManager.ReplaceFile(OwnerFile, newFile);
-
                         dispatcher.Invoke(report, "Replacing new File in edata finished!");
 
                         EdataFileViewModel.LoadFile(EdataFileViewModel.LoadedFile);
