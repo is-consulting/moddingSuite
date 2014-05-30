@@ -43,7 +43,8 @@ namespace moddingSuite.View.Extension
                     return element.FindResource("ColorPickerEditingTemplate") as DataTemplate;
 
                 case NdfType.Vector:
-                    return null;
+                    return element.FindResource("VectorEditingTemplate") as DataTemplate;
+                    
 
                 case NdfType.Map:
                     return element.FindResource("MapEditingTemplate") as DataTemplate;
