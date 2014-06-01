@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using moddingSuite.BL;
 using moddingSuite.BL.Compressing;
@@ -116,6 +118,81 @@ namespace moddingSuite.Test
             var hash = Utils.CreateLocalisationHash(toHash, toHash.Length);
 
             Console.WriteLine("{0}", Utils.ByteArrayToBigEndianHexByteString(hash));
+        }
+
+        [TestMethod]
+        public void ExportAreaVerteces()
+        {
+            string input = Path.Combine(@"C:\Users\enohka\Desktop\teststuff\scen", "zone_test");
+            string output = Path.Combine(@"C:\Users\enohka\Desktop\teststuff\scen", "zone_test.csv");
+
+            var enc = Encoding.Unicode;
+            var sep = enc.GetBytes(";");
+            var nl = enc.GetBytes("\r\n");
+
+            const int areaMagic = 1095062081;
+
+            using (var i = File.OpenRead(input))
+            {
+                var buffer = new byte[4];
+                i.Read(buffer, 0, buffer.Length);
+
+                if (BitConverter.ToInt32(buffer, 0) != areaMagic)
+                    throw new InvalidDataException();
+
+                i.Read(buffer, 0, buffer.Length);
+                int vertexCount = BitConverter.ToInt32(buffer, 0);
+
+                i.Read(buffer, 0, buffer.Length);
+                int facesCount = BitConverter.ToInt32(buffer, 0);
+
+                using (var o = File.OpenWrite(output))
+                {
+                    for (int v = 0; v < vertexCount; v++)
+                    {
+                        i.Read(buffer, 0, buffer.Length);
+                        var x = enc.GetBytes(BitConverter.ToSingle(buffer, 0).ToString());
+
+                        i.Read(buffer, 0, buffer.Length);
+                        var y = enc.GetBytes(BitConverter.ToSingle(buffer, 0).ToString());
+
+                        i.Seek(8, SeekOrigin.Current);
+
+                        i.Read(buffer, 0, buffer.Length);
+                        var z = enc.GetBytes(BitConverter.ToSingle(buffer, 0).ToString());
+
+                        o.Write(y, 0, y.Length);
+                        o.Write(sep, 0, sep.Length);
+                        o.Write(x, 0, x.Length);
+                        o.Write(sep, 0, sep.Length);
+                        o.Write(z,0,z.Length);
+                        o.Write(nl, 0, nl.Length);
+                    }
+
+                    i.Read(buffer, 0, buffer.Length);
+                    if (BitConverter.ToInt32(buffer, 0) != areaMagic)
+                        throw new InvalidDataException();
+
+                    for (int f = 0; f < facesCount; f++)
+                    {
+                        i.Read(buffer, 0, buffer.Length);
+                        var f1 = enc.GetBytes(BitConverter.ToInt32(buffer, 0).ToString());
+
+                        i.Read(buffer, 0, buffer.Length);
+                        var f2 = enc.GetBytes(BitConverter.ToInt32(buffer, 0).ToString());
+
+                        i.Read(buffer, 0, buffer.Length);
+                        var f3 = enc.GetBytes(BitConverter.ToInt32(buffer, 0).ToString());
+
+                        o.Write(f1, 0, f1.Length);
+                        o.Write(sep, 0, sep.Length);
+                        o.Write(f2, 0, f2.Length);
+                        o.Write(sep, 0, sep.Length);
+                        o.Write(f3, 0, f3.Length);
+                        o.Write(nl, 0, nl.Length);
+                    }
+                }
+            }
         }
     }
 }

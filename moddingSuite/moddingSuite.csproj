@@ -98,6 +98,7 @@
     <Compile Include="BL\Ndf\NdfbinReader.cs" />
     <Compile Include="BL\Ndf\NdfbinWriter.cs" />
     <Compile Include="BL\Ndf\NdfTextWriter.cs" />
+    <Compile Include="BL\Scenario\ScenarioExtensions.cs" />
     <Compile Include="BL\Scenario\ScenarioReader.cs" />
     <Compile Include="BL\Scenario\ScenarioWriter.cs" />
     <Compile Include="BL\TGV\TgvBitmapReader.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="BL\TGV\TgvReader.cs" />
     <Compile Include="BL\TGV\TgvWriter.cs" />
     <Compile Include="Model\Common\Md5Hash.cs" />
+    <Compile Include="Model\Common\MeshTriangularFace.cs" />
     <Compile Include="Model\Edata\EdataDir.cs" />
     <Compile Include="Model\Edata\EdataEntity.cs" />
     <Compile Include="Model\Edata\EdataContentFile.cs" />
@@ -176,6 +178,7 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFlatValueWrapper.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfValueWrapper.cs" />
     <Compile Include="Model\Sav\SavFile.cs" />
+    <Compile Include="Model\Scenario\AreaData.cs" />
     <Compile Include="Model\Scenario\ScenarioFile.cs" />
     <Compile Include="Model\Textures\TgvFile.cs" />
     <Compile Include="Model\Textures\TgvMipMap.cs" />
