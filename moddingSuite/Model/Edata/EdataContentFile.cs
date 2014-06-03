@@ -78,7 +78,7 @@ namespace moddingSuite.Model.Edata
             set
             {
                 _id = value;
-                OnPropertyChanged("Id");
+                OnPropertyChanged("Name");
             }
         }
 

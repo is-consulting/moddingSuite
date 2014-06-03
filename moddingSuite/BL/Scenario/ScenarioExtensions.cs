@@ -11,11 +11,11 @@ namespace moddingSuite.BL.Scenario
     {
         public const int AreaMagic = 1095062081;
 
-        public static void AssertAreaMagic(this MemoryStream ms)
+        public static void AssertAreaMagic(this Stream s)
         {
             var buffer = new byte[4];
 
-            ms.Read(buffer, 0, buffer.Length);
+            s.Read(buffer, 0, buffer.Length);
 
             if (BitConverter.ToInt32(buffer, 0) != AreaMagic)
                 throw new InvalidDataException("AREA expected");

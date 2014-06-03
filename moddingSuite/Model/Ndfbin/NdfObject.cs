@@ -50,7 +50,7 @@ namespace moddingSuite.Model.Ndfbin
             set
             {
                 _id = value;
-                OnPropertyChanged("Id");
+                OnPropertyChanged("Name");
             }
         }
 

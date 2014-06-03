@@ -120,7 +120,7 @@
                       SelectionMode="Extended"
                       SelectionUnit="FullRow">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" IsReadOnly="True" Width="40" />
+                                    <DataGridTextColumn Binding="{Binding Path=Id}" Header="Name" IsReadOnly="True" Width="40" />
                                     <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" IsReadOnly="True" Width="*" />
                                     <DataGridTextColumn Binding="{Binding Path=Instances.Count}" Header="Instances" IsReadOnly="True" Width="60" />
                                 </DataGrid.Columns>
@@ -262,7 +262,7 @@
                       SelectionMode="Single"
                       SelectionUnit="FullRow">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" IsReadOnly="True" Width="50" />
+                                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Name" IsReadOnly="True" Width="50" />
                                 <DataGridTextColumn Binding="{Binding Path=Value}" Header="Name" Width="*" />
                             </DataGrid.Columns>
                         </DataGrid>
@@ -288,7 +288,7 @@
                       SelectionMode="Single"
                       SelectionUnit="FullRow">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" IsReadOnly="True" Width="50" />
+                                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Name" IsReadOnly="True" Width="50" />
                                 <DataGridTextColumn Binding="{Binding Path=Value}" Header="Name" IsReadOnly="True" Width="*" />
                             </DataGrid.Columns>
                         </DataGrid>
@@ -355,7 +355,7 @@
                       SelectionMode="Single"
                       SelectionUnit="FullRow">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Instance Id" Binding="{Binding Id}" IsReadOnly="True" Width="*" />
+                                <DataGridTextColumn Header="Instance Name" Binding="{Binding Id}" IsReadOnly="True" Width="*" />
                                 <DataGridTextColumn Header="Name" Binding="{Binding Class.Name}" IsReadOnly="True" Width="*" />
                                 <DataGridTextColumn Header="Top Object" Binding="{Binding IsTopObject}" IsReadOnly="True" Width="*" />
                             </DataGrid.Columns>

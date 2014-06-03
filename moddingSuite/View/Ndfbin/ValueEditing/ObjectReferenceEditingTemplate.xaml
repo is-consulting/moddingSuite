@@ -18,7 +18,7 @@
                 </ItemsPanelTemplate>
             </ComboBox.ItemsPanel>
         </ComboBox>
-        <ComboBox Grid.Column="1" ItemsSource="{Binding Class.Instances}" DisplayMemberPath="Id" SelectedItem="{Binding Path=Instance}">
+        <ComboBox Grid.Column="1" ItemsSource="{Binding Class.Instances}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Instance}">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />

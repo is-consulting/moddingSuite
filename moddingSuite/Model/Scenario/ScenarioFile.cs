@@ -14,7 +14,7 @@ namespace moddingSuite.Model.Scenario
         private byte[] _checksum;
         private NdfBinary _ndfBinary;
         private List<byte[]> _contentFiles = new List<byte[]>();
-        private List<AreaData> _zoneData; 
+        private AreaFile _zoneData; 
 
         public byte[] Checksum
         {
@@ -40,10 +40,10 @@ namespace moddingSuite.Model.Scenario
             set { _contentFiles = value; }
         }
 
-        public List<AreaData> ZoneData
+        public AreaFile ZoneData
         {
             get { return _zoneData; }
-            set { _zoneData = value; OnPropertyChanged("Version"); }
+            set { _zoneData = value; OnPropertyChanged("ZoneData"); }
         }
     }
 }

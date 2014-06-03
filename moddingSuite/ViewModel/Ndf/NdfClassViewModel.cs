@@ -47,7 +47,7 @@ namespace moddingSuite.ViewModel.Ndf
             set
             {
                 Object.Id = value;
-                OnPropertyChanged("Id");
+                OnPropertyChanged("Name");
             }
         }
 

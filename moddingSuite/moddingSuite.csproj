@@ -178,7 +178,12 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfFlatValueWrapper.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfValueWrapper.cs" />
     <Compile Include="Model\Sav\SavFile.cs" />
-    <Compile Include="Model\Scenario\AreaData.cs" />
+    <Compile Include="Model\Scenario\Area.cs" />
+    <Compile Include="Model\Scenario\AreaClipped.cs" />
+    <Compile Include="Model\Scenario\AreaColletion.cs" />
+    <Compile Include="Model\Scenario\AreaContent.cs" />
+    <Compile Include="Model\Scenario\AreaFile.cs" />
+    <Compile Include="Model\Scenario\AreaVertex.cs" />
     <Compile Include="Model\Scenario\ScenarioFile.cs" />
     <Compile Include="Model\Textures\TgvFile.cs" />
     <Compile Include="Model\Textures\TgvMipMap.cs" />
