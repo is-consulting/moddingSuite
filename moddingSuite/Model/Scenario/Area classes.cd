@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="moddingSuite.Model.Scenario.Area">
+    <Position X="2" Y="4.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAgAAAABBAABAAAQAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Scenario\Area.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Content" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="moddingSuite.Model.Scenario.AreaClipped">
+    <Position X="9" Y="1.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAABAQAAEAAAAQAIIAACAAAAAAAAA=</HashCode>
+      <FileName>Model\Scenario\AreaClipped.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Scenario.AreaColletion" Collapsed="true">
+    <Position X="2" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Scenario\AreaColletion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="moddingSuite.Model.Scenario.AreaContent">
+    <Position X="3.75" Y="1.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="Triangles" Type="moddingSuite.Model.Common.MeshTriangularFace" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.938" Y="2.411" />
+        <Point X="4.938" Y="2.786" />
+        <Point X="5.042" Y="2.786" Type="JumpStart" />
+        <Point X="5.208" Y="2.786" Type="JumpEnd" />
+        <Point X="8.285" Y="2.786" />
+        <Point X="8.285" Y="4.5" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAEAABADAAAAAAAAAAACAAEAgAAAAAQAE=</HashCode>
+      <FileName>Model\Scenario\AreaContent.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="BorderTriangle" />
+      <Property Name="BorderVertex" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ClippedAreas" />
+      <Property Name="Vertices" />
+      <Property Name="Triangles" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="moddingSuite.Model.Scenario.AreaFile">
+    <Position X="1.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Scenario\AreaFile.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="AreaManagers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Struct Name="moddingSuite.Model.Scenario.AreaVertex">
+    <Position X="4.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIYAE=</HashCode>
+      <FileName>Model\Scenario\AreaVertex.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="moddingSuite.Model.Common.MeshTriangularFace">
+    <Position X="6.75" Y="4.5" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Common\MeshTriangularFace.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
