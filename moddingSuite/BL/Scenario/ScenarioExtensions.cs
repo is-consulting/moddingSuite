@@ -20,5 +20,11 @@ namespace moddingSuite.BL.Scenario
             if (BitConverter.ToInt32(buffer, 0) != AreaMagic)
                 throw new InvalidDataException("AREA expected");
         }
+
+        public static void WriteAreaMagic(this Stream s)
+        {
+            var buffer = BitConverter.GetBytes(AreaMagic);
+            s.Write(buffer, 0, buffer.Length);
+        }
     }
 }

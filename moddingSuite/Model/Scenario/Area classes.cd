@@ -39,8 +39,8 @@
       <Path>
         <Point X="4.938" Y="2.411" />
         <Point X="4.938" Y="2.786" />
-        <Point X="5.042" Y="2.786" Type="JumpStart" />
-        <Point X="5.208" Y="2.786" Type="JumpEnd" />
+        <Point X="5.073" Y="2.786" Type="JumpStart" />
+        <Point X="5.24" Y="2.786" Type="JumpEnd" />
         <Point X="8.285" Y="2.786" />
         <Point X="8.285" Y="4.5" />
       </Path>
@@ -61,6 +61,9 @@
   </Class>
   <Class Name="moddingSuite.Model.Scenario.AreaFile">
     <Position X="1.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\Scenario\AreaFile.cs</FileName>

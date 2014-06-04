@@ -54,7 +54,7 @@ namespace moddingSuite.Test
         [TestMethod]
         public void ExportTmsTest()
         {
-            var inpath = @"C:\Users\enohka\Desktop\teststuff\leopard2\";
+            var inpath = @"C:\Users\enohka\Desktop\teststuff\scen\";
             var inFile = Path.Combine(inpath, "lowdef.tmst_chunk_pc");
 
             var tgvReader = new TgvReader();
@@ -69,14 +69,30 @@ namespace moddingSuite.Test
 
                 int index = 1;
 
+                const uint fatMagic = 810828102;
+                
                 while (fs.Position < fs.Length)
                 {
-                    var sepBuffer = new byte[4];
-                    fs.Read(sepBuffer, 0, sepBuffer.Length);
+                    fs.Seek(4, SeekOrigin.Current);
+
+                    var buffer = new byte[4];
+                    fs.Read(buffer, 0, buffer.Length);
+
+                    if (BitConverter.ToUInt32(buffer, 0) != fatMagic)
+                        throw new InvalidDataException();
+
+                    fs.Seek(8, SeekOrigin.Current);
+
+                    fs.Read(buffer, 0, buffer.Length);
+                    var blockSize = BitConverter.ToUInt32(buffer, 0);
 
                     if (fs.Position >= fs.Length) continue;
 
-                    tgv = tgvReader.Read(fs);
+                    var tileBuffer = new byte[blockSize];
+
+                    fs.Read(tileBuffer, 0, tileBuffer.Length);
+
+                    tgv = tgvReader.Read(tileBuffer);
 
                     byte[] content = writer.CreateDDSFile(tgv);
 

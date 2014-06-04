@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace moddingSuite.Model.Scenario
 {
-    public struct AreaVertex
+    public class AreaVertex
     {
         public float X;
         public float Y;
