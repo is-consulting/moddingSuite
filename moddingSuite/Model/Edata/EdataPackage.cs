@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using moddingSuite.BL;
@@ -33,12 +34,23 @@ namespace moddingSuite.Model.Edata
             get { return _loadedFiles; }
         }
 
-        public override byte[] GetRawData(EdataContentFile ofFile)
+        public byte[] GetRawData(EdataContentFile ofFile, bool cacheResult = true)
         {
+            byte[] rawData;
+
             if (LoadedFiles.ContainsKey(ofFile))
-                return LoadedFiles[ofFile];
+            {
+                rawData = LoadedFiles[ofFile];
+                ofFile.Checksum = MD5.Create().ComputeHash(rawData);
+            }
             else
-                return base.GetRawData(ofFile);
+            {
+                rawData = base.GetRawData(ofFile);
+                if (cacheResult)
+                    LoadedFiles.Add(ofFile, rawData);
+            }
+
+            return rawData;
         }
 
         public override void ReplaceFile(EdataContentFile oldFile, byte[] newContent)

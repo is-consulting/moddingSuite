@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using moddingSuite.Model.Edata;
@@ -43,9 +44,14 @@ namespace moddingSuite.BL.Edata
 
             toStream.Seek(16, SeekOrigin.Current);
 
-            toStream.Seek(initStreamPos + DictionaryOffset, SeekOrigin.Begin);
+            NormalizeDirs(package.Root);
+            package.Root = NormalizeFiles(package.Root);
 
+            toStream.Seek(initStreamPos + DictionaryOffset, SeekOrigin.Begin);
             WriteFilesToStream(package, toStream);
+
+            toStream.Seek(initStreamPos + DictionaryOffset, SeekOrigin.Begin);
+            WriteDirToStream(package.Root, toStream);
         }
 
         public void WriteFilesToStream(EdataPackage pack, Stream s, int version = Version2)
@@ -61,7 +67,7 @@ namespace moddingSuite.BL.Edata
         {
             foreach (var file in node.Files)
             {
-                var data = pack.GetRawData(file);
+                var data = pack.GetRawData(file, false);
                 file.Offset = s.Position - fileOffset;
                 file.Size = data.Length;
                 s.Write(data, 0, data.Length);
@@ -86,7 +92,19 @@ namespace moddingSuite.BL.Edata
 
             foreach (var file in dir.Files)
             {
+                s.Write(BitConverter.GetBytes(0), 0, 4);
+                s.Write(BitConverter.GetBytes(GetFileSize(file)), 0, 4);
+                s.Write(BitConverter.GetBytes(file.Offset), 0, 8);
+                s.Write(BitConverter.GetBytes(file.Size), 0, 8);
 
+                s.Write(file.Checksum, 0, 16);
+
+                var nameData = Encoding.Unicode.GetBytes(file.Name);
+
+                s.Write(nameData, 0, nameData.Length);
+
+                if (nameData.Length % 2 == 1)
+                    s.Seek(1, SeekOrigin.Current);
             }
         }
 
