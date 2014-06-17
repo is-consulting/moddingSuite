@@ -21,15 +21,25 @@ namespace moddingSuite.Model.Edata
     public class EdataContentFile : EdataEntity
     {
         private byte[] _checkSum = new byte[16];
-
-        private EdataFileType _fileType = EdataFileType.Unknown;
         private uint _id;
         private long _offset;
         private string _path;
         private long _size;
+        private EdataDir _directory;
+        private EdataFileType _fileType = EdataFileType.Unknown;
 
-        public EdataContentFile(EdataManager mgr) : base(mgr)
+        public EdataContentFile(string name, EdataDir dir = null)
+            : base(name)
         {
+            Directory = dir;
+            if (dir != null)
+                dir.Files.Add(this);
+        }
+
+        public EdataContentFile()
+            : base(string.Empty)
+        {
+
         }
 
         public string Path
@@ -89,6 +99,16 @@ namespace moddingSuite.Model.Edata
             {
                 _fileType = value;
                 OnPropertyChanged("FileType");
+            }
+        }
+
+        public EdataDir Directory
+        {
+            get { return _directory; }
+            set
+            {
+                _directory = value;
+                OnPropertyChanged("Directory");
             }
         }
 

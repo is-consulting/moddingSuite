@@ -8,6 +8,7 @@ using System.Text;
 using moddingSuite.Model.Edata;
 using moddingSuite.Util;
 using System.Runtime.InteropServices;
+using moddingSuite.ViewModel.Base;
 
 namespace moddingSuite.BL
 {
@@ -15,7 +16,7 @@ namespace moddingSuite.BL
     /// Thanks to Giovanni Condello. He created the "WargameEE DAT unpacker" which is the base for my EdataManager.
     /// TODO: implement virtual packages.
     /// </summary>
-    public class EdataManager
+    public class EdataManager : ViewModelBase
     {
         public static readonly byte[] EdataMagic = { 0x65, 0x64, 0x61, 0x74 };
 
@@ -70,10 +71,10 @@ namespace moddingSuite.BL
         /// </summary>
         /// <param name="ofFile">A EdataFile of the current manager</param>
         /// <returns>The data of the desired EdataFile.</returns>
-        public byte[] GetRawData(EdataContentFile ofFile)
+        public virtual byte[] GetRawData(EdataContentFile ofFile)
         {
-            if (ofFile.Manager != this)
-                throw new ArgumentException("oFile must be created by this instance of EdataManager");
+            //if (ofFile.Manager != this)
+            //    throw new ArgumentException("ofFile must be created by this instance of EdataManager");
 
             byte[] buffer;
 
@@ -155,7 +156,7 @@ namespace moddingSuite.BL
 
                     if (fileGroupId == 0)
                     {
-                        var file = new EdataContentFile(this);
+                        var file = new EdataContentFile();
                         fileStream.Read(buffer, 0, 4);
                         file.FileEntrySize = BitConverter.ToInt32(buffer, 0);
 
@@ -191,7 +192,7 @@ namespace moddingSuite.BL
                     }
                     else if (fileGroupId > 0)
                     {
-                        var dir = new EdataDir(this);
+                        var dir = new EdataDir();
 
                         fileStream.Read(buffer, 0, 4);
                         dir.FileEntrySize = BitConverter.ToInt32(buffer, 0);
@@ -234,7 +235,7 @@ namespace moddingSuite.BL
 
                     if (fileGroupId == 0)
                     {
-                        var file = new EdataContentFile(this);
+                        var file = new EdataContentFile();
                         fileStream.Read(buffer, 0, 4);
                         file.FileEntrySize = BitConverter.ToInt32(buffer, 0);
 
@@ -271,7 +272,7 @@ namespace moddingSuite.BL
                     }
                     else if (fileGroupId > 0)
                     {
-                        var dir = new EdataDir(this);
+                        var dir = new EdataDir();
 
                         fileStream.Read(buffer, 0, 4);
                         dir.FileEntrySize = BitConverter.ToInt32(buffer, 0);
@@ -317,7 +318,7 @@ namespace moddingSuite.BL
         /// <param name="oldFile">The EdataFile object which is to be replaced.</param>
         /// <param name="newContent">The data of the new File including Header and content.</param>
         /// <returns>The data of the completly rebuilt EdataFile. This has to be saved back to the file.</returns>
-        public string ReplaceRebuildV2(EdataContentFile oldFile, byte[] newContent)
+        protected string ReplaceRebuildV2(EdataContentFile oldFile, byte[] newContent)
         {
             var reserveBuffer = new byte[200];
 
@@ -428,7 +429,7 @@ namespace moddingSuite.BL
             return tmpPath;
         }
 
-        public string ReplaceRebuildV1(EdataContentFile oldFile, byte[] newContent)
+        protected string ReplaceRebuildV1(EdataContentFile oldFile, byte[] newContent)
         {
             //var reserveBuffer = new byte[200]; // RUSE doesn't like the reserve buffer between files.
 
@@ -538,7 +539,7 @@ namespace moddingSuite.BL
         /// </summary>
         /// <param name="oldFile">The EdataFile object which is to be replaced.</param>
         /// <param name="newContent">The data of the new File including Header and content.</param>
-        public void ReplaceFile(EdataContentFile oldFile, byte[] newContent)
+        public virtual void ReplaceFile(EdataContentFile oldFile, byte[] newContent)
         {
             if (!File.Exists(FilePath))
                 throw new InvalidOperationException("The Edata file does not exist anymore.");

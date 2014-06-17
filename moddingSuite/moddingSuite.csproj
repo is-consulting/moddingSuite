@@ -87,6 +87,7 @@
     </ApplicationDefinition>
     <Compile Include="BL\DDS\DDS.cs" />
     <Compile Include="BL\DDS\DDSHelper.cs" />
+    <Compile Include="BL\Edata\EdataWriter.cs" />
     <Compile Include="BL\ImageService\BlockDXT\AlphaBlockDXT5.cs" />
     <Compile Include="BL\ImageService\BlockDXT\BlockDXT1.cs" />
     <Compile Include="BL\ImageService\BlockDXT\BlockDXT5.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Model\Edata\EdataEntity.cs" />
     <Compile Include="Model\Edata\EdataContentFile.cs" />
     <Compile Include="Model\Edata\EdataFileType.cs" />
+    <Compile Include="Model\Edata\EdataPackage.cs" />
     <Compile Include="Model\Mesh\MeshContentFile.cs" />
     <Compile Include="Model\Mesh\MeshFile.cs" />
     <Compile Include="Model\Mesh\MeshHeader.cs" />
@@ -604,6 +606,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\puzzle-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\geometry-26.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
