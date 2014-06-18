@@ -76,9 +76,11 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -191,6 +193,7 @@
     <Compile Include="BL\TradManager.cs" />
     <Compile Include="BL\SettingsManager.cs" />
     <Compile Include="Model\Settings\Settings.cs" />
+    <Compile Include="Util\Geometry.cs" />
     <Compile Include="Util\Utils.cs" />
     <Compile Include="ViewModel\About\AboutViewModel.cs" />
     <Compile Include="ViewModel\Base\ObjectWrapperViewModel.cs" />
@@ -319,6 +322,50 @@
     <Compile Include="View\VersionManager\VersionManagerView.xaml.cs">
       <DependentUpon>VersionManagerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ZoneEditor\Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZoneEditor\Editor.Designer.cs">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ZoneEditor\Markers\CreaterMarker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ZoneEditor\Markers\Marker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ZoneEditor\Markers\VertexMarker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ZoneEditor\ScenarioItems\Icon.cs" />
+    <Compile Include="ZoneEditor\ScenarioItems\IconType.cs" />
+    <Compile Include="ZoneEditor\ScenarioItems\Possession.cs" />
+    <Compile Include="ZoneEditor\ScenarioItems\Property.cs" />
+    <Compile Include="ZoneEditor\ScenarioItems\PropertyPanels\IconProperty.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ZoneEditor\ScenarioItems\PropertyPanels\IconProperty.Designer.cs">
+      <DependentUpon>IconProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ZoneEditor\ScenarioItems\PropertyPanels\SpawnProperty.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ZoneEditor\ScenarioItems\PropertyPanels\SpawnProperty.Designer.cs">
+      <DependentUpon>SpawnProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ZoneEditor\ScenarioItems\PropertyPanels\ZoneProperty.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ZoneEditor\ScenarioItems\PropertyPanels\ZoneProperty.Designer.cs">
+      <DependentUpon>ZoneProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ZoneEditor\ScenarioItems\ScenarioItem.cs" />
+    <Compile Include="ZoneEditor\ScenarioItems\Spawn.cs" />
+    <Compile Include="ZoneEditor\ScenarioItems\SpawnType.cs" />
+    <Compile Include="ZoneEditor\ScenarioItems\Zone.cs" />
+    <Compile Include="ZoneEditor\Outline.cs" />
+    <Compile Include="ZoneEditor\PanAndZoom.cs" />
+    <Compile Include="ZoneEditor\ZoneEditorData.cs" />
     <Page Include="View\Common\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -477,6 +524,19 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="ZoneEditor\Editor.resx">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZoneEditor\Form1.resx" />
+    <EmbeddedResource Include="ZoneEditor\ScenarioItems\PropertyPanels\IconProperty.resx">
+      <DependentUpon>IconProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZoneEditor\ScenarioItems\PropertyPanels\SpawnProperty.resx">
+      <DependentUpon>SpawnProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZoneEditor\ScenarioItems\PropertyPanels\ZoneProperty.resx">
+      <DependentUpon>ZoneProperty.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Model\Scenario\Area classes.cd" />
     <None Include="Model\Ndfbin\ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
@@ -604,6 +664,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\puzzle-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ZoneEditor\Images\portWonsan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ZoneEditor\Images\CV.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\FOB.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

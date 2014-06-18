@@ -25,21 +25,25 @@ namespace moddingSuite.Model.Scenario
         public AreaClipped BorderTriangle
         {
             get { return _borderTriangle; }
+            set { _borderTriangle = value; }
         }
 
         public AreaClipped BorderVertex
         {
             get { return _borderVertex; }
+            set { _borderVertex = value; }
         }
 
         public List<AreaVertex> Vertices
         {
             get { return _vertices; }
+            set { _vertices = value; }
         }
 
         public List<MeshTriangularFace> Triangles
         {
             get { return _triangles; }
+            set { _triangles = value; }
         }
     }
 }

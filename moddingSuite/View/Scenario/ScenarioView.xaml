@@ -2,23 +2,27 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Scenario editor" Height="145" Width="425">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <ToolBar Grid.Row="0" Style="{StaticResource Vs2010StyleToolBar}">
-                <Button ToolTip="Save changes" Command="{Binding Path=SaveCommand}"  Style="{DynamicResource ButtonStyle1}">
-                    <Image Source="{StaticResource SaveIcon}"  />
-                </Button>
-                <Separator/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0" Style="{StaticResource Vs2010StyleToolBar}">
+            <Button ToolTip="Save changes" Command="{Binding Path=SaveCommand}"  Style="{DynamicResource ButtonStyle1}">
+                <Image Source="{StaticResource SaveIcon}"  />
+            </Button>
+            <Separator/>
             <Button ToolTip="Edit scenario logic" Command="{Binding Path=EditGameModeLogicCommand}"  Style="{DynamicResource ButtonStyle1}">
-                    <Image Source="{StaticResource ScenarioIcon}"  />
-                </Button>
-            </ToolBar>
-            <StatusBar Grid.Row="2">
-                <TextBlock Text="{Binding Path=StatusText}" />
-            </StatusBar>
-        </Grid>
+            <Image Source="{StaticResource ScenarioIcon}" RenderTransformOrigin="2.325,0.339"  Margin="0,0,0,8"  />
+            </Button>
+            <Button ToolTip="Zone Editor" Command="{Binding Path=ZoneEditorCommand}"  Style="{DynamicResource ButtonStyle1}">
+                <Image Source="{StaticResource ScenarioIcon}" RenderTransformOrigin="2.325,0.339"  Margin="0,0,0,8"  />
+            </Button>
+
+        </ToolBar>
+        <StatusBar Grid.Row="2">
+            <TextBlock Text="{Binding Path=StatusText}" />
+        </StatusBar>
+    </Grid>
 </Window>

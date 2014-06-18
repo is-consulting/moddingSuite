@@ -54,7 +54,7 @@ namespace moddingSuite.Test
         [TestMethod]
         public void ExportTmsTest()
         {
-            var inpath = @"C:\Users\enohka\Desktop\teststuff\scen\";
+            var inpath = @"C:\Users\Anders\wargameexport\r2";
             var inFile = Path.Combine(inpath, "lowdef.tmst_chunk_pc");
 
             var tgvReader = new TgvReader();
@@ -70,7 +70,7 @@ namespace moddingSuite.Test
                 int index = 1;
 
                 const uint fatMagic = 810828102;
-                
+                Console.WriteLine("start");
                 while (fs.Position < fs.Length)
                 {
                     fs.Seek(4, SeekOrigin.Current);
@@ -80,7 +80,7 @@ namespace moddingSuite.Test
 
                     if (BitConverter.ToUInt32(buffer, 0) != fatMagic)
                         throw new InvalidDataException();
-
+                    Console.WriteLine("passe");
                     fs.Seek(8, SeekOrigin.Current);
 
                     fs.Read(buffer, 0, buffer.Length);

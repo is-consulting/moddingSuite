@@ -16,6 +16,8 @@ using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
 using moddingSuite.ViewModel.Ndf;
+using ZoneEditor;
+using moddingSuite.ZoneEditor;
 
 namespace moddingSuite.ViewModel.Scenario
 {
@@ -25,11 +27,12 @@ namespace moddingSuite.ViewModel.Scenario
         private string _statusText;
 
         public ICommand EditGameModeLogicCommand { get; protected  set; }
+        public ICommand ZoneEditorCommand { get; protected set; }
         public ICommand SaveCommand { get; protected set; }
 
         protected EdataFileViewModel EdataFileViewModel { get; set; }
         protected EdataContentFile OwnerFile { get; set; }
-
+        private ZoneEditorData zoneEditor;
         public string StatusText
         {
             get { return _statusText; }
@@ -56,9 +59,15 @@ namespace moddingSuite.ViewModel.Scenario
             ScenarioFile = reader.Read(ownerVm.EdataManager.GetRawData(file));
 
             EditGameModeLogicCommand = new ActionCommand(EditGameModeLogicExecute);
+            ZoneEditorCommand = new ActionCommand(ZoneEditorExecute);
             SaveCommand = new ActionCommand(SaveExecute);
         }
-
+        private void ZoneEditorExecute(object obj)
+        {
+            var ndfEditor = new NdfEditorMainViewModel(ScenarioFile.NdfBinary);
+            zoneEditor=new ZoneEditorData(ScenarioFile, ndfEditor);
+            Console.WriteLine("Launch Editor");
+        }
         private void EditGameModeLogicExecute(object obj)
         {
             var ndfEditor = new NdfEditorMainViewModel(ScenarioFile.NdfBinary);
@@ -68,6 +77,10 @@ namespace moddingSuite.ViewModel.Scenario
 
         private void SaveExecute(object obj)
         {
+            if (zoneEditor != null)
+            {
+                zoneEditor.Save();
+            }
             Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
             Action<string> report = msg => StatusText = msg;
 
