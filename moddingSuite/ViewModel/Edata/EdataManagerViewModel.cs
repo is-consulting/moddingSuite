@@ -313,7 +313,7 @@ namespace moddingSuite.ViewModel.Edata
                 return;
 
             var tgvReader = new TgvReader();
-            var data = destTgvFile.Manager.GetRawData(destTgvFile);
+            var data = vm.EdataManager.GetRawData(destTgvFile);
             var tgv = tgvReader.Read(data);
 
             Settings settings = SettingsManager.Load();
@@ -408,7 +408,7 @@ namespace moddingSuite.ViewModel.Edata
                     dispatcher.Invoke(report, string.Format("Exporting to {0}...", exportPath));
 
                     var tgvReader = new TgvReader();
-                    var tgv = tgvReader.Read(sourceTgvFile.Manager.GetRawData(sourceTgvFile));
+                    var tgv = tgvReader.Read(vm.EdataManager.GetRawData(sourceTgvFile));
 
                     var writer = new TgvDDSWriter();
 
@@ -522,7 +522,7 @@ namespace moddingSuite.ViewModel.Edata
 
             Settings settings = SettingsManager.Load();
 
-            byte[] content = new NdfbinReader().GetUncompressedNdfbinary(ndf.Manager.GetRawData(ndf));
+            byte[] content = new NdfbinReader().GetUncompressedNdfbinary(vm.EdataManager.GetRawData(ndf));
 
             var f = new FileInfo(ndf.Path);
 

@@ -214,7 +214,7 @@ namespace moddingSuite.BL.Mesh
                 }
                 else if (fileGroupId > 0)
                 {
-                    var dir = new EdataDir(new EdataManager(string.Empty));
+                    var dir = new EdataDir();
 
                     s.Read(buffer, 0, 4);
                     dir.FileEntrySize = BitConverter.ToInt32(buffer, 0);
