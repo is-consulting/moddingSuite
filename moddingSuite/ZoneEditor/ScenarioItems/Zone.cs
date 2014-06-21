@@ -21,7 +21,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
         Outline outline;
         
         Area area;
-        private string name;
+        //private string name;
         private Possession _possession;
         private int _value;
         public int value{
@@ -47,9 +47,22 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
                 }
         }
         Editor editor;
+        public Zone(Editor e, Point p, int index)
+        {
+            editor = e;
+            attachPoint = new VertexMarker();
+            attachPoint.setPosition(PanAndZoom.fromLocalToGlobal(p));
+            attachPoint.Colour = System.Drawing.Brushes.Green;
+            outline = new Outline(p);
+            propertypanel = new ZoneProperty(this);
+
+            possession = Possession.Neutral;
+            Name = string.Format("Zone {0}", index);
+            setSelected(false);
+        }
         public Zone(Editor e,Area a)
         {
-            name = a.Name;
+            //name = a.Name;
             editor = e;
             area = a;
             attachPoint = new VertexMarker();
@@ -59,25 +72,32 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
             propertypanel = new ZoneProperty(this);
             
             possession = Possession.Neutral;
-            Name = string.Format("Zone {0}: ", a.Id,a.Name);
+            Name = string.Format("Zone {0}", a.Id);
             setSelected(false);
             
             
 
+        }
+        public override void detachFrom(Control c)
+        {
+            c.Paint -= paintEvent;
+            c.Controls.Remove(attachPoint);
+            outline.detachFrom(c);
+            
         }
         public override void attachTo(Control c)
         {
             c.Paint += new PaintEventHandler(paint);
             c.Controls.Add(attachPoint);
             outline.attachTo(c);
-            
+
         }
         public override void setSelected(bool selected)
         {
             attachPoint.Visible = selected;
             outline.setSelected(selected);
         }
-        private void paint(object sen, PaintEventArgs e)
+        protected override void paint(object sen, PaintEventArgs e)
         {
             PanAndZoom.Transform(e);
             Font font = new Font(System.Drawing.FontFamily.GenericSansSerif, 16);
@@ -91,7 +111,9 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
         }
         public List<AreaVertex> getRawOutline()
         {
-            return area.Content.Vertices.GetRange(area.Content.BorderVertex.StartVertex, area.Content.BorderVertex.VertexCount);
+            if (area != null)
+                return area.Content.Vertices.GetRange(area.Content.BorderVertex.StartVertex, area.Content.BorderVertex.VertexCount);
+            else return new List<AreaVertex>();
         }
         public Area getArea()
         {

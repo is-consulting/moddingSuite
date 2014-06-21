@@ -18,6 +18,19 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
         VertexMarker position;
         Image image;
         private IconType _type;
+        private int _priority;
+        public int priority
+        {
+            get { return _priority; }
+            set
+            {
+                _priority = value;
+                ((IconProperty)propertypanel).update();
+                updateImage();
+                if (position.Parent != null)
+                    position.Parent.Refresh();
+            }
+        }
         public IconType type
         {
             get { return _type; }
@@ -29,8 +42,9 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
                 position.Parent.Refresh();
             }
         }
-        public Icon(Point p,int i,IconType t)
+        public Icon(Point p,int i,IconType t,int prio=1)
         {
+            
             position = new VertexMarker();
             position.Colour = Brushes.Green;
             position.setPosition(p);
@@ -38,11 +52,17 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
             type = t;
             Name = string.Format("Start Position {0}", i);
             setSelected(false);
+            priority = prio;
         }
         public override void attachTo(System.Windows.Forms.Control c)
         {
             c.Controls.Add(position);
-            c.Paint += new PaintEventHandler(paint);
+            c.Paint += paintEvent;
+        }
+        public override void detachFrom(System.Windows.Forms.Control c)
+        {
+            c.Controls.Remove(position);
+            c.Paint -= paintEvent;
         }
         private void updateImage()
         {
@@ -60,12 +80,17 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
             var imgStream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".ZoneEditor.Images." + typeString);
             image = new Bitmap(imgStream);
         }
-        public void paint(object o,PaintEventArgs e)
+        protected override void paint(object o,PaintEventArgs e)
         {
-            PanAndZoom.Transform(e);
-            var p=position.getPosition();
-            p.Offset(-15,-30);
-            e.Graphics.DrawImage(image, p);
+            //PanAndZoom.Transform(e);
+            //var p=position.getPosition();
+            e.Graphics.ResetTransform();
+            var p = PanAndZoom.fromGlobalToLocal(position.getPosition());
+            var size=20;
+            
+            e.Graphics.TranslateTransform(p.X,p.Y) ;
+            
+            e.Graphics.DrawImage(image, new Rectangle(-size/2,-size/2,size,size));
         }
         public override void setSelected(bool selected)
         {
@@ -98,7 +123,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
             rankingProperty.Value = new NdfGuid(Guid.NewGuid());*/
             var allocationProperty = getProperty(spawnPoint, "AllocationPriority");
             //NOT RIGHT
-            allocationProperty.Value = new NdfInt32(1);
+            allocationProperty.Value = new NdfInt32(priority);
 
             var designItem = createNdfObject(data, "TGameDesignItem");
             var list = data.Classes.First().Instances.First().PropertyValues.First().Value as NdfCollection;

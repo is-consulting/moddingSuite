@@ -18,6 +18,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
         VertexMarker head;
         VertexMarker source;
         int arrowLength = 250000;
+        int arrowHeadLength = 1500;
         private SpawnType _type;
         public SpawnType type{
             get{return _type;}
@@ -25,14 +26,23 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
                 _type=value;
                 try { head.Parent.Refresh(); }
                 catch (NullReferenceException e) { }
-
+                if (_type == SpawnType.Sea)
+                {
+                    arrowLength = 350000;
+                }
+                else
+                {
+                    arrowLength = 250000;
+                }
                 ((SpawnProperty) propertypanel).update();
             }
         }
-            
+        public Spawn(Point p,int i, SpawnType t):this(p,0,1f,i,t)
+        {
+        }   
         public Spawn(Point p,float rot,float scale,int i,SpawnType t)
         {
-            if (scale == null) scale = 1;
+            //if (scale == null) scale = 1;
             propertypanel = new SpawnProperty(this);
             type = t;
             head = new VertexMarker();
@@ -52,25 +62,49 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
         {
             c.Controls.Add(head);
             c.Controls.Add(source);
-            c.Paint += new PaintEventHandler(paint);
+            c.Paint += paintEvent;
         }
-        public void paint(object sen, PaintEventArgs e)
+        public override void detachFrom(System.Windows.Forms.Control c)
+        {
+            c.Controls.Remove(head);
+            c.Controls.Remove(source);
+            c.Paint -= paintEvent;
+        }
+        protected override void paint(object sen, PaintEventArgs e)
         {
             PanAndZoom.Transform(e);
             Pen p = new Pen(Brushes.White, 10);
+            var width = 5;
+            Brush b=Brushes.White;
             switch (type){
                 case SpawnType.Land:
-                    p=new Pen(Brushes.White,10);
+                    width = 10;
+                    
                     break;
                 case SpawnType.Air:
-                    p = new Pen(Brushes.Blue, 5);
+                    b=Brushes.Blue;
+                    
                     break;
                 case SpawnType.Sea:
-                    p = new Pen(Brushes.White, 5);
+                    
                     break;
-            }    
-                
-            e.Graphics.DrawLine(p, source.getPosition(), head.getPosition());
+            }
+            p = new Pen(b, width);
+            var ah = head.getPosition();
+            var ahBase = ah;
+            ahBase = ah;
+            var rot = getRotation();
+            ahBase.Offset(-(int)(width * arrowHeadLength * Math.Cos(rot) / Geometry.Geometry.scaleFactor), -(int)(width * arrowHeadLength * Math.Sin(rot) / Geometry.Geometry.scaleFactor));
+            var ahLeft = ahBase;
+            rot += (float)Math.PI / 2;
+            ahLeft.Offset(-(int)(width * arrowHeadLength * Math.Cos(rot) / Geometry.Geometry.scaleFactor), -(int)(width * arrowHeadLength * Math.Sin(rot) / Geometry.Geometry.scaleFactor));
+            var ahRight = ahBase;
+            rot -= (float)Math.PI;
+            ahRight.Offset(-(int)(width * arrowHeadLength * Math.Cos(rot) / Geometry.Geometry.scaleFactor), -(int)(width * arrowHeadLength * Math.Sin(rot) / Geometry.Geometry.scaleFactor));
+            rot += (float)Math.PI / 2;
+            ahBase.Offset((int)(500 * width * Math.Cos(rot) / Geometry.Geometry.scaleFactor), (int)(500 * width * Math.Sin(rot) / Geometry.Geometry.scaleFactor));
+            e.Graphics.DrawLine(p, source.getPosition(), ahBase);
+            e.Graphics.FillPolygon(b, new Point[] { ah, ahLeft, ahRight });
         }
         public override void setSelected(bool selected)
         {
@@ -130,6 +164,12 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
 
             var addOnProperty = getProperty(designItem, "AddOn");
             addOnProperty.Value = new NdfObjectReference(spawnPoint.Class, spawnPoint.Id);
+        }
+        public float getRotation()
+        {
+            var hp = head.getPosition();
+            var sp = source.getPosition();
+            return (float)Math.Atan2(hp.Y - sp.Y, hp.X - sp.X);
         }
     }
 }

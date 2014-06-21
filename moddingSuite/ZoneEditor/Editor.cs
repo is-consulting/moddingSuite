@@ -17,7 +17,6 @@ namespace moddingSuite.ZoneEditor
     public partial class Editor : Form
     {
         public Point LeftClickPoint;
-        Outline outline;
         System.Drawing.Image image;
         Redraw redraw
         {
@@ -43,11 +42,11 @@ namespace moddingSuite.ZoneEditor
         ZoneEditorData zoneData;
         
 
-        public Editor(ZoneEditorData ze)
+        public Editor(ZoneEditorData ze,string path)
         {
             InitializeComponent();
             zoneData = ze;
-            buildImage("portWonsan.png");
+            buildImage(path);
             this.Name = "ZoneDrawer";
             this.Text = "ZoneDrawer";
             
@@ -79,6 +78,8 @@ namespace moddingSuite.ZoneEditor
             positions.DropDown.Items[0].Click += ze.AddCV;
             positions.DropDown.Items[1].Click += ze.AddFOB;
 
+            this.button1.Click += new System.EventHandler(ze.deleteItem);
+
 
             
             
@@ -89,11 +90,15 @@ namespace moddingSuite.ZoneEditor
 
 
         }
-        public void addScenarioItem(ScenarioItem item)
+        public void addScenarioItem(ScenarioItem item,bool select=false)
         {
             item.attachTo(pictureBox1);
             listBox1.Items.Add(item.ToString());
-            
+            if (select)
+            {
+                zoneData.setSelectedItem(item.ToString());
+                listBox1.SelectedItem = item.ToString();
+            }
             redraw();
         }
         private void stripClicked(object obj, EventArgs e)
@@ -122,15 +127,37 @@ namespace moddingSuite.ZoneEditor
         {
 
         }
-        private void buildImage(string imageString)
+        private void buildImage(string path)
         {
+            var mapName = getMapName(path);
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var imgStream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".ZoneEditor.Images.portWonsan.png");
-            Console.WriteLine(assembly.GetName().Name);
+            var imgStream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".ZoneEditor.Images."+mapName+".png");
+            //Console.WriteLine(assembly.GetName().Name);
             image = new Bitmap(imgStream);
 
+        }
+        private string getMapName(string path)
+        {
+            	//map\scenario\_2x2_port_wonsan_terrestre_destruction\zonebluff\leveldesign.kdt	0 B
+            
+            var maps = new List<string>(){
+                "_2x2_port_wonsan",
+                "_2x3_anbyon",
+                "_2x3_esashi",
+                "_2x3_hwaseong",
+                "_2x3_montagne_2",
+                "_2x3_tohoku",
+                "_3x2_sangju",
+                "_3x3_chongju",
+                "_3x3_gangjin",
+                "_3x3_pyeongtaek"
+            };
+            foreach(var m in maps){
+                var p=path.Substring(13,m.Length);
+                if (p.Equals(m))  return m;
             }
-
+            return null;
+        }
         
         private void OnPaint(object sender, PaintEventArgs e)
         {
@@ -173,6 +200,14 @@ namespace moddingSuite.ZoneEditor
         private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        public void deleteItem(ScenarioItem item)
+        {
+            item.detachFrom(pictureBox1);
+            listBox1.Items.Remove(item.ToString());
+
+            redraw();
         }
     }
 }

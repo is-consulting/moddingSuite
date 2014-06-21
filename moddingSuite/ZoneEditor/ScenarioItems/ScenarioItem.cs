@@ -17,13 +17,19 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
         protected string Name="default";
         public Control propertypanel;
         bool selected;
+        protected PaintEventHandler paintEvent;
+        public ScenarioItem(){
+            paintEvent=new PaintEventHandler(paint);
+        }
         public override string ToString()
         {
             return Name; 
         }
         public abstract void attachTo(Control c);
+        public abstract void detachFrom(Control c);
         public abstract void setSelected(bool selected);
         public abstract void buildNdf(NdfEditorMainViewModel data,ref int i);
+        protected abstract void paint(object sen, PaintEventArgs e);
         protected static NdfObject createNdfObject(NdfEditorMainViewModel data,string str){
             var classView= data.Classes.Single(x => x.Object.Name.Equals(str));
             var inst=classView.Object.Manager.CreateInstanceOf(classView.Object, false);

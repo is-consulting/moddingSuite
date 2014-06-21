@@ -20,6 +20,7 @@ namespace ZoneEditor
         List<CreaterMarker> creaters = new List<CreaterMarker>();
         Control parent;
         public Possession possession;
+        private PaintEventHandler paintEvent;
         public Outline(List<Point> nodes)
         {
             
@@ -38,10 +39,11 @@ namespace ZoneEditor
                 //parent.Controls.Add(c);
                 creaters.Add(c);
             }
+            paintEvent = new PaintEventHandler(paint);
         }
         public Outline(Point center){
             
-            var sideLength = 100;
+            var sideLength = 50;
             center.Offset(-sideLength / 2, -sideLength/2);
             nodes.Add(PanAndZoom.fromLocalToGlobal(center));
 
@@ -54,8 +56,7 @@ namespace ZoneEditor
 
             center.Offset(0, -sideLength);
             nodes.Add(PanAndZoom.fromLocalToGlobal(center));
-            center.Offset(-sideLength, 0);
-            nodes.Add(PanAndZoom.fromLocalToGlobal(center));
+            
             //parent.Controls.Add(this);
             //BringToFront();
 
@@ -66,23 +67,37 @@ namespace ZoneEditor
                 marker.setPosition(n);
                 marker.MouseClick += new MouseEventHandler(deleteMarker);
                 markers.Add(marker);
-                
+
                 marker.BringToFront();
 
-                var c=new CreaterMarker();
+                var c = new CreaterMarker();
                 c.MouseClick += new MouseEventHandler(createMarker);
                 //parent.Controls.Add(c);
                 creaters.Add(c);
             }
-            
+            paintEvent = new PaintEventHandler(paint);
             
         }
         public void attachTo(Control c)
         {
             this.parent = c;
-            parent.Paint += new PaintEventHandler(this.paint);
+            parent.Paint += paintEvent;
             c.Controls.AddRange(markers.ToArray());
             c.Controls.AddRange(creaters.ToArray());
+        }
+        public void detachFrom(Control c)
+        {
+            
+            parent.Paint -= paintEvent;
+            foreach (var m in markers)
+            {
+                c.Controls.Remove(m);
+            }
+            foreach (var cr in creaters)
+            {
+                c.Controls.Remove(cr);
+            }
+            this.parent = null;
         }
         public void paint(object sen, PaintEventArgs e)
         {

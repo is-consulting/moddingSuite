@@ -23,11 +23,21 @@ namespace moddingSuite.ZoneEditor.ScenarioItems.PropertyPanels
         public void update()
         {
             comboBox1.SelectedIndex = (int)icon.type;
-            //textBox1.Text = string.Format("{0}", zone.value);
+            textBox1.Text = string.Format("{0}", icon.priority);
         }
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             icon.type = (IconType)comboBox1.SelectedIndex;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            int temp;
+            if (int.TryParse(textBox1.Text, out temp))
+            {
+                icon.priority = temp;
+            }
+            textBox1.Text = string.Format("{0}", icon.priority);
         }
     }
 }

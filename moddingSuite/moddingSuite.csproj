@@ -666,11 +666,24 @@
     <Resource Include="View\Images\puzzle-26.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ZoneEditor\Images\portWonsan.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_2x2_port_wonsan.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ZoneEditor\Images\CV.png" />
     <EmbeddedResource Include="ZoneEditor\Images\FOB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ZoneEditor\Images\hopAndGlory.png" />
+    <Resource Include="ZoneEditor\Images\N_Hamhung_Gamescon_v11.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_2x3_anbyon.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_2x3_esashi.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_2x3_hwaseong.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_2x3_montagne_2.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_2x3_tohoku.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x2_sangju.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x3_chongju.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x3_gangjin.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x3_pyeongtaek.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -33,7 +33,9 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.button1 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Label = new System.Windows.Forms.ToolStripTextBox();
             this.Zone = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,7 +46,6 @@
             this.StartPosition = new System.Windows.Forms.ToolStripMenuItem();
             this.CV = new System.Windows.Forms.ToolStripMenuItem();
             this.FOB = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -63,7 +64,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(470, 460);
+            this.pictureBox1.Size = new System.Drawing.Size(500, 486);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -82,8 +83,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(784, 462);
-            this.splitContainer1.SplitterDistance = 472;
+            this.splitContainer1.Size = new System.Drawing.Size(835, 488);
+            this.splitContainer1.SplitterDistance = 502;
             this.splitContainer1.TabIndex = 7;
             // 
             // splitContainer2
@@ -96,25 +97,46 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.button1);
             this.splitContainer2.Panel1.Controls.Add(this.listBox1);
             // 
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
             this.splitContainer2.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint_1);
-            this.splitContainer2.Size = new System.Drawing.Size(308, 462);
-            this.splitContainer2.SplitterDistance = 194;
+            this.splitContainer2.Size = new System.Drawing.Size(329, 488);
+            this.splitContainer2.SplitterDistance = 204;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button1.Location = new System.Drawing.Point(0, 179);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(327, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Delete Selected Object";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // listBox1
             // 
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(0, 0);
+            this.listBox1.Location = new System.Drawing.Point(3, 0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(306, 192);
+            this.listBox1.Size = new System.Drawing.Size(325, 160);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(327, 278);
+            this.panel1.TabIndex = 0;
             // 
             // contextMenuStrip1
             // 
@@ -193,19 +215,11 @@
             this.FOB.Size = new System.Drawing.Size(96, 22);
             this.FOB.Text = "FOB";
             // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(306, 262);
-            this.panel1.TabIndex = 0;
-            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 462);
+            this.ClientSize = new System.Drawing.Size(835, 488);
             this.Controls.Add(this.splitContainer1);
             this.Name = "Editor";
             this.Text = "Form1";
@@ -242,6 +256,7 @@
         private System.Windows.Forms.ToolStripMenuItem CV;
         private System.Windows.Forms.ToolStripMenuItem FOB;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button button1;
 
     }
 }
