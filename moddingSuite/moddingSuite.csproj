@@ -685,6 +685,16 @@
     <EmbeddedResource Include="ZoneEditor\Images\_3x3_gangjin.png" />
     <EmbeddedResource Include="ZoneEditor\Images\_3x3_pyeongtaek.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ZoneEditor\Images\_2x3_boseong.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x2_boryeong.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x2_haenam.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x2_montagne_3.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x2_taean.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x2_taebuko.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x3_montagne_1.png" />
+    <EmbeddedResource Include="ZoneEditor\Images\_3x3_montagne_4.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

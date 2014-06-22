@@ -14,10 +14,10 @@
             </Button>
             <Separator/>
             <Button ToolTip="Edit scenario logic" Command="{Binding Path=EditGameModeLogicCommand}"  Style="{DynamicResource ButtonStyle1}">
-            <Image Source="{StaticResource ScenarioIcon}" RenderTransformOrigin="2.325,0.339"  Margin="0,0,0,8"  />
+                <Image Source="{StaticResource ScenarioIcon}" RenderTransformOrigin="2.325,0.339"  Margin="0,0,0,8"  />
             </Button>
             <Button ToolTip="Zone Editor" Command="{Binding Path=ZoneEditorCommand}"  Style="{DynamicResource ButtonStyle1}">
-                <Image Source="{StaticResource ZoneIcon}" RenderTransformOrigin="2.325,0.339"  Margin="0,0,0,8"  />
+                <Image Source="{StaticResource ScenarioIcon}" RenderTransformOrigin="0.321,0.423"  Margin="0,0,0,8"  />
             </Button>
 
         </ToolBar>
