@@ -13,6 +13,8 @@ namespace moddingSuite.Model.Common
             Point1 = p1;
             Point2 = p2;
             Point3 = p3;
+
+            
         }
     }
 }
