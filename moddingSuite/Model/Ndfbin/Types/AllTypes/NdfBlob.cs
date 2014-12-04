@@ -12,7 +12,6 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
     {
         public ICommand ExportRawCommand { get; set; }
         public ICommand ExportKdTreeCommand { get; set; }
-
         public NdfBlob(byte[] value)
             : base(NdfType.Blob, value)
         {
@@ -26,41 +25,45 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
             using (var ms = new MemoryStream(data))
             {
-                Settings.Settings settings = SettingsManager.Load();
-
                 var buffer = new byte[4];
 
-                //ms.Read(buffer, 0, buffer.Length);
-                //uint lenSum = BitConverter.ToUInt32(buffer, 0);
+                ms.Read(buffer, 0, buffer.Length);
+                uint fileLength = BitConverter.ToUInt32(buffer, 0);
 
-                int blockId = 1;
-                var creationDate = DateTime.Now;
-
-                while (ms.Position < ms.Length)
-                {
-                    ms.Read(buffer, 0, buffer.Length);
-                    uint blockLenComp = BitConverter.ToUInt32(buffer, 0);
-
-                    ms.Read(buffer, 0, buffer.Length);
-                    uint blockLenUnComp = BitConverter.ToUInt32(buffer, 0);
-
-                    var subBlockBuffer = new byte[blockLenComp - 4];
-
-                    ms.Read(subBlockBuffer, 0, subBlockBuffer.Length);
-
-                    var subBlockData = Compressor.Decomp(subBlockBuffer);
-
-                    using (var fs = new FileStream(Path.Combine(settings.SavePath, string.Format("Kd_tree_{0}_{1}", creationDate.ToString("dd_MM_yyyy_HH_mm_ff"), blockId)), FileMode.OpenOrCreate))
-                    {
-                        fs.Write(subBlockData, 0, subBlockData.Length);
-                        fs.Flush();
-                    }
-
-                    blockId++;
-                }
+                printToFile(ms, "firstPart");
+                printToFile(ms, "secondPart");
+                ms.Seek(8, SeekOrigin.Current);
+                printToFile(ms, "OffsetOfIndexBuffer");
+                ms.Seek(4, SeekOrigin.Current);
+                printToFile(ms, "OffsetOfTriangleIndexList");
+                ms.Seek(64, SeekOrigin.Current);
+                printToFile(ms, "OffsetOfCompressedSubtrees");
+                
             }
         }
+        private void printToFile(MemoryStream ms,  string name)
+        {
+            Settings.Settings settings = SettingsManager.Load();
+            var buffer = new byte[4];
+            ms.Read(buffer, 0, buffer.Length);
+            uint blockLenComp = BitConverter.ToUInt32(buffer, 0);
 
+            ms.Read(buffer, 0, buffer.Length);
+            uint blockLenUnComp = BitConverter.ToUInt32(buffer, 0);
+
+            var subBlockBuffer = new byte[blockLenComp - 4];
+
+            ms.Read(subBlockBuffer, 0, subBlockBuffer.Length);
+
+            var subBlockData = Compressor.Decomp(subBlockBuffer);
+
+            using (var fs = new FileStream(Path.Combine(settings.SavePath, name), FileMode.OpenOrCreate))
+            {
+                fs.Write(subBlockData, 0, subBlockData.Length);
+                fs.Flush();
+            }
+            //ms.Seek(2, SeekOrigin.Current);
+        }
         private void ExportRawExecute(object obj)
         {
             Settings.Settings settings = SettingsManager.Load();
