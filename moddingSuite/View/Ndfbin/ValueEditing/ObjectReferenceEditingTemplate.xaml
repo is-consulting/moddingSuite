@@ -5,20 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="22" d:DesignWidth="300">
+             
     <Grid DataContext="{Binding Path=Value}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <!--<Label Content="{Binding Path=Class.Name}" />-->
-        <ComboBox Grid.Column="0" ItemsSource="{Binding Class.Manager.Classes}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Class}">
+        <ComboBox Grid.Column="0" ItemsSource="{Binding Class.Manager.Classes}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Class}" IsEditable="True">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />
                 </ItemsPanelTemplate>
             </ComboBox.ItemsPanel>
         </ComboBox>
-        <ComboBox Grid.Column="1" ItemsSource="{Binding Class.Instances}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Instance}">
+        <ComboBox Grid.Column="1" ItemsSource="{Binding Class.Instances}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Instance}" IsEditable="True">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />

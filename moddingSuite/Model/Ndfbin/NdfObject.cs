@@ -18,7 +18,10 @@ namespace moddingSuite.Model.Ndfbin
         private byte[] _data;
         private uint _id;
         private bool _isTopObject;
-
+        public string Name
+        {
+            get { return string.Format("{0}",Id); }
+        }
         public NdfClass Class
         {
             get { return _class; }
