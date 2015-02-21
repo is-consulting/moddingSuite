@@ -105,7 +105,7 @@ namespace moddingSuite.ViewModel.Ndf
                                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
-                item.Value = NdfTypeManager.GetValue(new byte[0], NdfType.Unset, item.Manager);
+                item.Value = NdfTypeManager.GetValue(new byte[0], item.Type, item.Manager);
         }
 
         private bool RemovePropertyCanExecute()

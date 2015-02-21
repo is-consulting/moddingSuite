@@ -31,6 +31,7 @@
 
             <Menu Grid.Row="0" Grid.ColumnSpan="2" IsMainMenu="True">
                 <MenuItem Header="_File">
+                    <MenuItem Header="_New" Command="{Binding Path=NewFileCommand}" />
                     <MenuItem Header="_Open" Command="{Binding Path=OpenFileCommand}" />
                     <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
 

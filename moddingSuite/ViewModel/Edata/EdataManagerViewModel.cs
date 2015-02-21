@@ -88,6 +88,7 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand ReplaceRawCommand { get; set; }
         public ICommand ExportTextureCommand { get; set; }
         public ICommand ReplaceTextureCommand { get; set; }
+        public ICommand NewFileCommand { get; set; }
         public ICommand OpenFileCommand { get; set; }
         public ICommand CloseFileCommand { get; set; }
         public ICommand ChangeExportPathCommand { get; set; }
@@ -134,6 +135,7 @@ namespace moddingSuite.ViewModel.Edata
 
         protected void InitializeCommands()
         {
+            NewFileCommand = new ActionCommand(NewFileExecute);
             OpenFileCommand = new ActionCommand(OpenFileExecute);
             CloseFileCommand = new ActionCommand(CloseFileExecute);
 
@@ -655,6 +657,11 @@ namespace moddingSuite.ViewModel.Edata
                 settings.PythonPath = folderDlg.SelectedPath;
                 SettingsManager.Save(settings);
             }
+        }
+
+        protected void NewFileExecute(object obj)
+        {
+            AddFile("myfile.dat");
         }
 
         protected void OpenFileExecute(object obj)
