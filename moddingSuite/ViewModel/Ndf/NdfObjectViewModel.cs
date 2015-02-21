@@ -76,7 +76,7 @@ namespace moddingSuite.ViewModel.Ndf
 
             if (type == NdfType.Unset || type == NdfType.Unknown)
                 return;
-
+            
             item.Value = NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, item.Manager);
         }
 
@@ -105,7 +105,10 @@ namespace moddingSuite.ViewModel.Ndf
                                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
-                item.Value = NdfTypeManager.GetValue(new byte[0], item.Type, item.Manager);
+            {
+                var outType = item.Type == NdfType.List || item.Type == NdfType.MapList ? item.Type : NdfType.Unset;
+                item.Value = NdfTypeManager.GetValue(new byte[0], outType, item.Manager);
+            }
         }
 
         private bool RemovePropertyCanExecute()
