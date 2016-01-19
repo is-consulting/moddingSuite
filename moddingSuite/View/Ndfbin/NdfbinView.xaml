@@ -2,7 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:view="clr-namespace:moddingSuite.View"
-        xmlns:viewer="clr-namespace:moddingSuite.View.Ndfbin.Viewer" Title="{Binding Path=Title}" Height="500" Width="1000" Icon="{StaticResource ScriptIcon}">
+        xmlns:viewer="clr-namespace:moddingSuite.View.Ndfbin.Viewer"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:filter="clr-namespace:moddingSuite.ViewModel.Filter" Title="{Binding Path=Title}" Height="500" Width="1000" Icon="{StaticResource ScriptIcon}">
     <Grid>
         <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Panel.ZIndex="1000" Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Margin="0 0 0 20">
             <view:SpinningWheel IsSpinning="True" 
@@ -196,6 +198,14 @@
                                 SelectionMode="Single"
                                 SelectionUnit="FullRow"
                                 ItemsSource="{Binding SelectedValue.PropertyFilterExpressions,  ElementName=classGrid}">
+                                        <DataGrid.Resources>
+                                            <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                                                    ObjectType="{x:Type System:Enum}">
+                                                <ObjectDataProvider.MethodParameters>
+                                                    <x:Type TypeName="filter:FilterDiscriminator"/>
+                                                </ObjectDataProvider.MethodParameters>
+                                            </ObjectDataProvider>
+                                        </DataGrid.Resources>
                                         <DataGrid.Columns>
                                             <DataGridComboBoxColumn Header="Property" 
                                                     SelectedValuePath="Name" 
@@ -212,6 +222,11 @@
                                                     </Style>
                                                 </DataGridComboBoxColumn.EditingElementStyle>
                                             </DataGridComboBoxColumn>
+
+                                            <DataGridComboBoxColumn Header="Disc" SelectedValueBinding="{Binding Path=Discriminator}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}">
+
+                                            </DataGridComboBoxColumn>
+
                                             <DataGridTextColumn  Header="Value" Binding="{Binding Path=Value}" Width="60" />
                                         </DataGrid.Columns>
                                     </DataGrid>
