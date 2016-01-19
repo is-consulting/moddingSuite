@@ -1,5 +1,6 @@
 ﻿using moddingSuite.Util;
 using moddingSuite.ViewModel.Base;
+using moddingSuite.ViewModel.Trad;
 
 namespace moddingSuite.Model.Trad
 {
@@ -71,8 +72,8 @@ namespace moddingSuite.Model.Trad
             set
             {
                 _content = value;
-
                 OnPropertyChanged(() => Content);
+                TradFileViewModel.CalculateHash(this);
             }
         }
 

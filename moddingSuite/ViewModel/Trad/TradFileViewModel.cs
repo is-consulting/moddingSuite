@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Windows.Data;
 using System.Windows.Input;
 using moddingSuite.BL;
@@ -113,9 +114,20 @@ namespace moddingSuite.ViewModel.Trad
             CalculateHash(item);
         }
 
-        private static void CalculateHash(TradEntry item)
+        public static void CalculateHash(TradEntry item)
         {
-            item.Hash = Utils.CreateLocalisationHash(Utils.GenerateCoupon(8, new Random()));
+            const string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            var allowedChars = characters.ToCharArray().ToList();
+
+            var wordToHash = new StringBuilder();
+
+            foreach (char t in item.Content)
+                if (allowedChars.Contains(t))
+                    wordToHash.Append(t);
+
+            var word = wordToHash.ToString();
+
+            item.Hash = Utils.CreateLocalisationHash(word, word.Length);
         }
 
         private void SaveCommandExecute(object obj)
@@ -160,9 +172,9 @@ namespace moddingSuite.ViewModel.Trad
 
         private void AddEntryExecute(object obj)
         {
-            var newEntry = new TradEntry {Content = "<New entry>", UserCreated = true};
+            var newEntry = new TradEntry { Content = "New entry", UserCreated = true };
 
-            CalculateHash(newEntry);
+            //CalculateHash(newEntry);
 
             int newIndex;
 
