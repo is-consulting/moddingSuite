@@ -13,7 +13,7 @@ namespace moddingSuite.Model.Trad
         private uint _offsetCont;
         private uint _offsetDic;
 
-        private bool _userCreated;
+        private bool _userCreated = false;
 
         public string HashView
         {
@@ -31,7 +31,9 @@ namespace moddingSuite.Model.Trad
             set
             {
                 _hash = value;
+
                 HashView = Utils.ByteArrayToBigEndianHexByteString(_hash);
+
                 OnPropertyChanged(() => Hash);
             }
         }
@@ -72,8 +74,11 @@ namespace moddingSuite.Model.Trad
             set
             {
                 _content = value;
+
+                if (UserCreated)
+                    TradFileViewModel.CalculateHash(this);
+
                 OnPropertyChanged(() => Content);
-                TradFileViewModel.CalculateHash(this);
             }
         }
 
