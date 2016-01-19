@@ -6,7 +6,6 @@ using moddingSuite.BL;
 using moddingSuite.Model.Edata;
 using moddingSuite.ViewModel.Base;
 using System.Windows.Input;
-using System.Diagnostics;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -24,7 +23,6 @@ namespace moddingSuite.ViewModel.Edata
 
         public ICommand DetailsCommand { get; set; }
 
-        public ICommand AddRowCommand { get; set; }
         public EdataManagerViewModel ParentVm
         {
             get
@@ -39,13 +37,8 @@ namespace moddingSuite.ViewModel.Edata
 
             CloseCommand = new ActionCommand((x) => ParentVm.CloseFile(this));
             DetailsCommand = new ActionCommand(DetailsExecute);
-            AddRowCommand = new ActionCommand(AddRowExecute);
         }
 
-        private void AddRowExecute(object obj)
-        {
-            Debug.WriteLine("add row");
-        }
         private void DetailsExecute(object obj)
         {
             var file = obj as EdataContentFile;
