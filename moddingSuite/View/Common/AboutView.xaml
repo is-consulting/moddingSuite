@@ -30,7 +30,7 @@
             <Label Content="Wargame Modding suite" FontSize="18" />
 
  
-            <Label Content="v0.8.2" FontSize="16" Grid.Column="1" VerticalAlignment="Center" />
+            <Label Content="v0.8.3" FontSize="16" Grid.Column="1" VerticalAlignment="Center" />
 
             <Image Source="{StaticResource GplIcon}" Grid.Column="1" Grid.Row="1" Height="30" MouseUp="ImageMouseUp1" Cursor="Hand" />
 

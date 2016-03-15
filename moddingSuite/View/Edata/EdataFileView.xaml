@@ -18,7 +18,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-
+            <!--
             <ToolBar HorizontalAlignment="Left">
                 <Button ToolTip="Add new row" Command="{Binding Path=AddRowCommand}">
                     <Image Source="{StaticResource AddRowIcon}"  />
@@ -31,7 +31,7 @@
                 <ToggleButton ToolTip="Toggle: Add commands insert the new item after the currently selected one." IsChecked="{Binding IsInsertMode}">
                     <Image Source="{StaticResource InsertModeIcon}" />
                 </ToggleButton>
-            </ToolBar>
+            </ToolBar> -->
             <TextBox Text="{Binding Path=FilterExpression, UpdateSourceTrigger=PropertyChanged}" Margin="5" HorizontalAlignment="Right" Width="200" Grid.Column="1" />
         </Grid>
 
