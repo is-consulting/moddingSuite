@@ -24,7 +24,7 @@
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Property.BinId}" Header="BinName" IsReadOnly="True" Width="70" Visibility="Collapsed"/>
-                <DataGridTextColumn Binding="{Binding Path=Property.Id}" Header="Name" IsReadOnly="True" Width="50" />
+                <DataGridTextColumn Binding="{Binding Path=Property.Id}" Header="Id" IsReadOnly="True" Width="50" />
                 <DataGridTextColumn Binding="{Binding Path=Property.Name}" Header="Name" IsReadOnly="True" Width="4*" />
                 <DataGridTextColumn Binding="{Binding Path=Value.Type}" Header="Type" IsReadOnly="True" Width="150" />
                 <DataGridTextColumn Binding="{Binding Path=BinValue}" Header="Biniary Value" IsReadOnly="True" Width="150" Visibility="Collapsed" />

@@ -32,6 +32,7 @@ namespace moddingSuite.ViewModel.Ndf
             DetailsCommand = new ActionCommand(DetailsCommandExecute);
             AddPropertyCommand = new ActionCommand(AddPropertyExecute, AddPropertyCanExecute);
             RemovePropertyCommand = new ActionCommand(RemovePropertyExecute, RemovePropertyCanExecute);
+            CopyToInstancesCommand = new ActionCommand(CopyToInstancesExecute);
         }
 
         public uint Id
@@ -52,7 +53,7 @@ namespace moddingSuite.ViewModel.Ndf
         public ICommand DetailsCommand { get; protected set; }
         public ICommand AddPropertyCommand { get; protected set; }
         public ICommand RemovePropertyCommand { get; protected set; }
-
+        public ICommand CopyToInstancesCommand { get; protected set; }
         private void AddPropertyExecute(object obj)
         {
             ICollectionView cv = CollectionViewSource.GetDefaultView(PropertyValues);
@@ -119,7 +120,20 @@ namespace moddingSuite.ViewModel.Ndf
 
             return item.Type != NdfType.Unset;
         }
+        private void CopyToInstancesExecute(object obj)
+        {
+            ICollectionView cv = CollectionViewSource.GetDefaultView(PropertyValues);
 
+            var item = cv.CurrentItem as NdfPropertyValue;
+            foreach (var instance in item.Instance.Class.Instances)
+            {
+                var property=instance.PropertyValues.First(x => x.Property == item.Property);
+                property.BeginEdit();
+                property.Value = item.Value;
+                property.EndEdit();
+                
+            }
+        }
         public void DetailsCommandExecute(object obj)
         {
             var item = obj as IEnumerable<DataGridCellInfo>;
@@ -186,10 +200,26 @@ namespace moddingSuite.ViewModel.Ndf
 
             if (refe == null)
                 return;
+            
+            if (isTable(refe))
+            {
+                var editor = new ListEditorViewModel(refe, Object.Class.Manager);
+                DialogProvider.ProvideView(editor, ParentVm);
+            }
+            else
+            {
+                var editor = new ListEditorViewModel(refe, Object.Class.Manager);
+                DialogProvider.ProvideView(editor, ParentVm);
+            }
+        }
+        private bool isTable(NdfCollection collection)
+        {
+            var map = collection.First().Value as NdfMap;
+            if (collection == null)
+                return false;
+            var valHolder = map.Value as MapValueHolder;
+            return valHolder.Value is NdfCollection;
 
-            var editor = new ListEditorViewModel(refe, Object.Class.Manager);
-
-            DialogProvider.ProvideView(editor, ParentVm);
         }
     }
 }

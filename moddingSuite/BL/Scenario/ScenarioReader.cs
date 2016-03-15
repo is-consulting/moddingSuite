@@ -8,6 +8,9 @@ using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Common;
 using moddingSuite.Model.Scenario;
 using moddingSuite.Util;
+using moddingSuite.Model;
+using moddingSuite.Model.Settings;
+
 
 namespace moddingSuite.BL.Scenario
 {
@@ -41,9 +44,10 @@ namespace moddingSuite.BL.Scenario
 
             s.Read(buffer, 0, buffer.Length);
             int subFilesCount = BitConverter.ToInt32(buffer, 0);
-
+            
             for (int i = 0; i < subFilesCount; i++)
             {
+                f.lastPartStartByte=s.Position;
                 s.Read(buffer, 0, buffer.Length);
                 var contentFileBuffer = new byte[BitConverter.ToUInt32(buffer, 0)];
                 s.Read(contentFileBuffer, 0, contentFileBuffer.Length);
@@ -54,7 +58,7 @@ namespace moddingSuite.BL.Scenario
             f.NdfBinary = reader.Read(f.ContentFiles[1]);
 
             f.ZoneData = ReadZoneData(f.ContentFiles[0]);
-
+            uncompressedPrintToFile(f.ContentFiles[2], "thirdPart");
             return f;
         }
 
@@ -224,6 +228,20 @@ namespace moddingSuite.BL.Scenario
                 throw new InvalidDataException("END0 expected!");
 
             return currentZone;
+        }
+        private void uncompressedPrintToFile(byte[] buffer, string name, StreamWriter logFile = null)
+        {
+            Settings settings = SettingsManager.Load();
+            using (var fs = new FileStream(Path.Combine(settings.SavePath, name), FileMode.OpenOrCreate))
+            {
+                //var buffer = new byte[length];
+                //var start = ms.Position;
+                //ms.Read(buffer, 0, length);
+                //var end = ms.Position;
+                fs.Write(buffer, 0, buffer.Length);
+                fs.Flush();
+                //if (logFile != null) logFile.WriteLine("{0}: {1}/{2}/{3}", name, start, end, length);
+            }
         }
     }
 }
