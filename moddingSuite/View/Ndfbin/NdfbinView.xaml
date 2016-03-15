@@ -161,6 +161,9 @@
                                 <Button ToolTip="Set property to null" Command="{Binding SelectedValue.RemovePropertyCommand, ElementName=instanceGrid}">
                                     <Image Source="{StaticResource DeletePropIcon}"  />
                                 </Button>
+                                <Button ToolTip="Copy value to instances" Command="{Binding SelectedValue.CopyToInstancesCommand, ElementName=instanceGrid}">
+                                    <Image Source="{StaticResource AddPropIcon}"  />
+                                </Button>
                                 <ToggleButton x:Name="filterButton">
                                     <Image Source="{StaticResource EmptyFilter}" >
                                         <Image.Style>

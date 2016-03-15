@@ -37,7 +37,7 @@ namespace moddingSuite.View.DialogProvider
 
             Maps.Add(new ViewMap<InstanceWindowView, NdfClassViewModel>());
             Maps.Add(new ViewMap<ListEditorWindow, ListEditorViewModel>());
-
+            //Maps.Add(new ViewMap<DamageTableView,DamageTableViewModel>());
 
             Maps.Add(new ViewMap<TradFileView, TradFileViewModel>());
 

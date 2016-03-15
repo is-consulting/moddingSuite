@@ -133,6 +133,7 @@ namespace moddingSuite.ZoneEditor
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var imgStream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".ZoneEditor.Images."+mapName+".png");
             //Console.WriteLine(assembly.GetName().Name);
+            
             image = new Bitmap(imgStream);
 
         }

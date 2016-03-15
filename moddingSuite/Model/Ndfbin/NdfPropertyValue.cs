@@ -10,6 +10,7 @@ using moddingSuite.Util;
 using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Ndf;
+using System.Diagnostics;
 
 namespace moddingSuite.Model.Ndfbin
 {
@@ -65,6 +66,7 @@ namespace moddingSuite.Model.Ndfbin
             set
             {
                 _value = value;
+                _value.ParentProperty = this;
                 OnPropertyChanged("Value");
             }
         }
@@ -145,9 +147,11 @@ namespace moddingSuite.Model.Ndfbin
             if (refe == null)
                 return;
 
+            
             var editor = new ListEditorViewModel(refe, Manager);
-
             DialogProvider.ProvideView(editor);
+            
+            
         }
 
 

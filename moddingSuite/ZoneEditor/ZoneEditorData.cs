@@ -85,7 +85,7 @@ namespace ZoneEditor
         {
             Console.WriteLine("saving");
             //Zones
-            
+           
             scenarioFile.ZoneData.AreaManagers[1].Clear();
             var i = 0;
             foreach(var zone in zones){

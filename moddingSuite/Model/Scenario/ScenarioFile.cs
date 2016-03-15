@@ -14,8 +14,8 @@ namespace moddingSuite.Model.Scenario
         private byte[] _checksum;
         private NdfBinary _ndfBinary;
         private List<byte[]> _contentFiles = new List<byte[]>();
-        private AreaFile _zoneData; 
-
+        private AreaFile _zoneData;
+        public long lastPartStartByte;
         public byte[] Checksum
         {
             get { return _checksum; }
