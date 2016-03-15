@@ -50,6 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -113,6 +114,8 @@
     <Compile Include="BL\SavManager.cs" />
     <Compile Include="BL\TGV\TgvReader.cs" />
     <Compile Include="BL\TGV\TgvWriter.cs" />
+    <Compile Include="Half.cs" />
+    <Compile Include="HalfHelper.cs" />
     <Compile Include="Model\Common\Md5Hash.cs" />
     <Compile Include="Model\Common\MeshTriangularFace.cs" />
     <Compile Include="Model\Edata\EdataDir.cs" />
