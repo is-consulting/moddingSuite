@@ -24,7 +24,7 @@ namespace moddingSuite.ZoneEditor
             {
                 return new Redraw(delegate()
                 {
-                    
+
                     foreach (var c in pictureBox1.Controls)
                     {
                         if (c is Marker)
@@ -32,7 +32,7 @@ namespace moddingSuite.ZoneEditor
                             var a = c as Marker;
                             a.UpdateMarker();
                         }
-                        
+
                     }
                     pictureBox1.Select();
                     pictureBox1.Refresh();
@@ -40,37 +40,37 @@ namespace moddingSuite.ZoneEditor
             }
         }
         ZoneEditorData zoneData;
-        
 
-        public Editor(ZoneEditorData ze,string path)
+
+        public Editor(ZoneEditorData ze, string path)
         {
             InitializeComponent();
             zoneData = ze;
             buildImage(path);
             this.Name = "ZoneDrawer";
             this.Text = "ZoneDrawer";
-            
-            
+
+
 
 
             Graphics g = this.CreateGraphics();
             var zoom = ((float)pictureBox1.Width / (float)image.Width) *
                     (image.HorizontalResolution / g.DpiX);
             PanAndZoom.setZoom(zoom);
-            
+
             pictureBox1.Paint += new PaintEventHandler(OnPaint);
             pictureBox1.MouseDown += PanAndZoom.MouseDown;
             pictureBox1.MouseMove += PanAndZoom.MouseMove;
-            
+
             pictureBox1.MouseUp += PanAndZoom.MouseUp;
             pictureBox1.MouseClick += new MouseEventHandler(pictureBox1_Click);
             pictureBox1.MouseWheel += PanAndZoom.MouseWheel;
-            
+
             pictureBox1.Select();
             //contextMenuStrip1
             PanAndZoom.redraw = redraw;
             contextMenuStrip1.Items[1].Click += ze.AddZone;
-            var spawns=contextMenuStrip1.Items[2] as ToolStripMenuItem;
+            var spawns = contextMenuStrip1.Items[2] as ToolStripMenuItem;
             spawns.DropDown.Items[0].Click += ze.AddLandSpawn;
             spawns.DropDown.Items[1].Click += ze.AddAirSpawn;
             spawns.DropDown.Items[2].Click += ze.AddSeaSpawn;
@@ -81,16 +81,16 @@ namespace moddingSuite.ZoneEditor
             this.button1.Click += new System.EventHandler(ze.deleteItem);
 
 
-            
-            
-            
+
+
+
             //outline = new Outline(pictureBox1);
             //pictureBox1.Paint += new PaintEventHandler(outline.paint);
-            
+
 
 
         }
-        public void addScenarioItem(ScenarioItem item,bool select=false)
+        public void addScenarioItem(ScenarioItem item, bool select = false)
         {
             item.attachTo(pictureBox1);
             listBox1.Items.Add(item.ToString());
@@ -110,7 +110,7 @@ namespace moddingSuite.ZoneEditor
             if (e.Button == MouseButtons.Right)
             {
                 LeftClickPoint = e.Location;
-                contextMenuStrip1.Show(pictureBox1,e.Location);
+                contextMenuStrip1.Show(pictureBox1, e.Location);
             }
             //var scalingFactor = 5100;
             //textBox1.Text = String.Format("{0}", e.X * scalingFactor);
@@ -130,16 +130,25 @@ namespace moddingSuite.ZoneEditor
         private void buildImage(string path)
         {
             var mapName = getMapName(path);
+            
+            if (mapName == null)
+            {
+                image = new Bitmap(500,500);
+                return;
+            }
+                
+
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var imgStream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".ZoneEditor.Images."+mapName+".png");
+            var imgStream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".ZoneEditor.Images." + mapName + ".png");
             //Console.WriteLine(assembly.GetName().Name);
+            
             image = new Bitmap(imgStream);
 
         }
         private string getMapName(string path)
         {
-            	//map\scenario\_2x2_port_wonsan_terrestre_destruction\zonebluff\leveldesign.kdt	0 B
-            
+            //map\scenario\_2x2_port_wonsan_terrestre_destruction\zonebluff\leveldesign.kdt	0 B
+
             var maps = new List<string>(){
                 "_2x2_port_wonsan",
                 "_2x3_anbyon",
@@ -152,13 +161,15 @@ namespace moddingSuite.ZoneEditor
                 "_3x3_gangjin",
                 "_3x3_pyeongtaek"
             };
-            foreach(var m in maps){
-                var p=path.Substring(13,m.Length);
-                if (p.Equals(m))  return m;
+            foreach (var m in maps)
+            {
+                //var p=path.Substring(13,m.Length);
+                if (path.Contains(m))
+                    return m;
             }
             return null;
         }
-        
+
         private void OnPaint(object sender, PaintEventArgs e)
         {
             PanAndZoom.Transform(e);
@@ -174,13 +185,13 @@ namespace moddingSuite.ZoneEditor
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (zoneData.selectedItem!=null)
+            if (zoneData.selectedItem != null)
             {
                 panel1.Controls.Remove(zoneData.selectedItem.propertypanel);
             }
             zoneData.setSelectedItem((string)listBox1.SelectedItem);
             panel1.Controls.Add(zoneData.selectedItem.propertypanel);
-            
+
         }
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {

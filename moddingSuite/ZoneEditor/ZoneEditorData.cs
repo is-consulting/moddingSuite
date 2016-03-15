@@ -27,15 +27,16 @@ namespace ZoneEditor
         Editor editor;
         ScenarioFile scenarioFile;
         NdfEditorMainViewModel data;
-        
-        public ZoneEditorData(ScenarioFile sf, NdfEditorMainViewModel model,string path)
+
+        public ZoneEditorData(ScenarioFile sf, NdfEditorMainViewModel model, string path)
         {
 
             scenarioFile = sf;
             editor = new Editor(this, path);
-            
+
             data = new NdfEditorMainViewModel(sf.NdfBinary);
-            foreach(var area in sf.ZoneData.AreaManagers[1]){
+            foreach (var area in sf.ZoneData.AreaManagers[1])
+            {
                 //var nodes=Geometry.getOutline(area.Content);
                 //var zone = new Outline(nodes);
                 //zoneOutlines.Add(zone);
@@ -65,16 +66,17 @@ namespace ZoneEditor
             }
             Console.WriteLine("]");
                 }*/
-                
+
             }
-            
+
             doZoneProperties();
             Application.EnableVisualStyles();
             Application.Run(editor);
             //Application.SetCompatibleTextRenderingDefault(false);
-            
+
         }
-        public ScenarioItem setSelectedItem(string s){
+        public ScenarioItem setSelectedItem(string s)
+        {
             if (s == null) return null;
             if (selectedItem != null) selectedItem.setSelected(false);
             selectedItem = scenarioItems.Find(x => x.ToString().Equals(s));
@@ -85,25 +87,26 @@ namespace ZoneEditor
         {
             Console.WriteLine("saving");
             //Zones
-            
+
             scenarioFile.ZoneData.AreaManagers[1].Clear();
             var i = 0;
-            foreach(var zone in zones){
-                var area=zone.getArea();
+            foreach (var zone in zones)
+            {
+                var area = zone.getArea();
                 area.Id = i++;
                 scenarioFile.ZoneData.AreaManagers[1].Add(area);
             }
-            
+
             //delete old Markups
             purgeData();
             //Markups
             var j = 1;
-            scenarioItems.ForEach(x=>x.buildNdf(data,ref j));
+            scenarioItems.ForEach(x => x.buildNdf(data, ref j));
             //data.Classes.First().Object.Manager.CreateInstanceOf
         }
         private void purgeData()
         {
-            string[] toBePurged={"TGameDesignItem",
+            string[] toBePurged ={"TGameDesignItem",
                                     "TGameDesignAddOn_CommandPoints",
                                     "TGameDesignAddOn_StartingPoint",
                                     "TGameDesignAddOn_ReinforcementLocation",
@@ -112,11 +115,12 @@ namespace ZoneEditor
                                     "TGameDesignAddOn_StartingCommandUnit",
                                     "TGameDesignAddOn_StartingFOB"
                                  };
-            foreach(var str in toBePurged){
-                if(!data.Classes.Any(x => x.Object.Name.Equals(str)))continue;
-                var viewModel=data.Classes.Single(x => x.Object.Name.Equals(str));
+            foreach (var str in toBePurged)
+            {
+                if (!data.Classes.Any(x => x.Object.Name.Equals(str))) continue;
+                var viewModel = data.Classes.Single(x => x.Object.Name.Equals(str));
                 //foreach (var inst in viewModel.Instances)
-                while (viewModel.Instances.Count>0)
+                while (viewModel.Instances.Count > 0)
                 {
                     var inst = viewModel.Instances.Last();
                     if (inst == null)
@@ -129,21 +133,31 @@ namespace ZoneEditor
             }
             var list = data.Classes.First().Instances.First().PropertyValues.First().Value as NdfCollection;
             list.Clear();
-            
+
         }
         private void doZoneProperties()
         {
-            var list=data.Classes.First().Instances.First().PropertyValues.First().Value as NdfCollection;
+            var list = data.Classes.First().Instances.First().PropertyValues.First().Value as NdfCollection;
             foreach (var item in list)
             {
-                var reference=item.Value as NdfObjectReference;
+                var reference = item.Value as NdfObjectReference;
                 if (reference.Instance == null) continue;
                 var designItem = reference.Instance;
-                var position = designItem.PropertyValues.First(x=>x.Property.Name.Equals("Position")).Value as NdfVector;
+                var position = designItem.PropertyValues.First(x => x.Property.Name.Equals("Position")).Value as NdfVector;
                 var rotation = designItem.PropertyValues.First(x => x.Property.Name.Equals("Rotation")).Value as NdfSingle;
-                var scale = designItem.PropertyValues.First(x => x.Property.Name.Equals("Scale")).Value as NdfVector;
                 var addonReference = designItem.PropertyValues.First(x => x.Property.Name.Equals("AddOn")).Value as NdfObjectReference;
-                
+
+                var scale = designItem.PropertyValues.FirstOrDefault(x => x.Property.Name.Equals("Scale"));
+
+                float s = 1;
+
+                if (scale != null)
+                {
+                    var sc = scale.Value as NdfVector;
+                    if (sc != null)
+                        s = (float)((Point3D)sc.Value).X;
+                }
+
                 var addon = addonReference.Instance;
 
                 var q = (Point3D)position.Value;
@@ -151,12 +165,12 @@ namespace ZoneEditor
                 p.X = (float)q.X;
                 p.Y = (float)q.Y;
                 Zone zone;
-                
-                    zone = zones.FirstOrDefault(x =>
-                        Geometry.isInside(p, x.getRawOutline())
-                        );
-                
-                
+
+                zone = zones.FirstOrDefault(x =>
+                    Geometry.isInside(p, x.getRawOutline())
+                    );
+
+
                 if (addon.Class.Name.Equals("TGameDesignAddOn_CommandPoints") && zone != null)
                 {
                     var pos = addon.PropertyValues.First(x => x.Property.Name.Equals("Points")).Value as NdfInt32;
@@ -169,50 +183,51 @@ namespace ZoneEditor
                         zone.value = (int)pos.Value;
                     }
                 }
-                
 
-                if (addon.Class.Name.Equals("TGameDesignAddOn_StartingPoint")&&zone != null)
+
+                if (addon.Class.Name.Equals("TGameDesignAddOn_StartingPoint") && zone != null)
                 {
-                    
-                   
-                    
-                        var pos=addon.PropertyValues.First(x => x.Property.Name.Equals("AllianceNum")).Value as NdfInt32;
-                        if (pos == null)
-                        {
-                            zone.possession = (Possession)0;
-                        }
-                        else
-                        {
-                            zone.possession = (Possession)pos.Value;
-                        }
-                        
-                        
-                    
+
+
+
+                    var pos = addon.PropertyValues.First(x => x.Property.Name.Equals("AllianceNum")).Value as NdfInt32;
+                    if (pos == null)
+                    {
+                        zone.possession = (Possession)0;
+                    }
+                    else
+                    {
+                        zone.possession = (Possession)pos.Value;
+                    }
+
+
+
                 }
                 if (addon.Class.Name.Equals("TGameDesignAddOn_ReinforcementLocation") && zone != null)
                 {
-                    var spawn = new Spawn(Geometry.convertPoint(q), (float)rotation.Value, (float)((Point3D)scale.Value).X, spawnNumber++,SpawnType.Land);
+
+                    var spawn = new Spawn(Geometry.convertPoint(q), (float)rotation.Value, s, spawnNumber++, SpawnType.Land);
                     editor.addScenarioItem(spawn);
                     scenarioItems.Add(spawn);
                 }
                 if (addon.Class.Name.Equals("TGameDesignAddOn_MaritimeCorridor") && zone != null)
                 {
-                    var spawn = new Spawn(Geometry.convertPoint(q), (float)rotation.Value, (float)((Point3D)scale.Value).X, spawnNumber++,SpawnType.Sea);
+
+                    var spawn = new Spawn(Geometry.convertPoint(q), (float)rotation.Value, s, spawnNumber++, SpawnType.Sea);
                     editor.addScenarioItem(spawn);
                     scenarioItems.Add(spawn);
                 }
                 if (addon.Class.Name.Equals("TGameDesignAddOn_AerialCorridor") && zone != null)
                 {
-                    float s=1;
-                    if (scale != null) s = (float)((Point3D)scale.Value).X;
-                    var spawn = new Spawn(Geometry.convertPoint(q), (float)rotation.Value, s, spawnNumber++,SpawnType.Air);
+
+                    var spawn = new Spawn(Geometry.convertPoint(q), (float)rotation.Value, s, spawnNumber++, SpawnType.Air);
                     editor.addScenarioItem(spawn);
                     scenarioItems.Add(spawn);
                 }
                 if (addon.Class.Name.Equals("TGameDesignAddOn_StartingCommandUnit") && zone != null)
                 {
 
-                    var prop=addon.PropertyValues.First(x => x.Property.Name.Equals("AllocationPriority"));
+                    var prop = addon.PropertyValues.First(x => x.Property.Name.Equals("AllocationPriority"));
                     int prio = 0;
                     if (!(prop.Value is NdfNull))
                     {
@@ -225,24 +240,25 @@ namespace ZoneEditor
                 if (addon.Class.Name.Equals("TGameDesignAddOn_StartingFOB") && zone != null)
                 {
                     var prop = addon.PropertyValues.First(x => x.Property.Name.Equals("AllocationPriority"));
-                    int prio=0;
+                    int prio = 0;
                     if (!(prop.Value is NdfNull))
                     {
-                        prio=(int)((NdfInt32)prop.Value).Value;
+                        prio = (int)((NdfInt32)prop.Value).Value;
                     }
                     var startPos = new Icon(Geometry.convertPoint(q), startPosNumber++, IconType.FOB, prio);
                     editor.addScenarioItem(startPos);
                     scenarioItems.Add(startPos);
                 }
 
-                
+
 
 
 
                 //Console.WriteLine(rotation);
             }
         }
-        public EventHandler AddZone{
+        public EventHandler AddZone
+        {
             get { return new EventHandler(addZone); }
         }
         public EventHandler AddLandSpawn
@@ -265,16 +281,17 @@ namespace ZoneEditor
         {
             get { return new EventHandler(addFOB); }
         }
-        private void addZone(object obj,EventArgs e){
+        private void addZone(object obj, EventArgs e)
+        {
             var zone = new Zone(editor, editor.LeftClickPoint, zoneNumber++);
             scenarioItems.Add(zone);
             zones.Add(zone);
-            editor.addScenarioItem(zone,true);
-            
+            editor.addScenarioItem(zone, true);
+
         }
         private void addLandSpawn(object obj, EventArgs e)
         {
-            var spawn = new Spawn(PanAndZoom.fromLocalToGlobal(editor.LeftClickPoint),spawnNumber,SpawnType.Land);
+            var spawn = new Spawn(PanAndZoom.fromLocalToGlobal(editor.LeftClickPoint), spawnNumber, SpawnType.Land);
             scenarioItems.Add(spawn);
             editor.addScenarioItem(spawn, true);
             //Console.WriteLine("add land spawn");
@@ -285,21 +302,21 @@ namespace ZoneEditor
             scenarioItems.Add(spawn);
             editor.addScenarioItem(spawn, true);
 
-           // Console.WriteLine("add air spawn");
+            // Console.WriteLine("add air spawn");
         }
         private void addSeaSpawn(object obj, EventArgs e)
         {
             var spawn = new Spawn(PanAndZoom.fromLocalToGlobal(editor.LeftClickPoint), spawnNumber++, SpawnType.Sea);
             scenarioItems.Add(spawn);
             editor.addScenarioItem(spawn, true);
-            
+
         }
         private void addCV(object obj, EventArgs e)
         {
             var icon = new Icon(PanAndZoom.fromLocalToGlobal(editor.LeftClickPoint), startPosNumber++, IconType.CV);
             scenarioItems.Add(icon);
             editor.addScenarioItem(icon, true);
-           
+
         }
         private void addFOB(object obj, EventArgs e)
         {
@@ -307,7 +324,8 @@ namespace ZoneEditor
             scenarioItems.Add(icon);
             editor.addScenarioItem(icon, true);
         }
-        public void deleteItem(object o,EventArgs e){
+        public void deleteItem(object o, EventArgs e)
+        {
             scenarioItems.Remove(selectedItem);
             if (selectedItem is Zone)
             {
@@ -315,6 +333,6 @@ namespace ZoneEditor
             }
             editor.deleteItem(selectedItem);
         }
-        
+
     }
 }

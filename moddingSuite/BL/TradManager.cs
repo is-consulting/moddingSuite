@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Text;
 using moddingSuite.Model.Trad;
 
@@ -10,6 +12,8 @@ namespace moddingSuite.BL
     public class TradManager
     {
         private ObservableCollection<TradEntry> _entries = new ObservableCollection<TradEntry>();
+
+        private const ulong GlyphHash = (ulong)0x1 << 63;
 
         public TradManager(byte[] data)
         {
@@ -107,8 +111,22 @@ namespace moddingSuite.BL
                 buffer = BitConverter.GetBytes(Entries.Count);
                 ms.Write(buffer, 0, buffer.Length);
 
+
+                var glyphEntry = Entries.FirstOrDefault(x => BitConverter.ToUInt64(x.Hash, 0).Equals(GlyphHash));
+
+                if (glyphEntry == null)
+                {
+                    glyphEntry = new TradEntry() {Hash = BitConverter.GetBytes(GlyphHash)};
+                    Entries.Add(glyphEntry);
+                }
+
+                var orderedEntried = Entries.OrderBy(x => BitConverter.ToUInt64(x.Hash, 0)).ToList();
+                orderedEntried.Remove(glyphEntry);
+                glyphEntry.Content = BuildGlyphContent(orderedEntried);
+                orderedEntried.Add(glyphEntry);
+
                 // Write dictionary
-                foreach (TradEntry entry in Entries)
+                foreach (TradEntry entry in orderedEntried)
                 {
                     entry.OffsetDic = (uint)ms.Position;
 
@@ -123,14 +141,14 @@ namespace moddingSuite.BL
                     ms.Write(buffer, 0, buffer.Length);
                 }
 
-                foreach (TradEntry entry in Entries)
+                foreach (TradEntry entry in orderedEntried)
                 {
                     entry.OffsetCont = (uint)ms.Position;
                     buffer = Encoding.Unicode.GetBytes(entry.Content);
                     ms.Write(buffer, 0, buffer.Length);
                 }
 
-                foreach (TradEntry entry in Entries)
+                foreach (TradEntry entry in orderedEntried)
                 {
                     ms.Seek(entry.OffsetDic, SeekOrigin.Begin);
 
@@ -145,6 +163,28 @@ namespace moddingSuite.BL
 
                 return ms.ToArray();
             }
+        }
+
+        protected string BuildGlyphContent(List<TradEntry> lst)
+        {
+            var glyphOccurences = new Dictionary<char, int>();
+
+            foreach (TradEntry e in lst)
+                foreach (var chr in e.Content)
+
+                    if (glyphOccurences.ContainsKey(chr))
+                        glyphOccurences[chr]++;
+                    else
+                        glyphOccurences.Add(chr, 1);
+
+            StringBuilder contentBuilder = new StringBuilder();
+
+            var tmp = glyphOccurences.OrderByDescending(x => x.Value);
+
+            foreach (var occurence in glyphOccurences.OrderByDescending(x => x.Value))
+                contentBuilder.Append(occurence.Key);
+
+            return contentBuilder.ToString();
         }
     }
 }

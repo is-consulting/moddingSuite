@@ -42,8 +42,18 @@ namespace tgvExporter
 
                     if (BitConverter.ToUInt32(buffer, 0) != fatMagic)
                         break;
-                    
-                    fs.Seek(8, SeekOrigin.Current);
+
+                    // Always 1
+                    fs.Read(buffer, 0, buffer.Length);
+                    uint int1 = BitConverter.ToUInt32(buffer, 0);
+
+                    // Always 16
+                    fs.Read(buffer, 0, buffer.Length);
+                    uint int2 = BitConverter.ToUInt32(buffer, 0);
+
+                    //Console.WriteLine("{0} - {1}", int1, int2);
+
+                    //fs.Seek(8, SeekOrigin.Current);
 
                     fs.Read(buffer, 0, buffer.Length);
                     var blockSize = BitConverter.ToUInt32(buffer, 0);

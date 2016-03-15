@@ -314,7 +314,7 @@
     <Compile Include="View\Ndfbin\Viewer\ReferenceSearchResultView.xaml.cs">
       <DependentUpon>ReferenceSearchResultView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Scenario\ScenarioView.xaml.cs">
+    <Compile Include="View\Ndfbin\Scenario\ScenarioView.xaml.cs">
       <DependentUpon>ScenarioView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SpinningWheel\Enums\RotateDirection.cs" />
@@ -495,7 +495,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Scenario\ScenarioView.xaml">
+    <Page Include="View\Ndfbin\Scenario\ScenarioView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
