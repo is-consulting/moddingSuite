@@ -111,7 +111,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
             head.Visible = selected;
             source.Visible = selected;
         }
-        public override void buildNdf(ViewModel.Ndf.NdfEditorMainViewModel data, ref int i)
+        public override void buildNdf(NdfBinary data, ref int i)
         {
             string name = "";
             string ranking = "";
@@ -144,7 +144,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
 
             var designItem = createNdfObject(data, "TGameDesignItem");
             var list = data.Classes.First().Instances.First().PropertyValues.First().Value as NdfCollection;
-            var ci = new CollectionItemValueHolder(new NdfObjectReference(designItem.Class, designItem.Id), data.NdfBinary);
+            var ci = new CollectionItemValueHolder(new NdfObjectReference(designItem.Class, designItem.Id), data);
             list.Add(ci);
 
             var positionProperty = getProperty(designItem, "Position");

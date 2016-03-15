@@ -11,6 +11,7 @@ using moddingSuite.Model.Ndfbin.Types.AllTypes;
 using moddingSuite.ZoneEditor;
 using moddingSuite.ZoneEditor.ScenarioItems;
 using System.Windows.Media.Media3D;
+using moddingSuite.Model.Ndfbin;
 
 
 namespace ZoneEditor
@@ -26,15 +27,15 @@ namespace ZoneEditor
         public ScenarioItem selectedItem;
         Editor editor;
         ScenarioFile scenarioFile;
-        NdfEditorMainViewModel data;
+        NdfBinary data;
 
-        public ZoneEditorData(ScenarioFile sf, NdfEditorMainViewModel model, string path)
+        public ZoneEditorData(ScenarioFile sf, string path)
         {
 
             scenarioFile = sf;
             editor = new Editor(this, path);
 
-            data = new NdfEditorMainViewModel(sf.NdfBinary);
+            data = sf.NdfBinary;
             foreach (var area in sf.ZoneData.AreaManagers[1])
             {
                 //var nodes=Geometry.getOutline(area.Content);
@@ -116,8 +117,8 @@ namespace ZoneEditor
                                  };
             foreach (var str in toBePurged)
             {
-                if (!data.Classes.Any(x => x.Object.Name.Equals(str))) continue;
-                var viewModel = data.Classes.Single(x => x.Object.Name.Equals(str));
+                if (!data.Classes.Any(x => x.Name.Equals(str))) continue;
+                var viewModel = data.Classes.Single(x => x.Name.Equals(str));
                 //foreach (var inst in viewModel.Instances)
                 while (viewModel.Instances.Count > 0)
                 {
@@ -125,7 +126,7 @@ namespace ZoneEditor
                     if (inst == null)
                         return;
 
-                    viewModel.Object.Manager.DeleteInstance(inst.Object);
+                    viewModel.Manager.DeleteInstance(inst);
 
                     viewModel.Instances.Remove(inst);
                 }
