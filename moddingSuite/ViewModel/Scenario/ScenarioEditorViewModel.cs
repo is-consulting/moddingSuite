@@ -64,8 +64,7 @@ namespace moddingSuite.ViewModel.Scenario
         }
         private void ZoneEditorExecute(object obj)
         {
-            var ndfEditor = new NdfEditorMainViewModel(ScenarioFile.NdfBinary);
-            zoneEditor=new ZoneEditorData(ScenarioFile, ndfEditor,OwnerFile.Path);
+            zoneEditor=new ZoneEditorData(ScenarioFile,OwnerFile.Path);
             Console.WriteLine("Launch Editor");
         }
         private void EditGameModeLogicExecute(object obj)

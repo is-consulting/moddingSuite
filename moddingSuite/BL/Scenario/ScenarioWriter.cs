@@ -27,7 +27,9 @@ namespace moddingSuite.BL.Scenario
             file.ContentFiles[0] = CreateAreaSubFile(file.ZoneData);
 
             var ndfBinWriter = new NdfbinWriter();
+
             file.ContentFiles[1] = ndfBinWriter.Write(file.NdfBinary, false); // something wrong here; enohka: Should be fixed by now?
+
 
             foreach (var contentFile in file.ContentFiles)
             {

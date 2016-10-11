@@ -28,24 +28,24 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
         public abstract void attachTo(Control c);
         public abstract void detachFrom(Control c);
         public abstract void setSelected(bool selected);
-        public abstract void buildNdf(NdfEditorMainViewModel data,ref int i);
+        public abstract void buildNdf(NdfBinary data,ref int i);
         protected abstract void paint(object sen, PaintEventArgs e);
-        protected static NdfObject createNdfObject(NdfEditorMainViewModel data,string str){
-            var classView= data.Classes.Single(x => x.Object.Name.Equals(str));
-            var inst=classView.Object.Manager.CreateInstanceOf(classView.Object, false);
-            classView.Object.Instances.Add(inst);
-            classView.Instances.Add(new NdfObjectViewModel(inst, data));
+        protected static NdfObject createNdfObject(NdfBinary data,string str){
+            var classView= data.Classes.Single(x => x.Name.Equals(str));
+            var inst=classView.Manager.CreateInstanceOf(classView, false);
+            classView.Instances.Add(inst);
+            //classView.Instances.Add(new NdfObjectViewModel(inst, data));
             return inst;
         }
         protected static NdfPropertyValue getProperty(NdfObject obj,string str){
             return obj.PropertyValues.Single(x => x.Property.Name.Equals(str));
         }
-        protected static NdfFileNameString getAutoName(NdfEditorMainViewModel data, int i)
+        protected static NdfFileNameString getAutoName(NdfBinary data, int i)
         {
             var nameStr = string.Format("P0_AutoName_{0}", i);
             return getString(data,nameStr);
         }
-        protected static NdfFileNameString getString(NdfEditorMainViewModel data, string nameStr)
+        protected static NdfFileNameString getString(NdfBinary data, string nameStr)
         {
             
             var nameRef = data.Strings.Single(x => x.Value.Equals(nameStr));

@@ -33,10 +33,6 @@ namespace moddingSuite.Geometry
             outline=outline.Select(x => { x.Center = 1; return x; }).ToList();
             content.Vertices.AddRange(outline);
 
-            
-
-
-
             //var bottomRing = new List<AreaVertex>(outline);
             var bottomRing = outline.Select(x => {
                 var y = new AreaVertex();

@@ -123,7 +123,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
             area.Name = string.Format("zone_{0}",Guid.NewGuid().ToString());
             return area;
         }
-        public override void buildNdf(ViewModel.Ndf.NdfEditorMainViewModel data,ref int i)
+        public override void buildNdf(NdfBinary data,ref int i)
         {
 
             var commandPoint = createNdfObject(data, "TGameDesignAddOn_CommandPoints");
@@ -138,7 +138,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
             
             var designItem = createNdfObject(data, "TGameDesignItem");
             var list = data.Classes.First().Instances.First().PropertyValues.First().Value as NdfCollection;
-            var ci=new CollectionItemValueHolder(new NdfObjectReference(designItem.Class,designItem.Id),data.NdfBinary);
+            var ci=new CollectionItemValueHolder(new NdfObjectReference(designItem.Class,designItem.Id),data);
             list.Add(ci);
 
             var positionProperty=getProperty(designItem,"Position");
@@ -174,7 +174,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
                 }
 
                 designItem = createNdfObject(data, "TGameDesignItem");
-                ci = new CollectionItemValueHolder(new NdfObjectReference(designItem.Class, designItem.Id), data.NdfBinary);
+                ci = new CollectionItemValueHolder(new NdfObjectReference(designItem.Class, designItem.Id), data);
                 list.Add(ci);
 
 
