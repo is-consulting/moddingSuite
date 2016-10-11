@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using moddingSuite.BL.Ndf;
 using moddingSuite.Model.Scenario;
+using moddingSuite.Util;
 
 namespace moddingSuite.BL.Scenario
 {
@@ -26,12 +27,21 @@ namespace moddingSuite.BL.Scenario
             file.ContentFiles[0] = CreateAreaSubFile(file.ZoneData);
 
             var ndfBinWriter = new NdfbinWriter();
-            file.ContentFiles[1] = ndfBinWriter.Write(file.NdfBinary, false);//something wrong here
+            file.ContentFiles[1] = ndfBinWriter.Write(file.NdfBinary, false); // something wrong here; enohka: Should be fixed by now?
 
             foreach (var contentFile in file.ContentFiles)
             {
-                scenarioData.AddRange(BitConverter.GetBytes(contentFile.Length));
+                int padding = Utils.RoundToNextDivBy4(contentFile.Length) - contentFile.Length;
+
+                scenarioData.AddRange(BitConverter.GetBytes(contentFile.Length + padding));
                 scenarioData.AddRange(contentFile);
+
+                var paddingLst = new List<byte>();
+
+                for(int p = 0; p < padding; p++)
+                    paddingLst.Add(0x0);
+
+                scenarioData.AddRange(paddingLst);
             }
 
             byte[] hash = MD5.Create().ComputeHash(scenarioData.ToArray());
