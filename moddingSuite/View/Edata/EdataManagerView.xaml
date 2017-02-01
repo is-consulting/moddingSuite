@@ -1,22 +1,25 @@
 ﻿<Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ViewModel="clr-namespace:moddingSuite.ViewModel" xmlns:View="clr-namespace:moddingSuite.View"
-        xmlns:Common="clr-namespace:moddingSuite.View.Common" xmlns:Edata="clr-namespace:moddingSuite.View.Edata"
-        xmlns:view="clr-namespace:moddingSuite.View"
-        x:Class="moddingSuite.View.Edata.EdataManagerView"
-        Height="565.855" Width="1008.364"  Title="Wargame Modding Suite" Icon="{StaticResource PackageFileIcon}" WindowStartupLocation="CenterScreen">
+    x:Class="moddingSuite.View.Edata.EdataManagerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Edata="clr-namespace:moddingSuite.View.Edata"
+    xmlns:edata="clr-namespace:moddingSuite.ViewModel.Edata"
+    Title="Wargame Modding Suite"
+    Width="1367.591"
+    Height="729.885"
+    Icon="{StaticResource PackageFileIcon}"
+    WindowStartupLocation="CenterScreen">
     <Grid>
-        <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Panel.ZIndex="1000" Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Margin="0 0 0 20">
-            <view:SpinningWheel IsSpinning="True" 
-                              DotRadius="7" 
+        <!--<UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Panel.ZIndex="1000" Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Margin="0 0 0 20">
+            <view:SpinningWheel IsSpinning="True"
+                              DotRadius="7"
                               Speed="1.25"
                               Radius="36"
-                              DotCount="21"  
+                              DotCount="21"
                               SymmetricalArrange="True"
                               Direction="CW"
                               x:Name="wheel" />
-        </UniformGrid>
+        </UniformGrid>-->
 
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
@@ -29,31 +32,34 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Menu Grid.Row="0" Grid.ColumnSpan="2" IsMainMenu="True">
+            <Menu
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                IsMainMenu="True">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Open" Command="{Binding Path=OpenFileCommand}" />
-                    <MenuItem Header="_Close" Command="{Binding Path=CloseFileCommand}" />
+                    <MenuItem Command="{Binding Path=OpenFileCommand}" Header="_Open" />
+                    <MenuItem Command="{Binding Path=CloseFileCommand}" Header="_Close" />
 
                 </MenuItem>
                 <MenuItem Header="_Settings">
-                    <MenuItem Header="Change _export path" Command="{Binding Path=ChangeExportPathCommand}" />
-                    <MenuItem Header="Change _Wargame path" Command="{Binding Path=ChangeWargamePathCommand}" />
-                    <MenuItem Header="Change _Python path" Command="{Binding Path=ChangePythonPathCommand}" />
+                    <MenuItem Command="{Binding Path=ChangeExportPathCommand}" Header="Change _export path" />
+                    <MenuItem Command="{Binding Path=ChangeWargamePathCommand}" Header="Change _Wargame path" />
+                    <MenuItem Command="{Binding Path=ChangePythonPathCommand}" Header="Change _Python path" />
                 </MenuItem>
             </Menu>
 
             <ToolBar Grid.Row="1" Style="{StaticResource Vs2010StyleToolBar}">
                 <Menu>
-                    <MenuItem ToolTip="Raw data" >
+                    <MenuItem ToolTip="Raw data">
                         <MenuItem.Header>
-                            <Image Source="{StaticResource ExtractRawIcon}"  />
+                            <Image Source="{StaticResource ExtractRawIcon}" />
                         </MenuItem.Header>
-                        <MenuItem Header="Export" Command="{Binding ExportRawCommand}">
+                        <MenuItem Command="{Binding ExportRawCommand}" Header="Export">
                             <MenuItem.Icon>
                                 <Image Source="{StaticResource ExportIcon}" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Replace" Command="{Binding ReplaceRawCommand}"  >
+                        <MenuItem Command="{Binding ReplaceRawCommand}" Header="Replace">
                             <MenuItem.Icon>
                                 <Image Source="{StaticResource ImportIcon}" />
                             </MenuItem.Icon>
@@ -63,21 +69,24 @@
                 <!--<Button ToolTip="Export raw data" Command="{Binding Path=ExportRawCommand}">
                 <Image Source="{StaticResource ExtractRawIcon}"  />
             </Button>-->
-                <Button ToolTip="Export Uncompressed NDF content" Command="{Binding Path=ExportNdfCommand}"  Style="{DynamicResource ButtonStyle1}">
-                    <Image Source="{StaticResource ExtractZipedPartIcon}"  />
+                <Button
+                    Command="{Binding Path=ExportNdfCommand}"
+                    Style="{DynamicResource ButtonStyle1}"
+                    ToolTip="Export Uncompressed NDF content">
+                    <Image Width="16 " Source="{StaticResource ExtractZipedPartIcon}" />
                 </Button>
 
                 <Menu>
-                    <MenuItem ToolTip="Textures" >
+                    <MenuItem ToolTip="Textures">
                         <MenuItem.Header>
                             <Image Source="{StaticResource TextureIcon}" />
                         </MenuItem.Header>
-                        <MenuItem Header="Export" Command="{Binding ExportTextureCommand}">
+                        <MenuItem Command="{Binding ExportTextureCommand}" Header="Export">
                             <MenuItem.Icon>
                                 <Image Source="{StaticResource ExportIcon}" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Replace" Command="{Binding ReplaceTextureCommand}" >
+                        <MenuItem Command="{Binding ReplaceTextureCommand}" Header="Replace">
                             <MenuItem.Icon>
                                 <Image Source="{StaticResource ImportIcon}" />
                             </MenuItem.Icon>
@@ -87,44 +96,133 @@
 
                 <Separator />
 
-                <Button ToolTip="Edit ndf file" Command="{Binding EditNdfbinCommand}"  Style="{DynamicResource ButtonStyle1}">
+                <Button
+                    Command="{Binding EditNdfbinCommand}"
+                    Style="{DynamicResource ButtonStyle1}"
+                    ToolTip="Edit ndf file">
                     <Image Source="{StaticResource OpenDetailsIcon}" />
                 </Button>
-                <Button ToolTip="Edit mesh file" Command="{Binding EditMeshCommand}"  Style="{DynamicResource ButtonStyle1}">
+                <Button
+                    Command="{Binding EditMeshCommand}"
+                    Style="{DynamicResource ButtonStyle1}"
+                    ToolTip="Edit mesh file">
                     <Image Source="{StaticResource MeshFileIcon}" />
                 </Button>
-                <Button ToolTip="Edit dictionary" Command="{Binding EditTradFileCommand}"  Style="{DynamicResource ButtonStyle1}">
+                <Button
+                    Command="{Binding EditTradFileCommand}"
+                    Style="{DynamicResource ButtonStyle1}"
+                    ToolTip="Edit dictionary">
                     <Image Source="{StaticResource OpenDictionayIcon}" />
                 </Button>
                 <!--<Button ToolTip="View Wmv file" Command="{Binding PlayMovieCommand}"  Style="{DynamicResource ButtonStyle1}">
                         <Image Source="{StaticResource OpenMovieIcon}" />
                     </Button>-->
                 <Separator />
-                <Button ToolTip="About" Command="{Binding AboutUsCommand}"  Style="{DynamicResource ButtonStyle1}">
+                <Button
+                    Command="{Binding AboutUsCommand}"
+                    Style="{DynamicResource ButtonStyle1}"
+                    ToolTip="About">
                     <Image Source="{StaticResource AboutIcon}" />
                 </Button>
 
             </ToolBar>
 
-            <TabControl Grid.Row="2" ItemsSource="{Binding Path=OpenFiles}" IsSynchronizedWithCurrentItem="True">
-                <TabControl.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel>
-                            <Button x:Name="close_btn" Content="X" DockPanel.Dock="Right" Height="15" Margin="15 0 0 0" Command="{Binding Path=CloseCommand}" Style="{StaticResource ButtonStyle1}" />
-                            <TextBlock Text="{Binding Path=HeaderText}" ToolTip="{Binding Path=LoadedFile}" />
-                        </DockPanel>
-                    </DataTemplate>
-                </TabControl.ItemTemplate>
-                <TabControl.ContentTemplate>
-                    <DataTemplate>
-                        <Edata:EdataFileView />
-                    </DataTemplate>
-                </TabControl.ContentTemplate>
-            </TabControl>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="300" />
+                </Grid.ColumnDefinitions>
 
-            <StatusBar Grid.Row="3" >
-                <TextBlock Text="{Binding Path=StatusText }" />
+                <TabControl IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Path=OpenFiles}">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <Button
+                                    x:Name="close_btn"
+                                    Height="15"
+                                    Margin="15,0,0,0"
+                                    Padding="2"
+                                    Command="{Binding Path=CloseCommand}"
+                                    DockPanel.Dock="Right"
+                                    Style="{StaticResource ButtonStyle1}">
+                                    <Path
+                                        x:Name="Cross"
+                                        Width="10"
+                                        Height="10"
+                                        Data="M0,0 L1,1 M0,1 L1,0"
+                                        Stretch="Fill"
+                                        Stroke="White"
+                                        StrokeThickness="1" />
+                                </Button>
+                                <TextBlock Text="{Binding Path=HeaderText}" ToolTip="{Binding Path=LoadedFile}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <Edata:EdataFileView />
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+                <GridSplitter
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="White" />
+
+                <TabControl Grid.Column="2">
+                    <TabItem Header="Workspace">
+                        <TreeView ItemsSource="{Binding Workspace.Root}">
+                            <TreeView.Resources>
+                                <DataTemplate DataType="{x:Type edata:FileViewModel}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Height="16" Source="{StaticResource GenericFileIcon}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Margin="5,2,2,2"
+                                            Text="{Binding Name}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </TreeView.Resources>
+                        </TreeView>
+                    </TabItem>
+                    <TabItem Header="Gamespace">
+                        <TreeView ItemsSource="{Binding Gamespace.Root}">
+                            <TreeView.Resources>
+                                <DataTemplate DataType="{x:Type edata:FileViewModel}">
+                                    <Grid>
+                                        <Grid.InputBindings>
+                                            <MouseBinding
+                                                Command="{Binding Path=DataContext.AddNewFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}}"
+                                                CommandParameter="{Binding}"
+                                                MouseAction="LeftDoubleClick" />
+                                        </Grid.InputBindings>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Height="16" Source="{StaticResource GenericFileIcon}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Margin="5,2,2,2"
+                                            Text="{Binding Name}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </TreeView.Resources>
+                        </TreeView>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+
+            <StatusBar Grid.Row="3">
+                <TextBlock Text="{Binding Path=StatusText}" />
             </StatusBar>
         </Grid>
     </Grid>
 </Window>
+

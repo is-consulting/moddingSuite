@@ -11,6 +11,7 @@ namespace moddingSuite.Model.Settings
         private int _lastHighlightedFileIndex;
         private string _wargamePath;
         private string _pythonPath;
+        private bool _exportWithFullPath = true;
 
         public string SavePath
         {
@@ -54,6 +55,16 @@ namespace moddingSuite.Model.Settings
         {
             get { return _pythonPath; }
             set { _pythonPath = value; OnPropertyChanged(() => PythonPath); }
+        }
+
+        public bool ExportWithFullPath
+        {
+            get { return _exportWithFullPath; }
+            set
+            {
+                _exportWithFullPath = value; 
+                OnPropertyChanged();
+            }
         }
     }
 }

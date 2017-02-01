@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using moddingSuite.BL.TGV;
 using moddingSuite.BL.Mesh;
+using moddingSuite.Model.Ndfbin.Types.AllTypes;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -72,13 +73,13 @@ namespace moddingSuite.ViewModel.Edata
             }
 
             if (failedFiles.Count > 0)
-                StatusText =
-                    string.Format("{0} files failed to open. Did you start the modding suite while running the game?",
-                                  failedFiles.Count);
+                StatusText = string.Format("{0} files failed to open. Did you start the modding suite while running the game?", failedFiles.Count);
 
             if (settings.LastOpenedFiles.Count == 0)
                 CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentToFirst();
 
+            Workspace = new WorkspaceViewModel(settings);
+            Gamespace = new GameSpaceViewModel(settings);
 
             OpenFiles.CollectionChanged += OpenFilesCollectionChanged;
         }
@@ -100,9 +101,21 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand PlayMovieCommand { get; set; }
         public ICommand AboutUsCommand { get; set; }
 
+        public ICommand AddNewFileCommand { get; set; }
+
         public ObservableCollection<EdataFileViewModel> OpenFiles
         {
             get { return _openFiles; }
+        }
+
+        public WorkspaceViewModel Workspace
+        {
+            get; set;
+        }
+
+        public GameSpaceViewModel Gamespace
+        {
+            get; set;
         }
 
         protected void OpenFilesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -154,6 +167,18 @@ namespace moddingSuite.ViewModel.Edata
             EditNdfbinCommand = new ActionCommand(EditNdfbinExecute, () => IsOfType(EdataFileType.Ndfbin));
             EditMeshCommand = new ActionCommand(EditMeshExecute, () => IsOfType(EdataFileType.Mesh));
             EditScenarioCommand = new ActionCommand(EditScenarioExecute, () => IsOfType(EdataFileType.Scenario));
+
+            AddNewFileCommand = new ActionCommand(AddNewFileExecute);
+        }
+
+        private void AddNewFileExecute(object obj)
+        {
+            if (obj is FileViewModel)
+            {
+                var file = obj as FileViewModel;
+
+                HandleNewFile(file.Info.FullName);
+            }
         }
 
         private void EditScenarioExecute(object obj)
@@ -557,12 +582,18 @@ namespace moddingSuite.ViewModel.Edata
                     Settings settings = SettingsManager.Load();
 
                     var f = new FileInfo(ndf.Path);
-                    var exportPath = Path.Combine(settings.SavePath, f.Name);
-                    dispatcher.Invoke(report, string.Format("Exporting to {0}...", exportPath));
+
+                    string exportFullName = Path.Combine(settings.SavePath, settings.ExportWithFullPath ? ndf.Path : f.Name);
+                    var exportDir = Path.GetDirectoryName(exportFullName);
+
+                    if (!Directory.Exists(exportDir))
+                        Directory.CreateDirectory(exportDir);
+
+                    dispatcher.Invoke(report, string.Format("Exporting to {0}...", exportFullName));
 
                     byte[] buffer = vm.EdataManager.GetRawData(ndf);
 
-                    using (var fs = new FileStream(exportPath, FileMode.OpenOrCreate))
+                    using (var fs = new FileStream(exportFullName, FileMode.OpenOrCreate))
                     {
                         fs.Write(buffer, 0, buffer.Length);
                         fs.Flush();

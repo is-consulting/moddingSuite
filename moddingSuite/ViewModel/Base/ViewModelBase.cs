@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
 namespace moddingSuite.ViewModel.Base
@@ -21,10 +22,9 @@ namespace moddingSuite.ViewModel.Base
             }
         }
 
-        public void OnPropertyChanged(string prop)
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
         [XmlIgnore]
