@@ -1,0 +1,144 @@
+﻿<Window
+    x:Class="moddingSuite.View.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:moddingSuite.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="WMS Settings"
+    Width="402.696"
+    Height="336.746"
+    Icon="{StaticResource SaveIcon}"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            HorizontalAlignment="Stretch"
+            FontSize="16"
+            TextWrapping="Wrap">
+            Before we can start the WMS (Wargame Modding Suite), we need to set a few things up first.
+        </TextBlock>
+
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Stretch"
+                FontSize="12"
+                TextWrapping="Wrap">
+                Your Workspace is the path where the WMS exports game files to. You should define a dedicated folder for it. Be it on your Desktop or something like &quot;C:Workspace\&quot;
+            </TextBlock>
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="0,0,10,0"
+                VerticalAlignment="Center"
+                Text="Workspace path" />
+            <DockPanel
+                Grid.Row="1"
+                Grid.Column="1"
+                LastChildFill="True">
+                <Button
+                    Margin="0,2,0,2"
+                    Click="WorkSpaceBrowserButtonClick"
+                    DockPanel.Dock="Right">
+                    ...
+                </Button>
+                <TextBox
+                    x:Name="WorkSpaceTextBox"
+                    Margin="0,2,0,2"
+                    IsReadOnly="True"
+                    Text="{Binding Path=SavePath}" />
+            </DockPanel>
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Stretch"
+                FontSize="12"
+                TextWrapping="Wrap">
+                The Game path is the path from wich you want to open files from. In case of Wargame: Red Dragon
+                &quot;C:\Program Files\Steam\SteamApps\common\Wargame Red Dragon\Data&quot; is a good bet.
+            </TextBlock>
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="0,0,10,0"
+                VerticalAlignment="Center"
+                Text="Game path" />
+            <DockPanel
+                Grid.Row="3"
+                Grid.Column="1"
+                LastChildFill="True">
+                <Button
+                    Margin="0,2,0,2"
+                    Click="GameSpaceButtonClick"
+                    DockPanel.Dock="Right">
+                    ...
+                </Button>
+                <TextBox
+                    x:Name="GameSpaceTextBox"
+                    Margin="0,2,0,2"
+                    IsReadOnly="True"
+                    Text="{Binding Path=WargamePath}" />
+            </DockPanel>
+
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                Margin="0,0,10,0"
+                VerticalAlignment="Center"
+                Text="Export to full path" />
+            <CheckBox
+                Grid.Row="4"
+                Grid.Column="1"
+                Margin="0,7,0,7" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Border
+                Background="White"
+                BorderBrush="DarkGray"
+                BorderThickness="0,1,0,0">
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button
+                        Margin="5"
+                        Padding="15,2,15,2"
+                        HorizontalAlignment="Right"
+                        Click="SaveButtonClick">
+                        Save
+                    </Button>
+                    <Button
+                        Margin="5"
+                        Padding="10,2,10,2"
+                        HorizontalAlignment="Right"
+                        Click="CanceButtonClick">
+                        Cancel
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

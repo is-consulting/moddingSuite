@@ -181,12 +181,6 @@ namespace moddingSuite.ViewModel.Edata
             ReplaceRawFromWorkspaceCommand = new ActionCommand(ReplaceRawFromWorkspaceExecute);
             ReplaceTextureFromWorkspaceCommand = new ActionCommand(ReplaceTextureFromWorkspaceExecute, () => IsOfType(EdataFileType.Image));
             ReplaceSoundFromWorkspaceCommand = new ActionCommand(ReplaceSoundFromWorkspaceExecute, () => HasEnding(".ess"));
-            OpenEdataFromWorkspaceCommand = new ActionCommand(OpenEdataFromWorkspaceExecute);
-        }
-
-        private void OpenEdataFromWorkspaceExecute(object obj)
-        {
-            throw new NotImplementedException();
         }
 
         private void AddNewFileExecute(object obj)

@@ -15,7 +15,7 @@
         <extension:BindingProxy x:Key="Proxy" Data="{Binding}" />
     </Window.Resources>
     <Grid>
-        <!--<UniformGrid
+        <UniformGrid
             Margin="0,0,0,20"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -31,7 +31,7 @@
                 Radius="36"
                 Speed="1.25"
                 SymmetricalArrange="True" />
-        </UniformGrid>-->
+        </UniformGrid>
 
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
@@ -41,6 +41,7 @@
                 <RowDefinition Height="22" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -258,7 +259,7 @@
                         </TreeView>
                     </TabItem>
                     <TabItem Header="Gamespace">
-                        <TreeView ItemsSource="{Binding Gamespace.Root}">
+                        <TreeView extension:TreeViewExtension.SelectItemOnRightClick="true" ItemsSource="{Binding Gamespace.Root}">
                             <TreeView.Resources>
                                 <DataTemplate DataType="{x:Type edata:FileViewModel}">
                                     <Grid>
@@ -285,9 +286,43 @@
                 </TabControl>
             </Grid>
 
-            <StatusBar Grid.Row="3">
+            <Grid
+                Grid.Row="3"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="White" />
+
+            <Grid Grid.Row="4">
+
+                <TabControl>
+                    <TabItem VerticalAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <TabItem.Header>
+                            <DockPanel>
+                                <ToggleButton
+                                    x:Name="OutputPushPin"
+                                    Height="15"
+                                    Margin="15,0,0,0"
+                                    Padding="0"
+                                    DockPanel.Dock="Right"
+                                    IsChecked="True"
+                                    Style="{StaticResource ToggleButtonStyle1}">
+                                    <Image Source="{StaticResource PushPinIcon}" />
+                                </ToggleButton>
+                                <TextBlock Text="Output" />
+                            </DockPanel>
+                        </TabItem.Header>
+                        <TextBox
+                            IsReadOnly="True"
+                            Text="{Binding Path=StatusText}"
+                            TextWrapping="WrapWithOverflow"
+                            Visibility="{Binding IsChecked, ElementName=OutputPushPin, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" />
+                    </TabItem>
+                </TabControl>
+            </Grid>
+
+            <!--<StatusBar Grid.Row="3">
                 <TextBlock Text="{Binding Path=StatusText}" />
-            </StatusBar>
+            </StatusBar>-->
         </Grid>
     </Grid>
 </Window>

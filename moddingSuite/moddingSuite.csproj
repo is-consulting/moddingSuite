@@ -330,6 +330,9 @@
     <Compile Include="View\Ndfbin\Scenario\ScenarioView.xaml.cs">
       <DependentUpon>ScenarioView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SpinningWheel\Enums\RotateDirection.cs" />
     <Compile Include="View\SpinningWheel\SpinningWheel.cs" />
     <Compile Include="View\VersionManager\VersionManagerView.xaml.cs">
@@ -509,6 +512,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Ndfbin\Scenario\ScenarioView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -772,6 +779,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\UnloadedProject_8303.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Open_6296.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\pushpin_16xLG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

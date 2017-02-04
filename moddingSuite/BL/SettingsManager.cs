@@ -18,7 +18,9 @@ namespace moddingSuite.BL
             var settings = new Settings();
 
             if (!File.Exists(SettingsPath))
+            {
                 return settings;
+            }
 
             var serializer = new XmlSerializer(typeof (Settings));
             using (var fs = new FileStream(SettingsPath, FileMode.Open))
@@ -26,8 +28,7 @@ namespace moddingSuite.BL
                 try
                 {
                     settings = serializer.Deserialize(fs) as Settings;
-
-                    //LastLoadedSettings = settings;
+                    settings.InitialSettings = false;
                 }
                 catch (InvalidOperationException ex)
                 {

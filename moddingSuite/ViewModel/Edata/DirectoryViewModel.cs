@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using moddingSuite.ViewModel.Base;
 
 namespace moddingSuite.ViewModel.Edata
 {
@@ -16,6 +19,12 @@ namespace moddingSuite.ViewModel.Edata
         public DirectoryViewModel(DirectoryInfo info)
         {
             _directoryInfo = info;
+            OpenInFileExplorerCommand = new ActionCommand(OpenInFileExplorerExecute);
+        }
+
+        private void OpenInFileExplorerExecute(object obj)
+        {
+            Process.Start(this.Info.FullName);
         }
 
         public ObservableCollection<FileSystemItemViewModel> Items
@@ -41,6 +50,11 @@ namespace moddingSuite.ViewModel.Edata
             {
                 _directoryInfo = value;
             }
+        }
+
+        public ICommand OpenInFileExplorerCommand
+        {
+            get; set;
         }
 
         public override string Name
