@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,9 +15,6 @@ namespace moddingSuite.ViewModel.Ndf
 {
     public class NdfObjectViewModel : ObjectWrapperViewModel<NdfObject>
     {
-        private readonly ObservableCollection<NdfPropertyValue> _propertyValues =
-            new ObservableCollection<NdfPropertyValue>();
-
         public NdfObjectViewModel(NdfObject obj, ViewModelBase parentVm)
             : base(obj, parentVm)
         {
@@ -26,8 +22,8 @@ namespace moddingSuite.ViewModel.Ndf
 
             propVals.AddRange(obj.PropertyValues);
 
-            foreach (NdfPropertyValue source in propVals.OrderBy(x => x.Property.Id))
-                _propertyValues.Add(source);
+            foreach (var source in propVals.OrderBy(x => x.Property.Id))
+                PropertyValues.Add(source);
 
             DetailsCommand = new ActionCommand(DetailsCommandExecute);
             AddPropertyCommand = new ActionCommand(AddPropertyExecute, AddPropertyCanExecute);
@@ -45,18 +41,17 @@ namespace moddingSuite.ViewModel.Ndf
             }
         }
 
-        public ObservableCollection<NdfPropertyValue> PropertyValues
-        {
-            get { return _propertyValues; }
-        }
+        public ObservableCollection<NdfPropertyValue> PropertyValues { get; } =
+            new ObservableCollection<NdfPropertyValue>();
 
         public ICommand DetailsCommand { get; protected set; }
         public ICommand AddPropertyCommand { get; protected set; }
         public ICommand RemovePropertyCommand { get; protected set; }
         public ICommand CopyToInstancesCommand { get; protected set; }
+
         private void AddPropertyExecute(object obj)
         {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(PropertyValues);
+            var cv = CollectionViewSource.GetDefaultView(PropertyValues);
 
             var item = cv.CurrentItem as NdfPropertyValue;
 
@@ -65,9 +60,9 @@ namespace moddingSuite.ViewModel.Ndf
 
             var type = NdfType.Unset;
 
-            foreach (NdfObject instance in Object.Class.Instances)
+            foreach (var instance in Object.Class.Instances)
             {
-                foreach (NdfPropertyValue propertyValue in instance.PropertyValues)
+                foreach (var propertyValue in instance.PropertyValues)
                 {
                     if (propertyValue.Property.Id == item.Property.Id)
                         if (propertyValue.Type != NdfType.Unset)
@@ -83,7 +78,7 @@ namespace moddingSuite.ViewModel.Ndf
 
         private bool AddPropertyCanExecute()
         {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(PropertyValues);
+            var cv = CollectionViewSource.GetDefaultView(PropertyValues);
 
             var item = cv.CurrentItem as NdfPropertyValue;
 
@@ -95,15 +90,15 @@ namespace moddingSuite.ViewModel.Ndf
 
         private void RemovePropertyExecute(object obj)
         {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(PropertyValues);
+            var cv = CollectionViewSource.GetDefaultView(PropertyValues);
 
             var item = cv.CurrentItem as NdfPropertyValue;
 
             if (item == null || item.Type == NdfType.Unset || item.Type == NdfType.Unknown)
                 return;
 
-            MessageBoxResult result = MessageBox.Show("Do you want to set this property to null?", "Confirmation",
-                                                      MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show("Do you want to set this property to null?", "Confirmation",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
                 item.Value = NdfTypeManager.GetValue(new byte[0], NdfType.Unset, item.Manager);
@@ -111,7 +106,7 @@ namespace moddingSuite.ViewModel.Ndf
 
         private bool RemovePropertyCanExecute()
         {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(PropertyValues);
+            var cv = CollectionViewSource.GetDefaultView(PropertyValues);
 
             var item = cv.CurrentItem as NdfPropertyValue;
 
@@ -120,20 +115,21 @@ namespace moddingSuite.ViewModel.Ndf
 
             return item.Type != NdfType.Unset;
         }
+
         private void CopyToInstancesExecute(object obj)
         {
-            ICollectionView cv = CollectionViewSource.GetDefaultView(PropertyValues);
+            var cv = CollectionViewSource.GetDefaultView(PropertyValues);
 
             var item = cv.CurrentItem as NdfPropertyValue;
             foreach (var instance in item.Instance.Class.Instances)
             {
-                var property=instance.PropertyValues.First(x => x.Property == item.Property);
+                var property = instance.PropertyValues.First(x => x.Property == item.Property);
                 property.BeginEdit();
                 property.Value = item.Value;
                 property.EndEdit();
-                
             }
         }
+
         public void DetailsCommandExecute(object obj)
         {
             var item = obj as IEnumerable<DataGridCellInfo>;
@@ -148,7 +144,7 @@ namespace moddingSuite.ViewModel.Ndf
 
         private void FollowDetails(IValueHolder prop)
         {
-            if (prop == null || prop.Value == null)
+            if (prop?.Value == null)
                 return;
 
             switch (prop.Value.Type)
@@ -184,7 +180,7 @@ namespace moddingSuite.ViewModel.Ndf
 
             var vm = new NdfClassViewModel(refe.Class, ParentVm);
 
-            NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == refe.InstanceId);
+            var inst = vm.Instances.SingleOrDefault(x => x.Id == refe.InstanceId);
 
             if (inst == null)
                 return;
@@ -200,26 +196,28 @@ namespace moddingSuite.ViewModel.Ndf
 
             if (refe == null)
                 return;
-            
-            //if (isTable(refe))
+
+            //if (IsTable(refe))
             //{
-                var editor = new ListEditorViewModel(refe, Object.Class.Manager);
-                DialogProvider.ProvideView(editor, ParentVm);
+            var editor = new ListEditorViewModel(refe, Object.Class.Manager);
+            DialogProvider.ProvideView(editor, ParentVm);
             //}
             //else
             //{
-                //var editor = new ListEditorViewModel(refe, Object.Class.Manager);
-                //DialogProvider.ProvideView(editor, ParentVm);
+            //var editor = new ListEditorViewModel(refe, Object.Class.Manager);
+            //DialogProvider.ProvideView(editor, ParentVm);
             //}
         }
-        private bool isTable(NdfCollection collection)
+
+        private bool IsTable(NdfCollection collection)
         {
             var map = collection.First().Value as NdfMap;
+
             if (collection == null)
                 return false;
+
             var valHolder = map.Value as MapValueHolder;
             return valHolder.Value is NdfCollection;
-
         }
     }
 }

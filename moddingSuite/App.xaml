@@ -63,6 +63,8 @@
         <BitmapImage x:Key="VsFolderIconOpen" UriSource="View\Images\folder_Open_16xLG.png" />
         <BitmapImage x:Key="GenericFileIcon" UriSource="View\Images\news-26.png" />
 
+        <BitmapImage x:Key="OpenEdataPackageIcon" UriSource="View\Images\UnloadedProject_8303.png" />
+
         <!--  Thanks to Mitchellnolte!!!  -->
         <ImageBrush x:Key="SplashScreenArt" ImageSource="View\Images\about.jpg" />
 

@@ -103,8 +103,9 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand ReplaceRawFromWorkspaceCommand { get; set; }
         public ICommand ReplaceTextureFromWorkspaceCommand { get; set; }
         public ICommand ReplaceSoundFromWorkspaceCommand { get; set; }
-
+        public ICommand OpenEdataFromWorkspaceCommand { get; set; }
         public ICommand AddNewFileCommand { get; set; }
+
 
         public ObservableCollection<EdataFileViewModel> OpenFiles
         {
@@ -180,6 +181,12 @@ namespace moddingSuite.ViewModel.Edata
             ReplaceRawFromWorkspaceCommand = new ActionCommand(ReplaceRawFromWorkspaceExecute);
             ReplaceTextureFromWorkspaceCommand = new ActionCommand(ReplaceTextureFromWorkspaceExecute, () => IsOfType(EdataFileType.Image));
             ReplaceSoundFromWorkspaceCommand = new ActionCommand(ReplaceSoundFromWorkspaceExecute, () => HasEnding(".ess"));
+            OpenEdataFromWorkspaceCommand = new ActionCommand(OpenEdataFromWorkspaceExecute);
+        }
+
+        private void OpenEdataFromWorkspaceExecute(object obj)
+        {
+            throw new NotImplementedException();
         }
 
         private void AddNewFileExecute(object obj)

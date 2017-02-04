@@ -265,68 +265,77 @@
                                 PlacementTarget="{Binding ElementName=filterButton}"
                                 PopupAnimation="Slide"
                                 StaysOpen="False">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
+                                <Border
+                                    Padding="10"
+                                    Background="White"
+                                    BorderBrush="DarkGray"
+                                    BorderThickness="1">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
 
-                                    <DataGrid
-                                        AutoGenerateColumns="False"
-                                        CanUserAddRows="True"
-                                        CanUserDeleteRows="True"
-                                        CanUserResizeRows="False"
-                                        IsSynchronizedWithCurrentItem="True"
-                                        ItemsSource="{Binding SelectedValue.PropertyFilterExpressions, ElementName=classGrid}"
-                                        SelectionMode="Single"
-                                        SelectionUnit="FullRow">
-                                        <DataGrid.Resources>
-                                            <ObjectDataProvider
-                                                x:Key="dataFromEnum"
-                                                MethodName="GetValues"
-                                                ObjectType="{x:Type System:Enum}">
-                                                <ObjectDataProvider.MethodParameters>
-                                                    <x:Type TypeName="filter:FilterDiscriminator" />
-                                                </ObjectDataProvider.MethodParameters>
-                                            </ObjectDataProvider>
-                                        </DataGrid.Resources>
-                                        <DataGrid.Columns>
-                                            <DataGridComboBoxColumn
-                                                DisplayMemberPath="Name"
-                                                Header="Property"
-                                                SelectedValueBinding="{Binding Path=PropertyName}"
-                                                SelectedValuePath="Name">
-                                                <DataGridComboBoxColumn.ElementStyle>
-                                                    <Style TargetType="ComboBox">
-                                                        <Setter Property="ItemsSource" Value="{Binding SelectedValue.Properties, ElementName=classGrid}" />
-                                                    </Style>
-                                                </DataGridComboBoxColumn.ElementStyle>
-                                                <DataGridComboBoxColumn.EditingElementStyle>
-                                                    <Style TargetType="ComboBox">
-                                                        <Setter Property="ItemsSource" Value="{Binding SelectedValue.Properties, ElementName=classGrid}" />
-                                                    </Style>
-                                                </DataGridComboBoxColumn.EditingElementStyle>
-                                            </DataGridComboBoxColumn>
+                                        <DataGrid
+                                            AutoGenerateColumns="False"
+                                            CanUserAddRows="True"
+                                            CanUserDeleteRows="True"
+                                            CanUserResizeRows="False"
+                                            IsSynchronizedWithCurrentItem="True"
+                                            ItemsSource="{Binding SelectedValue.PropertyFilterExpressions, ElementName=classGrid}"
+                                            SelectionMode="Single"
+                                            SelectionUnit="FullRow">
+                                            <DataGrid.Resources>
+                                                <ObjectDataProvider
+                                                    x:Key="dataFromEnum"
+                                                    MethodName="GetValues"
+                                                    ObjectType="{x:Type System:Enum}">
+                                                    <ObjectDataProvider.MethodParameters>
+                                                        <x:Type TypeName="filter:FilterDiscriminator" />
+                                                    </ObjectDataProvider.MethodParameters>
+                                                </ObjectDataProvider>
+                                            </DataGrid.Resources>
+                                            <DataGrid.Columns>
+                                                <DataGridComboBoxColumn
+                                                    DisplayMemberPath="Name"
+                                                    Header="Property"
+                                                    SelectedValueBinding="{Binding Path=PropertyName}"
+                                                    SelectedValuePath="Name">
+                                                    <DataGridComboBoxColumn.ElementStyle>
+                                                        <Style TargetType="ComboBox">
+                                                            <Setter Property="ItemsSource" Value="{Binding SelectedValue.Properties, ElementName=classGrid}" />
+                                                        </Style>
+                                                    </DataGridComboBoxColumn.ElementStyle>
+                                                    <DataGridComboBoxColumn.EditingElementStyle>
+                                                        <Style TargetType="ComboBox">
+                                                            <Setter Property="ItemsSource" Value="{Binding SelectedValue.Properties, ElementName=classGrid}" />
+                                                        </Style>
+                                                    </DataGridComboBoxColumn.EditingElementStyle>
+                                                </DataGridComboBoxColumn>
 
-                                            <DataGridComboBoxColumn
-                                                Header="Disc"
-                                                ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
-                                                SelectedValueBinding="{Binding Path=Discriminator}" />
+                                                <DataGridComboBoxColumn
+                                                    Header="Disc"
+                                                    ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+                                                    SelectedValueBinding="{Binding Path=Discriminator}" />
 
-                                            <DataGridTextColumn
-                                                Width="60"
-                                                Binding="{Binding Path=Value}"
-                                                Header="Value" />
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                    <Button
-                                        Grid.Column="1"
-                                        Margin="3"
-                                        VerticalAlignment="Bottom"
-                                        Command="{Binding SelectedValue.ApplyPropertyFilter, ElementName=classGrid}">
-                                        Apply
-                                    </Button>
-                                </Grid>
+                                                <DataGridTextColumn
+                                                    Width="60"
+                                                    Binding="{Binding Path=Value}"
+                                                    Header="Value" />
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+
+                                        <Button
+                                            Grid.Row="1"
+                                            Margin="5,5,0,0"
+                                            Padding="10,0,10,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Bottom"
+                                            Command="{Binding SelectedValue.ApplyPropertyFilter, ElementName=classGrid}">
+                                            Apply
+                                        </Button>
+                                    </Grid>
+                                </Border>
                             </Popup>
                         </Grid>
                         <viewer:InstanceView

@@ -15,7 +15,7 @@
         <extension:BindingProxy x:Key="Proxy" Data="{Binding}" />
     </Window.Resources>
     <Grid>
-        <UniformGrid
+        <!--<UniformGrid
             Margin="0,0,0,20"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -31,7 +31,7 @@
                 Radius="36"
                 Speed="1.25"
                 SymmetricalArrange="True" />
-        </UniformGrid>
+        </UniformGrid>-->
 
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
@@ -228,6 +228,15 @@
                                         Header="Import as tgv texture file">
                                         <MenuItem.Icon>
                                             <Image Source="{StaticResource ImportIcon}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator />
+                                    <MenuItem
+                                        Command="{Binding Data.AddNewFileCommand, Source={StaticResource Proxy}}"
+                                        CommandParameter="{Binding}"
+                                        Header="Open as Edata Container">
+                                        <MenuItem.Icon>
+                                            <Image Source="{StaticResource OpenEdataPackageIcon}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
                                 </ContextMenu>
