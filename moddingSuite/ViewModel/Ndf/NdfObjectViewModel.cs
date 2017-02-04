@@ -201,16 +201,16 @@ namespace moddingSuite.ViewModel.Ndf
             if (refe == null)
                 return;
             
-            if (isTable(refe))
-            {
+            //if (isTable(refe))
+            //{
                 var editor = new ListEditorViewModel(refe, Object.Class.Manager);
                 DialogProvider.ProvideView(editor, ParentVm);
-            }
-            else
-            {
-                var editor = new ListEditorViewModel(refe, Object.Class.Manager);
-                DialogProvider.ProvideView(editor, ParentVm);
-            }
+            //}
+            //else
+            //{
+                //var editor = new ListEditorViewModel(refe, Object.Class.Manager);
+                //DialogProvider.ProvideView(editor, ParentVm);
+            //}
         }
         private bool isTable(NdfCollection collection)
         {

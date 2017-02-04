@@ -31,7 +31,7 @@ namespace moddingSuite.BL
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Trace.TraceError(string.Format("Error while loading Settings: {0}", ex));
+                    Trace.TraceError($"Error while loading Settings: {ex}");
                 }
             }
 

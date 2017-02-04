@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using moddingSuite.BL;
 using moddingSuite.BL.Ndf;
-using moddingSuite.BL.Scenario;
 using moddingSuite.Model.Edata;
 using moddingSuite.Model.Settings;
 using moddingSuite.View.Common;
@@ -26,16 +25,15 @@ using moddingSuite.ViewModel.Trad;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using moddingSuite.BL.Ess;
 using moddingSuite.BL.TGV;
 using moddingSuite.BL.Mesh;
-using moddingSuite.Model.Ndfbin.Types.AllTypes;
 
 namespace moddingSuite.ViewModel.Edata
 {
     public class EdataManagerViewModel : ViewModelBase
     {
-        private readonly ObservableCollection<EdataFileViewModel> _openFiles =
-            new ObservableCollection<EdataFileViewModel>();
+        private readonly ObservableCollection<EdataFileViewModel> _openFiles = new ObservableCollection<EdataFileViewModel>();
 
         private string _statusText;
 
@@ -89,6 +87,8 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand ReplaceRawCommand { get; set; }
         public ICommand ExportTextureCommand { get; set; }
         public ICommand ReplaceTextureCommand { get; set; }
+        public ICommand ExportSoundCommand { get; set; }
+        public ICommand ReplaceSoundCommand { get; set; }
         public ICommand OpenFileCommand { get; set; }
         public ICommand CloseFileCommand { get; set; }
         public ICommand ChangeExportPathCommand { get; set; }
@@ -100,6 +100,9 @@ namespace moddingSuite.ViewModel.Edata
         public ICommand EditScenarioCommand { get; set; }
         public ICommand PlayMovieCommand { get; set; }
         public ICommand AboutUsCommand { get; set; }
+        public ICommand ReplaceRawFromWorkspaceCommand { get; set; }
+        public ICommand ReplaceTextureFromWorkspaceCommand { get; set; }
+        public ICommand ReplaceSoundFromWorkspaceCommand { get; set; }
 
         public ICommand AddNewFileCommand { get; set; }
 
@@ -159,6 +162,10 @@ namespace moddingSuite.ViewModel.Edata
             ReplaceRawCommand = new ActionCommand(ReplaceRawExecute);
             ExportTextureCommand = new ActionCommand(ExportTextureExecute, () => IsOfType(EdataFileType.Image));
             ReplaceTextureCommand = new ActionCommand(ReplaceTextureExecute, () => IsOfType(EdataFileType.Image));
+
+            ExportSoundCommand = new ActionCommand(ExportSoundExecute, () => HasEnding(".ess"));
+            ReplaceSoundCommand = new ActionCommand(ReplaceSoundExecute, () => HasEnding(".ess"));
+
             PlayMovieCommand = new ActionCommand(PlayMovieExecute);
 
             AboutUsCommand = new ActionCommand(AboutUsExecute);
@@ -169,6 +176,10 @@ namespace moddingSuite.ViewModel.Edata
             EditScenarioCommand = new ActionCommand(EditScenarioExecute, () => IsOfType(EdataFileType.Scenario));
 
             AddNewFileCommand = new ActionCommand(AddNewFileExecute);
+
+            ReplaceRawFromWorkspaceCommand = new ActionCommand(ReplaceRawFromWorkspaceExecute);
+            ReplaceTextureFromWorkspaceCommand = new ActionCommand(ReplaceTextureFromWorkspaceExecute, () => IsOfType(EdataFileType.Image));
+            ReplaceSoundFromWorkspaceCommand = new ActionCommand(ReplaceSoundFromWorkspaceExecute, () => HasEnding(".ess"));
         }
 
         private void AddNewFileExecute(object obj)
@@ -203,7 +214,7 @@ namespace moddingSuite.ViewModel.Edata
                     dispatcher.Invoke(() => IsUIBusy = true);
                     dispatcher.Invoke(report, "Reading scenario...");
 
-                 
+
 
                     var detailsVm = new ScenarioEditorViewModel(scenario, vm);
 
@@ -268,16 +279,6 @@ namespace moddingSuite.ViewModel.Edata
 
         private void ReplaceRawExecute(object obj)
         {
-            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
-
-            if (vm == null)
-                return;
-
-            var file = vm.FilesCollectionView.CurrentItem as EdataContentFile;
-
-            if (file == null)
-                return;
-
             Settings settings = SettingsManager.Load();
 
             var openfDlg = new OpenFileDialog
@@ -295,52 +296,12 @@ namespace moddingSuite.ViewModel.Edata
                 settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
                 SettingsManager.Save(settings);
 
-                var dispatcher = Dispatcher.CurrentDispatcher;
-
-                Action<string> report = msg => StatusText = msg;
-
-                var s = new Task(() =>
-                    {
-                        try
-                        {
-                            dispatcher.Invoke(() => IsUIBusy = true);
-                            dispatcher.Invoke(report, string.Format("Replacing {0}...", file.Path));
-                            byte[] replacefile = File.ReadAllBytes(openfDlg.FileName);
-
-                            vm.EdataManager.ReplaceFile(file, replacefile);
-                            vm.LoadFile(vm.LoadedFile);
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
-                        }
-                        finally
-                        {
-                            dispatcher.Invoke(report, "Ready");
-                            dispatcher.Invoke(() => IsUIBusy = false);
-                        }
-                    });
-
-                s.Start();
+                ReplaceRawFile(File.ReadAllBytes(openfDlg.FileName));
             }
         }
 
         protected void ReplaceTextureExecute(object obj)
         {
-            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
-
-            if (vm == null)
-                return;
-
-            var destTgvFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
-
-            if (destTgvFile == null)
-                return;
-
-            var tgvReader = new TgvReader();
-            var data = vm.EdataManager.GetRawData(destTgvFile);
-            var tgv = tgvReader.Read(data);
-
             Settings settings = SettingsManager.Load();
 
             var openfDlg = new OpenFileDialog
@@ -358,50 +319,207 @@ namespace moddingSuite.ViewModel.Edata
                 settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
                 SettingsManager.Save(settings);
 
-                var dispatcher = Dispatcher.CurrentDispatcher;
-                Action<string> report = msg => StatusText = msg;
-
-                var s = new Task(() =>
-                    {
-                        try
-                        {
-                            dispatcher.Invoke(() => IsUIBusy = true);
-                            dispatcher.Invoke(report, string.Format("Replacing {0}...", destTgvFile.Path));
-
-                            byte[] sourceDds = File.ReadAllBytes(openfDlg.FileName);
-
-                            dispatcher.Invoke(report, "Converting DDS to TGV file format...");
-
-                            var ddsReader = new TgvDDSReader();
-                            var sourceTgvFile = ddsReader.ReadDDS(sourceDds);
-                            byte[] sourceTgvRawData;
-
-                            using (var tgvwriterStream = new MemoryStream())
-                            {
-                                var tgvWriter = new TgvWriter();
-                                tgvWriter.Write(tgvwriterStream, sourceTgvFile, tgv.SourceChecksum, tgv.IsCompressed);
-                                sourceTgvRawData = tgvwriterStream.ToArray();
-                            }
-
-                            dispatcher.Invoke(report, "Replacing file in edata container...");
-
-                            vm.EdataManager.ReplaceFile(destTgvFile, sourceTgvRawData);
-                            vm.LoadFile(vm.LoadedFile);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
-                        }
-                        finally
-                        {
-                            dispatcher.Invoke(report, "Ready");
-                            dispatcher.Invoke(() => IsUIBusy = false);
-                        }
-                    });
-
-                s.Start();
+                ReplaceTextureFile(openfDlg.FileName);
             }
+        }
+
+        private void ReplaceSoundExecute(object obj)
+        {
+            Settings settings = SettingsManager.Load();
+
+            var openfDlg = new OpenFileDialog
+            {
+                DefaultExt = ".wav",
+                Multiselect = false,
+                Filter = "WAV files (.wav)|*.wav"
+            };
+
+            if (File.Exists(settings.LastOpenFolder))
+                openfDlg.InitialDirectory = settings.LastOpenFolder;
+
+            if (openfDlg.ShowDialog().Value)
+            {
+                settings.LastOpenFolder = new FileInfo(openfDlg.FileName).DirectoryName;
+                SettingsManager.Save(settings);
+
+                ReplaceSoundFile(openfDlg.FileName);
+            }
+        }
+
+        private void ReplaceRawFromWorkspaceExecute(object obj)
+        {
+            var file = obj.ToString();
+
+            if (File.Exists(file))
+            {
+                ReplaceRawFile(File.ReadAllBytes(file));
+            }
+        }
+
+        private void ReplaceTextureFromWorkspaceExecute(object obj)
+        {
+            var file = obj.ToString();
+
+            if (File.Exists(file))
+            {
+                ReplaceTextureFile(file);
+            }
+        }
+
+        private void ReplaceSoundFromWorkspaceExecute(object obj)
+        {
+            var file = obj.ToString();
+
+            if (File.Exists(file))
+            {
+                ReplaceSoundFile(file);
+            }
+        }
+
+        private void ReplaceRawFile(byte[] newFileData)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+            var file = vm?.FilesCollectionView.CurrentItem as EdataContentFile;
+
+            if (file == null)
+                return;
+
+            var dispatcher = Dispatcher.CurrentDispatcher;
+
+            Action<string> report = msg => StatusText = msg;
+
+            var s = new Task(() =>
+            {
+                try
+                {
+                    dispatcher.Invoke(() => IsUIBusy = true);
+                    dispatcher.Invoke(report, $"Replacing {file.Path}...");
+
+                    vm.EdataManager.ReplaceFile(file, newFileData);
+                    vm.LoadFile(vm.LoadedFile);
+
+                    dispatcher.Invoke(report, "Ready");
+                }
+                catch (Exception ex)
+                {
+                    dispatcher.Invoke(report, $"Replacing failed {ex.Message}");
+                    Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                }
+                finally
+                {
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                }
+            });
+
+            s.Start();
+        }
+
+        protected void ReplaceTextureFile(string newFilePath)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+            var destTgvFile = vm?.FilesCollectionView.CurrentItem as EdataContentFile;
+
+            if (destTgvFile == null)
+                return;
+
+            var tgvReader = new TgvReader();
+            var data = vm.EdataManager.GetRawData(destTgvFile);
+            var tgv = tgvReader.Read(data);
+
+            var dispatcher = Dispatcher.CurrentDispatcher;
+            Action<string> report = msg => StatusText = msg;
+
+            var s = new Task(() =>
+            {
+                try
+                {
+                    dispatcher.Invoke(() => IsUIBusy = true);
+                    dispatcher.Invoke(report, $"Replacing {destTgvFile.Path}...");
+
+                    byte[] sourceDds = File.ReadAllBytes(newFilePath);
+
+                    dispatcher.Invoke(report, "Converting DDS to TGV file format...");
+
+                    var ddsReader = new TgvDDSReader();
+                    var sourceTgvFile = ddsReader.ReadDDS(sourceDds);
+                    byte[] sourceTgvRawData;
+
+                    using (var tgvwriterStream = new MemoryStream())
+                    {
+                        var tgvWriter = new TgvWriter();
+                        tgvWriter.Write(tgvwriterStream, sourceTgvFile, tgv.SourceChecksum, tgv.IsCompressed);
+                        sourceTgvRawData = tgvwriterStream.ToArray();
+                    }
+
+                    dispatcher.Invoke(report, "Replacing file in edata container...");
+
+                    vm.EdataManager.ReplaceFile(destTgvFile, sourceTgvRawData);
+
+                    vm.LoadFile(vm.LoadedFile);
+                    dispatcher.Invoke(report, "Ready");
+                }
+                catch (Exception ex)
+                {
+                    dispatcher.Invoke(report, $"Replacing failed {ex.Message}");
+                    Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                }
+                finally
+                {
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                }
+            });
+
+            s.Start();
+        }
+
+        protected void ReplaceSoundFile(string newFilePath)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+
+            if (vm == null)
+                return;
+
+            var file = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+
+            if (file == null)
+                return;
+
+            var dispatcher = Dispatcher.CurrentDispatcher;
+            Action<string> report = msg => StatusText = msg;
+
+            var s = new Task(() =>
+            {
+                try
+                {
+                    dispatcher.Invoke(() => IsUIBusy = true);
+                    dispatcher.Invoke(report, string.Format("Replacing {0}...", file.Path));
+                    byte[] replacefile = File.ReadAllBytes(newFilePath);
+
+                    EssWriter writer = new EssWriter();
+
+                    try
+                    {
+                        replacefile = writer.WriteEss(replacefile);
+                        vm.EdataManager.ReplaceFile(file, replacefile);
+                        vm.LoadFile(vm.LoadedFile);
+                        dispatcher.Invoke(report, "Ready");
+                    }
+                    catch (InvalidDataException ex)
+                    {
+                        dispatcher.Invoke(report, ex.Message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                }
+                finally
+                {
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                }
+            });
+
+            s.Start();
         }
 
         protected void ExportTextureExecute(object obj)
@@ -459,19 +577,73 @@ namespace moddingSuite.ViewModel.Edata
             s.Start();
         }
 
-        protected bool IsOfType(EdataFileType type)
+        private void ExportSoundExecute(object obj)
         {
             var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
 
             if (vm == null)
-                return false;
+                return;
 
-            var ndf = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+            var sourceEssFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
 
-            if (ndf == null)
-                return false;
+            if (sourceEssFile == null)
+                return;
 
-            return ndf.FileType == type;
+            var dispatcher = Dispatcher.CurrentDispatcher;
+            Action<string> report = msg => StatusText = msg;
+
+            var s = new Task(() =>
+            {
+                try
+                {
+                    dispatcher.Invoke(() => IsUIBusy = true);
+
+                    Settings settings = SettingsManager.Load();
+
+                    var f = new FileInfo(sourceEssFile.Path);
+                    var exportPath = Path.Combine(settings.SavePath, f.Name + ".wav");
+
+                    dispatcher.Invoke(report, string.Format("Exporting to {0}...", exportPath));
+
+                    var tgvReader = new EssReader();
+                    var tgv = tgvReader.ReadEss(vm.EdataManager.GetRawData(sourceEssFile));
+
+                    using (var fs = new FileStream(Path.Combine(settings.SavePath, f.Name + ".wav"), FileMode.OpenOrCreate))
+                    {
+                        fs.Write(tgv, 0, tgv.Length);
+                        fs.Flush();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Unhandeled exception in Thread occoured: {0}", ex.ToString());
+                }
+                finally
+                {
+                    dispatcher.Invoke(report, "Ready");
+                    dispatcher.Invoke(() => IsUIBusy = false);
+                }
+            });
+
+            s.Start();
+        }
+
+        protected bool IsOfType(EdataFileType type)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+
+            var ndf = vm?.FilesCollectionView.CurrentItem as EdataContentFile;
+
+            return ndf?.FileType == type;
+        }
+
+        protected bool HasEnding(string ending)
+        {
+            var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
+
+            var ndf = vm?.FilesCollectionView.CurrentItem as EdataContentFile;
+
+            return ndf != null && ndf.Name.EndsWith(ending);
         }
 
         protected void EditTradFileExecute(object obj)
@@ -639,11 +811,11 @@ namespace moddingSuite.ViewModel.Edata
             Settings settings = SettingsManager.Load();
 
             var folderDlg = new FolderBrowserDialog
-                                {
-                                    SelectedPath = settings.SavePath,
-                                    //RootFolder = Environment.SpecialFolder.MyComputer,
-                                    ShowNewFolderButton = true,
-                                };
+            {
+                SelectedPath = settings.SavePath,
+                //RootFolder = Environment.SpecialFolder.MyComputer,
+                ShowNewFolderButton = true,
+            };
 
             if (folderDlg.ShowDialog() == DialogResult.OK)
             {
@@ -693,11 +865,11 @@ namespace moddingSuite.ViewModel.Edata
             Settings settings = SettingsManager.Load();
 
             var openfDlg = new OpenFileDialog
-                               {
-                                   DefaultExt = ".dat",
-                                   Multiselect = true,
-                                   Filter = "Edat (.dat)|*.dat|All Files|*.*"
-                               };
+            {
+                DefaultExt = ".dat",
+                Multiselect = true,
+                Filter = "Edat (.dat)|*.dat|All Files|*.*"
+            };
 
             if (File.Exists(settings.LastOpenFolder))
                 openfDlg.InitialDirectory = settings.LastOpenFolder;

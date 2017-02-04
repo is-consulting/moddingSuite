@@ -4,22 +4,34 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Edata="clr-namespace:moddingSuite.View.Edata"
     xmlns:edata="clr-namespace:moddingSuite.ViewModel.Edata"
+    xmlns:extension="clr-namespace:moddingSuite.View.Extension"
+    xmlns:view="clr-namespace:moddingSuite.View"
     Title="Wargame Modding Suite"
     Width="1367.591"
     Height="729.885"
     Icon="{StaticResource PackageFileIcon}"
     WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <extension:BindingProxy x:Key="Proxy" Data="{Binding}" />
+    </Window.Resources>
     <Grid>
-        <!--<UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" Panel.ZIndex="1000" Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Margin="0 0 0 20">
-            <view:SpinningWheel IsSpinning="True"
-                              DotRadius="7"
-                              Speed="1.25"
-                              Radius="36"
-                              DotCount="21"
-                              SymmetricalArrange="True"
-                              Direction="CW"
-                              x:Name="wheel" />
-        </UniformGrid>-->
+        <UniformGrid
+            Margin="0,0,0,20"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Panel.ZIndex="1000"
+            Background="White"
+            Visibility="{Binding Path=IsUIBusy, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+            <view:SpinningWheel
+                x:Name="wheel"
+                Direction="CW"
+                DotCount="21"
+                DotRadius="7"
+                IsSpinning="True"
+                Radius="36"
+                Speed="1.25"
+                SymmetricalArrange="True" />
+        </UniformGrid>
 
         <Grid Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
@@ -87,6 +99,24 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Command="{Binding ReplaceTextureCommand}" Header="Replace">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource ImportIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+
+                <Menu>
+                    <MenuItem ToolTip="Sounds">
+                        <MenuItem.Header>
+                            <Image Source="{StaticResource SoundIcon}" />
+                        </MenuItem.Header>
+                        <MenuItem Command="{Binding ExportSoundCommand}" Header="Export">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource ExportIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding ReplaceSoundCommand}" Header="Replace">
                             <MenuItem.Icon>
                                 <Image Source="{StaticResource ImportIcon}" />
                             </MenuItem.Icon>
@@ -173,10 +203,37 @@
 
                 <TabControl Grid.Column="2">
                     <TabItem Header="Workspace">
-                        <TreeView ItemsSource="{Binding Workspace.Root}">
+                        <TreeView extension:TreeViewExtension.SelectItemOnRightClick="true" ItemsSource="{Binding Workspace.Root}">
                             <TreeView.Resources>
-                                <DataTemplate DataType="{x:Type edata:FileViewModel}">
-                                    <Grid>
+                                <ContextMenu x:Key="workspaceContextMenu">
+                                    <MenuItem
+                                        Command="{Binding Data.ReplaceRawFromWorkspaceCommand, Source={StaticResource Proxy}}"
+                                        CommandParameter="{Binding Info.FullName}"
+                                        Header="Import raw file">
+                                        <MenuItem.Icon>
+                                            <Image Source="{StaticResource ImportIcon}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem
+                                        Command="{Binding Data.ReplaceSoundFromWorkspaceCommand, Source={StaticResource Proxy}}"
+                                        CommandParameter="{Binding Info.FullName}"
+                                        Header="Import as Ess sound file">
+                                        <MenuItem.Icon>
+                                            <Image Source="{StaticResource ImportIcon}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem
+                                        Command="{Binding Data.ReplaceTextureFromWorkspaceCommand, Source={StaticResource Proxy}}"
+                                        CommandParameter="{Binding Info.FullName}"
+                                        Header="Import as tgv texture file">
+                                        <MenuItem.Icon>
+                                            <Image Source="{StaticResource ImportIcon}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+
+                                <HierarchicalDataTemplate DataType="{x:Type edata:FileViewModel}">
+                                    <Grid ContextMenu="{StaticResource workspaceContextMenu}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
@@ -187,7 +244,7 @@
                                             Margin="5,2,2,2"
                                             Text="{Binding Name}" />
                                     </Grid>
-                                </DataTemplate>
+                                </HierarchicalDataTemplate>
                             </TreeView.Resources>
                         </TreeView>
                     </TabItem>
@@ -198,7 +255,7 @@
                                     <Grid>
                                         <Grid.InputBindings>
                                             <MouseBinding
-                                                Command="{Binding Path=DataContext.AddNewFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}}"
+                                                Command="{Binding Path=Data.AddNewFileCommand, Source={StaticResource Proxy}}"
                                                 CommandParameter="{Binding}"
                                                 MouseAction="LeftDoubleClick" />
                                         </Grid.InputBindings>

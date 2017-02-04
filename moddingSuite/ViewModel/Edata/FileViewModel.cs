@@ -22,7 +22,6 @@ namespace moddingSuite.ViewModel.Edata
             set
             {
                 _fileInfo = value;
-                
             }
         }
 

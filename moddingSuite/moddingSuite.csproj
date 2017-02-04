@@ -90,6 +90,8 @@
     </ApplicationDefinition>
     <Compile Include="BL\DDS\DDS.cs" />
     <Compile Include="BL\DDS\DDSHelper.cs" />
+    <Compile Include="BL\Ess\EssReader.cs" />
+    <Compile Include="BL\Ess\EssWriter.cs" />
     <Compile Include="BL\ImageService\BlockDXT\AlphaBlockDXT5.cs" />
     <Compile Include="BL\ImageService\BlockDXT\BlockDXT1.cs" />
     <Compile Include="BL\ImageService\BlockDXT\BlockDXT5.cs" />
@@ -238,6 +240,7 @@
     <Compile Include="View\DialogProvider\IViewMap.cs" />
     <Compile Include="View\DialogProvider\ViewInstance.cs" />
     <Compile Include="View\DialogProvider\ViewMap.cs" />
+    <Compile Include="View\Extension\BindingProxy.cs" />
     <Compile Include="View\Extension\BoolToVisibilityCollapsedConverter.cs" />
     <Compile Include="View\Extension\ByteToKiloByteConverter.cs" />
     <Compile Include="View\Extension\Color32ValueConverter.cs" />
@@ -250,6 +253,7 @@
     <Compile Include="View\Common\MoviePlaybackView.xaml.cs">
       <DependentUpon>MoviePlaybackView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Extension\TreeViewExtensions.cs" />
     <Compile Include="View\Extension\TreeViewItemExtensions.cs" />
     <Compile Include="View\Mesh\MeshView.xaml.cs">
       <DependentUpon>MeshView.xaml</DependentUpon>
@@ -762,6 +766,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\filter_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Recording_16xLG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

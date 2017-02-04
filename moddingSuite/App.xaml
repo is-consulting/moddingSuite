@@ -16,8 +16,10 @@
 
         <BitmapImage x:Key="SaveIcon" UriSource="View\Images\Save_6530.png" />
 
-        <BitmapImage x:Key="EmptyFilter" UriSource="View\Images\filter_16xLG.pngf" />
+        <BitmapImage x:Key="EmptyFilter" UriSource="View\Images\filter_16xLG.png" />
         <BitmapImage x:Key="FilledFilter" UriSource="View\Images\filled_filter-26.png" />
+
+
 
         <BitmapImage x:Key="ViewChanges" UriSource="View\Images\View_Details-26.png" />
 
@@ -38,6 +40,7 @@
         <BitmapImage x:Key="GplIcon" UriSource="View\Images\gplv3-127x51.png" />
 
         <BitmapImage x:Key="TextureIcon" UriSource="View\Images\resource_16xLG.png" />
+        <BitmapImage x:Key="SoundIcon" UriSource="View\Images\Recording_16xLG.png" />
 
         <BitmapImage x:Key="ExportIcon" UriSource="View\Images\BookmarkNext_2389.png" />
         <BitmapImage x:Key="ImportIcon" UriSource="View\Images\BookmarkPrevious_2391.png" />
@@ -604,8 +607,8 @@
                                     <Condition Property="IsSelected" Value="true" />
                                     <Condition Property="IsSelectionActive" Value="false" />
                                 </MultiTrigger.Conditions>
-                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ToolBarButtonPressed}" />
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
                             </MultiTrigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
