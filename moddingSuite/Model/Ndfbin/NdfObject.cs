@@ -20,7 +20,7 @@ namespace moddingSuite.Model.Ndfbin
         private bool _isTopObject;
         public string Name
         {
-            get { return string.Format("{0}",Id); }
+            get { return $"{Id}"; }
         }
         public NdfClass Class
         {

@@ -73,7 +73,7 @@ namespace moddingSuite.View.DialogProvider
             var viewInstance = Activator.CreateInstance(map.ViewType) as Window;
 
             if (viewInstance == null)
-                throw new InvalidOperationException(string.Format("Can not create an instance of {0}", map.ViewType));
+                throw new InvalidOperationException($"Can not create an instance of {map.ViewType}");
 
 
             if (parentVm != null)
