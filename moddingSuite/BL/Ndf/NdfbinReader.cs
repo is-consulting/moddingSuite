@@ -386,11 +386,17 @@ namespace moddingSuite.BL.Ndf
             for (uint i = 0; i < instanceCount; i++)
             {
                 long objOffset = ms.Position;
+                try
+                {
+                    NdfObject obj = ReadObject(ms, i, owner);
 
-                NdfObject obj = ReadObject(ms, i, owner);
-                obj.Offset = objOffset;
+                    obj.Offset = objOffset;
 
-                objects.Add(obj);
+                    objects.Add(obj);
+                }catch(Exception e)
+                {
+                    throw e;
+                }
             }
 
             return objects;
@@ -446,9 +452,16 @@ namespace moddingSuite.BL.Ndf
                             }
 
                 instance.PropertyValues.Add(propVal);
-
-                NdfValueWrapper res = ReadValue(ms, owner);
-                propVal.Value = res;
+                try
+                {
+                    NdfValueWrapper res = ReadValue(ms, owner);
+                    propVal.Value = res;
+                }
+                catch(Exception e)
+                {
+                    throw e;
+                }
+                
             }
 
             owner.AddEmptyProperties(instance);
@@ -469,11 +482,24 @@ namespace moddingSuite.BL.Ndf
             var buffer = new byte[4];
 
             ms.Read(buffer, 0, buffer.Length);
-            NdfType type = NdfTypeManager.GetType(buffer);
+            NdfType type=NdfTypeManager.GetType(buffer);
+
 
             if (type == NdfType.Unknown)
+            {
+                using (var file = File.Create("dump.bin"))
+                {
+                    var k = 64;
+                    var buf = new byte[k];
+                    ms.Read(buf, 0, k);
+                    file.Write(buf, 0, k);
+                    file.Flush();
+                    Console.WriteLine("dumped");
+                }
+
                 throw new InvalidDataException("Unknown datatypes are not supported!");
 
+            }
             if (type == NdfType.Reference)
             {
                 ms.Read(buffer, 0, buffer.Length);

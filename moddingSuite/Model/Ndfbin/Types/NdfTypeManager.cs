@@ -16,7 +16,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                 return NdfType.Unknown;
 
             uint value = BitConverter.ToUInt32(data, 0);
-
+            
             if (Enum.IsDefined(typeof(NdfType), value))
                 return (NdfType)value;
 
@@ -38,10 +38,17 @@ namespace moddingSuite.Model.Ndfbin.Types
                     return new NdfInt16(BitConverter.ToInt16(data, 0));
                 case NdfType.UInt16:
                     return new NdfUInt16(BitConverter.ToUInt16(data, 0));
+                /*case NdfType.Int24:
+                    var buf = new byte[4];
+                    
+                    Array.Copy(data, buf, 3);
+                    return new NdfInt32(BitConverter.ToInt32(buf, 0));*/
                 case NdfType.Int32:
                     return new NdfInt32(BitConverter.ToInt32(data, 0));
                 case NdfType.UInt32:
                     return new NdfUInt32(BitConverter.ToUInt32(data, 0));
+                case NdfType.Long:
+                    return new NdfLong(BitConverter.ToInt64(data, 0));
                 case NdfType.Float32:
                     return new NdfSingle(BitConverter.ToSingle(data, 0));
                 case NdfType.Float64:
@@ -144,6 +151,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                 case NdfType.WideString:
                     return 4;
                 case NdfType.Float64:
+                case NdfType.Long:
                 case NdfType.LocalisationHash:
                 case NdfType.ObjectReference:
                 case NdfType.EugInt2:
@@ -178,6 +186,7 @@ namespace moddingSuite.Model.Ndfbin.Types
                            NdfType.Boolean,
                            NdfType.Int32,
                            NdfType.UInt32,
+                           NdfType.Long,
                            NdfType.Float32,
                            NdfType.ObjectReference,
                            NdfType.Map,

@@ -194,7 +194,30 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             var end = ms.Position;
             ms.Seek(0, SeekOrigin.Current);
             var subBlockData = Compressor.Decomp(subBlockBuffer);
-            var uncompLength = subBlockData.Length;
+            var bs = new MemoryStream(subBlockData);
+            uncompressedPrintToFile(bs, "vertexBinary", (int)(bs.Length));
+            var vertexFile = new StreamWriter(new FileStream(Path.Combine(settings.SavePath, "vertexes.csv"), FileMode.Create));
+            bs.Read(buffer, 0, buffer.Length);
+            var nbVertexes = BitConverter.ToInt32(buffer, 0);
+            bs.Read(buffer, 0, buffer.Length);
+            var unknown = BitConverter.ToInt32(buffer, 0);
+            uint xMask = 0xFFFC0000;
+            uint yMask = 0x0003FFF0;
+            Console.WriteLine("M=[");
+            for (var i = 0; i < nbVertexes; i++)
+            {
+                bs.Read(buffer, 0, buffer.Length);
+                Array.Reverse(buffer);
+                uint coord = BitConverter.ToUInt32(buffer, 0);
+                bs.Seek(2, SeekOrigin.Current);
+                uint x = (coord & xMask) >> 18;
+                uint y = (coord & yMask) >> 4;
+                Console.WriteLine("{0}\t{1};", x, y);
+                vertexFile.WriteLine("{0}\t{1}", x, y);
+                
+            }
+            Console.WriteLine("]");
+            /*var uncompLength = subBlockData.Length;
 
             var vertexFile = new StreamWriter(new FileStream(Path.Combine(settings.SavePath, "vertexes.csv"), FileMode.Create));
             var readPosition=0;
@@ -216,8 +239,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
                     //readPosition += 2;
                 }
                 vertexFile.WriteLine();
-            }
-            vertexFile.Flush();
+            }*/
+            //vertexFile.Flush();
         }
     }
 }

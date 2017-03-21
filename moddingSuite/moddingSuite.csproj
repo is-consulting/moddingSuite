@@ -161,6 +161,7 @@
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfGuid.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfHash.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfInt16.cs" />
+    <Compile Include="Model\Ndfbin\Types\AllTypes\NdfLong.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfTime64.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfUInt16.cs" />
     <Compile Include="Model\Ndfbin\Types\AllTypes\NdfInt32.cs" />

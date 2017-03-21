@@ -213,3 +213,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+/moddingSuite/View/Ndfbin/Viewer/DamageTableView.xaml.cs
+/moddingSuite/ViewModel/Ndf/DamageTableViewModel.cs
