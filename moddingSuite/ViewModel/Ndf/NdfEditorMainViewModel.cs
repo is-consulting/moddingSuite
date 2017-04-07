@@ -532,15 +532,15 @@ namespace moddingSuite.ViewModel.Ndf
 
             if (cls == null)
                 return;
+            var vm = new NdfClassViewModel(cls.Object.Class, this);
+            NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == cls.Id);
             ViewModelBase baseViewModel;
             switch (cls.Object.Class.Name) {
+                case "TGameplayArmeArmureContainer":
                 case "TGameplayDamageResistanceContainer":
-                    baseViewModel = new ArmourDamageViewModel(cls.Object, this);
+                    baseViewModel = new ArmourDamageViewModel(inst.Object, this);
                     break;
                 default:
-                    var vm = new NdfClassViewModel(cls.Object.Class, this);
-                     NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == cls.Id);
-
                      if (inst == null)
                         return;
                     vm.InstancesCollectionView.MoveCurrentTo(inst);

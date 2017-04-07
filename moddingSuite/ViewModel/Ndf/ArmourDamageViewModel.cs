@@ -16,13 +16,41 @@ namespace moddingSuite.ViewModel.Ndf
         public ArmourDamageViewModel(NdfObject obj, ViewModelBase parentVm)
             : base(obj, parentVm)
         {
-            switch (obj.Class.Name) { 
+            Name = obj.Class.Name;
+            switch (obj.Class.Name) {
+                case "TGameplayArmeArmureContainer":
+                    readTGameplayArmeArmureContainer(obj);
+                    break;
                 case "TGameplayDamageResistanceContainer":
                     readTGameplayDamageResistanceContainer(obj);
                     break;
                 default:
                     throw new Exception(string.Format("Cannot read object {0} as ArmourDamageViewModel", obj.Class.Name));
             }
+        }
+
+        private void readTGameplayArmeArmureContainer(NdfObject obj)
+        {
+            var maps = obj.PropertyValues[0].Value as NdfCollection;
+            for (var i = 0; i < 42; i++)
+            {
+                TableData.Columns.Add(i.ToString());
+            }
+            for (var i = 0; i < 70; i++)
+            {
+                var map = maps.FirstOrDefault(x => ((NdfMap)x.Value).Key.Value.ToString().Equals(i.ToString()));
+                if (map != null)
+                {
+                    var collection = ((MapValueHolder)((NdfMap)map.Value).Value).Value as NdfCollection;
+                    var row = TableData.NewRow();
+                    TableData.Rows.Add(row);
+                    for (var j = 0; j < collection.Count; j++)
+                    {
+                        row[j] = collection[j].Value;
+                    }
+                }
+            }
+            TableData.AcceptChanges();
         }
 
         private void readTGameplayDamageResistanceContainer(NdfObject obj)
@@ -49,10 +77,10 @@ namespace moddingSuite.ViewModel.Ndf
                 }
                 
             }
-            TableData.WriteXml("data.xml");
             TableData.AcceptChanges();
         }
         public DataTable TableData { get; } = new DataTable();
+        public string Name;
         /*public ObservableCollection<ObservableCollection<NdfPropertyValue>> TableData { get; } =
             new ObservableCollection<ObservableCollection<NdfPropertyValue>>();*/
     }

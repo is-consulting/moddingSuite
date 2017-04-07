@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:moddingSuite.View.Ndfbin.Viewer"
         mc:Ignorable="d"
-        Title="ArmourDamageTableWindow" Height="305.042" Width="483.193">
+        Title="{Binding Path=Name}" Height="305.042" Width="483.193"
+        Icon="{StaticResource ScriptIcon}">
     <Grid>
         <DataGrid x:Name="damageGrid"  ItemsSource="{Binding TableData}"
                       IsSynchronizedWithCurrentItem="True"
@@ -16,7 +17,13 @@
                       SelectionMode="Single"
                       SelectionUnit="Cell"
                       RowDetailsVisibilityMode="VisibleWhenSelected">
-            <!--<DataGrid.InputBindings>
+
+
+            <!--<DataGrid.Columns>
+                
+                    
+            </DataGrid.Columns> CellEditingTemplateSelector="{DynamicResource editingControlTemplateSelector}"/>
+            <DataGrid.InputBindings>
                 <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DetailsCommand}" CommandParameter="{Binding ElementName=propGrid, Path=SelectedCells}" />
             </DataGrid.InputBindings>-->
             
