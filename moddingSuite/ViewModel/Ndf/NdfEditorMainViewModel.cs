@@ -532,17 +532,22 @@ namespace moddingSuite.ViewModel.Ndf
 
             if (cls == null)
                 return;
+            ViewModelBase baseViewModel;
+            switch (cls.Object.Class.Name) {
+                case "TGameplayDamageResistanceContainer":
+                    baseViewModel = new ArmourDamageViewModel(cls.Object, this);
+                    break;
+                default:
+                    var vm = new NdfClassViewModel(cls.Object.Class, this);
+                     NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == cls.Id);
 
-            var vm = new NdfClassViewModel(cls.Object.Class, this);
-
-            NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == cls.Id);
-
-            if (inst == null)
-                return;
-
-            vm.InstancesCollectionView.MoveCurrentTo(inst);
-
-            DialogProvider.ProvideView(vm, this);
+                     if (inst == null)
+                        return;
+                    vm.InstancesCollectionView.MoveCurrentTo(inst);
+                    baseViewModel = vm;
+                    break;
+            }
+            DialogProvider.ProvideView(baseViewModel, this);
         }
 
         private void DeleteStringExecute(object obj)

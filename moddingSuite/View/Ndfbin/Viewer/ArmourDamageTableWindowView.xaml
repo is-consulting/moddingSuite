@@ -1,0 +1,26 @@
+﻿<Window x:Class="moddingSuite.View.Ndfbin.Viewer.ArmourDamageTableWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:moddingSuite.View.Ndfbin.Viewer"
+        mc:Ignorable="d"
+        Title="ArmourDamageTableWindow" Height="305.042" Width="483.193">
+    <Grid>
+        <DataGrid x:Name="damageGrid"  ItemsSource="{Binding TableData}"
+                      IsSynchronizedWithCurrentItem="True"
+                      CanUserResizeRows="False"
+                      CanUserAddRows="False"  
+                      CanUserDeleteRows="False" 
+                      AutoGenerateColumns="True"
+                      SelectionMode="Single"
+                      SelectionUnit="Cell"
+                      RowDetailsVisibilityMode="VisibleWhenSelected">
+            <!--<DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DetailsCommand}" CommandParameter="{Binding ElementName=propGrid, Path=SelectedCells}" />
+            </DataGrid.InputBindings>-->
+            
+        </DataGrid>
+        
+    </Grid>
+</Window>

@@ -49,6 +49,7 @@ namespace moddingSuite.View.DialogProvider
             Maps.Add(new ViewMap<VersionManagerView, VersionManagerViewModel>());
 
             Maps.Add(new ViewMap<UnhandledExceptionView, UnhandledExceptionViewModel>());
+            Maps.Add(new ViewMap<ArmourDamageTableWindowView, ArmourDamageViewModel>());
         }
 
         public static IList<ViewInstance> RegisteredViews

@@ -208,6 +208,7 @@
     <Compile Include="ViewModel\Edata\FileViewModel.cs" />
     <Compile Include="ViewModel\Edata\GameSpaceViewModel.cs" />
     <Compile Include="ViewModel\Edata\WorkspaceViewModel.cs" />
+    <Compile Include="ViewModel\Ndf\ArmourDamageViewModel.cs" />
     <Compile Include="ViewModel\Ndf\ObjectCopyResultViewModel.cs" />
     <Compile Include="ViewModel\Scenario\ScenarioEditorViewModel.cs" />
     <Compile Include="ViewModel\UnhandledException\UnhandledExceptionViewModel.cs" />
@@ -280,6 +281,9 @@
     </Compile>
     <Compile Include="View\Ndfbin\Viewer\AddCollectionItemView.xaml.cs">
       <DependentUpon>AddCollectionItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Ndfbin\Viewer\ArmourDamageTableWindowView.xaml.cs">
+      <DependentUpon>ArmourDamageTableWindowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Ndfbin\Viewer\InstanceWindowView.xaml.cs">
       <DependentUpon>InstanceWindowView.xaml</DependentUpon>
@@ -442,6 +446,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Ndfbin\Viewer\AddCollectionItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Ndfbin\Viewer\ArmourDamageTableWindowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
