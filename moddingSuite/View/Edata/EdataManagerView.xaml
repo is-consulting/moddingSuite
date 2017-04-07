@@ -7,7 +7,6 @@
     xmlns:edata="clr-namespace:moddingSuite.ViewModel.Edata"
     xmlns:extension="clr-namespace:moddingSuite.View.Extension"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mdi="clr-namespace:moddingSuite.View.Mdi"
     xmlns:view="clr-namespace:moddingSuite.View"
     Title="Wargame Modding Suite"
     Width="1367.591"
