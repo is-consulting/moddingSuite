@@ -71,7 +71,7 @@ namespace moddingSuite.ViewModel.Edata
             }
 
             if (failedFiles.Count > 0)
-                StatusText = string.Format("{0} files failed to open. Did you start the modding suite while running the game?", failedFiles.Count);
+                StatusText = $"{failedFiles.Count} files failed to open. Did you start the modding suite while running the game?";
 
             if (settings.LastOpenedFiles.Count == 0)
                 CollectionViewSource.GetDefaultView(OpenFiles).MoveCurrentToFirst();
@@ -493,14 +493,14 @@ namespace moddingSuite.ViewModel.Edata
                 try
                 {
                     dispatcher.Invoke(() => IsUIBusy = true);
-                    dispatcher.Invoke(report, string.Format("Replacing {0}...", file.Path));
+                    dispatcher.Invoke(report, $"Replacing {file.Path}...");
                     byte[] replacefile = File.ReadAllBytes(newFilePath);
 
                     EssWriter writer = new EssWriter();
 
                     try
                     {
-                        replacefile = writer.WriteEss(replacefile);
+                        replacefile = writer.Write(replacefile);
                         vm.EdataManager.ReplaceFile(file, replacefile);
                         vm.LoadFile(vm.LoadedFile);
                         dispatcher.Invoke(report, "Ready");
@@ -527,10 +527,7 @@ namespace moddingSuite.ViewModel.Edata
         {
             var vm = CollectionViewSource.GetDefaultView(OpenFiles).CurrentItem as EdataFileViewModel;
 
-            if (vm == null)
-                return;
-
-            var sourceTgvFile = vm.FilesCollectionView.CurrentItem as EdataContentFile;
+            var sourceTgvFile = vm?.FilesCollectionView.CurrentItem as EdataContentFile;
 
             if (sourceTgvFile == null)
                 return;
