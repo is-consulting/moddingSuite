@@ -16,9 +16,10 @@
                       AutoGenerateColumns="True"
                       SelectionMode="Single"
                       SelectionUnit="Cell"
-                      RowDetailsVisibilityMode="VisibleWhenSelected">
+                      RowDetailsVisibilityMode="VisibleWhenSelected"
+                      LoadingRow="DataGrid_LoadingRow">
 
-
+            
             <!--<DataGrid.Columns>
                 
                     

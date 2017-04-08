@@ -1,5 +1,6 @@
 ﻿using moddingSuite.Model.Ndfbin;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
+using moddingSuite.View.Ndfbin.Viewer;
 using moddingSuite.ViewModel.Base;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace moddingSuite.ViewModel.Ndf
 {
-    class ArmourDamageViewModel: ObjectWrapperViewModel<NdfObject>
+    class ArmourDamageViewModel : ObjectWrapperViewModel<NdfObject>
     {
         public ArmourDamageViewModel(NdfObject obj, ViewModelBase parentVm)
             : base(obj, parentVm)
@@ -27,6 +29,7 @@ namespace moddingSuite.ViewModel.Ndf
                 default:
                     throw new Exception(string.Format("Cannot read object {0} as ArmourDamageViewModel", obj.Class.Name));
             }
+
         }
 
         private void readTGameplayArmeArmureContainer(NdfObject obj)
@@ -59,27 +62,30 @@ namespace moddingSuite.ViewModel.Ndf
 
             var armourFamilies = obj.PropertyValues[1].Value as NdfCollection;
             var damageFamilies = obj.PropertyValues[0].Value as NdfCollection;
-            var values=obj.PropertyValues[2].Value as NdfCollection;
+            var values = obj.PropertyValues[2].Value as NdfCollection;
             TableData.Clear();
             TableData.TableName = "table";
             foreach (var armourFamily in armourFamilies) {
                 TableData.Columns.Add(armourFamily.Value.ToString());
             }
             int k = 0;
-            for (var i=0;i< damageFamilies.Count;i++)
+            for (var i = 0; i < damageFamilies.Count; i++)
             {
+                RowHeaders.Add(damageFamilies[i].Value.ToString());
                 var row = TableData.NewRow();
                 TableData.Rows.Add(row);
                 var damageFamily = new ObservableCollection<NdfPropertyValue>();
-                for (var j= 0;j < armourFamilies.Count;j++ )
+                for (var j = 0; j < armourFamilies.Count; j++)
                 {
-                    row[j]=values[k++].Value;
+                    row[j] = values[k++].Value;
                 }
-                
+
             }
             TableData.AcceptChanges();
         }
+        
         public DataTable TableData { get; } = new DataTable();
+        public ObservableCollection<string> RowHeaders { get; } = new ObservableCollection<string>();
         public string Name;
         /*public ObservableCollection<ObservableCollection<NdfPropertyValue>> TableData { get; } =
             new ObservableCollection<ObservableCollection<NdfPropertyValue>>();*/

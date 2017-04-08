@@ -1,4 +1,5 @@
-﻿using System;
+﻿using moddingSuite.ViewModel.Ndf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,14 @@ namespace moddingSuite.View.Ndfbin.Viewer
         public ArmourDamageTableWindowView()
         {
             InitializeComponent();
+        }
+        void DataGrid_LoadingRow(object w, DataGridRowEventArgs e)
+        {
+            var headers = ((ArmourDamageViewModel)DataContext).RowHeaders;
+            if (e.Row.GetIndex() < headers.Count)
+            {
+                e.Row.Header = headers[e.Row.GetIndex()];
+            }
         }
     }
 }
