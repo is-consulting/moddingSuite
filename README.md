@@ -1,5 +1,6 @@
-Wargame modding suite  [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif "Shut up and take my money!")](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XP3SV7QWZ9UEG "Shut up and take my money!")
+Wargame modding suite 
 ============
+This is rugnirviking's version of the Wargame modding suite. It is specifically made to work for RUSE, and probably will not work for the other eugen games. I made it because many of the filetypes supported by the editor are slightly different in RUSE and therefore it wouldn't read them by default.
 
 This software brings modding to R.U.S.E, Wargame: European Escalation, Wargame: Airland Battle and Wargame: Red Dragon.
 
