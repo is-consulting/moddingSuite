@@ -33,9 +33,9 @@ namespace moddingSuite.BL
         {
             byte[] edataHeader = EdataMagic;
             byte[] ndfbinheader = { 0x45, 0x55, 0x47, 0x30, 0x00, 0x00, 0x00, 0x00, 0x43, 0x4E, 0x44, 0x46 };
-            byte[] tradHeader = { 0x54, 0x52, 0x41, 0x44 };
+            byte[] tradHeader = { 0x54, 0x52, 0x41 };
             byte[] savHeader = { 0x53, 0x41, 0x56, 0x30, 0x00, 0x00, 0x00, 0x00 };
-            byte[] tgvHeader = { 2 };
+            byte[] tgvHeader = { 1 };
             byte[] meshHeader = { 0x4D, 0x45, 0x53, 0x48 };
             byte[] scenarioHeader = {0x53, 0x43, 0x45, 0x4E, 0x41, 0x52, 0x49, 0x4F, 0x0D, 0x0A};
 
@@ -238,7 +238,10 @@ namespace moddingSuite.BL
                         var file = new EdataContentFile();
                         fileStream.Read(buffer, 0, 4);
                         file.FileEntrySize = BitConverter.ToInt32(buffer, 0);
-
+                        if (file.FileEntrySize > 10000)
+                        {
+                            System.Console.Out.WriteLine("A big file name occured - Issue?");
+                        }
                         //buffer = new byte[8];  - it's [4] now, so no need to change
                         fileStream.Read(buffer, 0, 4);
                         file.Offset = BitConverter.ToUInt32(buffer, 0);
@@ -253,7 +256,10 @@ namespace moddingSuite.BL
 
                         file.Name = Utils.ReadString(fileStream);
                         file.Path = MergePath(dirs, file.Name);
-
+                        if (file.Path.Length > 500)
+                        {
+                            System.Console.Out.WriteLine("A big name occured - Issue?");
+                        }
                         if ((file.Name.Length + 1) % 2 == 0)
                             fileStream.Seek(1, SeekOrigin.Current);
 

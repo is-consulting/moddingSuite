@@ -92,8 +92,8 @@ namespace moddingSuite.BL
             var buffer = new byte[4];
 
             ms.Read(buffer, 0, buffer.Length);
-
-            if (Encoding.ASCII.GetString(buffer) != "TRAD")
+            string header = Encoding.ASCII.GetString(buffer);
+            if (header != "TRA\u0001" && header != "TRA\0")
                 throw new ArgumentException("No valid Eugen Systems TRAD (*.dic) file.");
 
             ms.Read(buffer, 0, buffer.Length);
@@ -105,7 +105,7 @@ namespace moddingSuite.BL
         {
             using (var ms = new MemoryStream())
             {
-                byte[] buffer = Encoding.ASCII.GetBytes("TRAD");
+                byte[] buffer = Encoding.ASCII.GetBytes("TRA\u0001");
                 ms.Write(buffer, 0, buffer.Length);
 
                 buffer = BitConverter.GetBytes(Entries.Count);

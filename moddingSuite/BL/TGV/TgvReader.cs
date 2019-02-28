@@ -47,9 +47,9 @@ namespace moddingSuite.BL.TGV
 
             ms.Seek(Utils.RoundToNextDivBy4(pixelFormatLen) - pixelFormatLen, SeekOrigin.Current);
 
-            buffer = new byte[16];
-            ms.Read(buffer, 0, buffer.Length);
-            file.SourceChecksum = (byte[])buffer.Clone();
+            //buffer = new byte[4];
+            //ms.Read(buffer, 0, buffer.Length);
+            //file.SourceChecksum = (byte[])buffer.Clone();
 
             buffer = new byte[4];
 

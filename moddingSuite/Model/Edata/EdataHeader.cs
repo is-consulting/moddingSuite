@@ -45,6 +45,6 @@ namespace moddingSuite.Model.Edata
         public readonly uint Unkown_1;
         public uint Padding;
 
-        public Md5Hash Checksum_V2;
+        //public Md5Hash Checksum_V2;
     }
 }

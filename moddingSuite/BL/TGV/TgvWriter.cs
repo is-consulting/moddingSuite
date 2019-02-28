@@ -17,8 +17,8 @@ namespace moddingSuite.BL.TGV
 
         public void Write(Stream destStream, TgvFile sourceFile, byte[] sourceChecksum, bool compress = true)
         {
-            if (sourceChecksum.Length > 16)
-                throw new ArgumentException("sourceChecksum");
+            //if (sourceChecksum.Length > 16)
+            //    throw new ArgumentException("sourceChecksum");
 
             sourceFile.PixelFormatStr = TranslatePixelFormatBack(sourceFile.Format);
             var zipoMagic = Encoding.ASCII.GetBytes("ZIPO");
@@ -50,7 +50,7 @@ namespace moddingSuite.BL.TGV
             destStream.Write(buffer, 0, buffer.Length);
             destStream.Seek(Utils.RoundToNextDivBy4(fmtLen) - fmtLen, SeekOrigin.Current);
 
-            destStream.Write(sourceChecksum, 0, sourceChecksum.Length);
+            //destStream.Write(sourceChecksum, 0, sourceChecksum.Length);
 
             var mipdefOffset = (destStream.Position);
 
