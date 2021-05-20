@@ -10,7 +10,7 @@
     xmlns:view="clr-namespace:moddingSuite.View"
     Title="Wargame Modding Suite"
     Width="1367.591"
-    Height="1250.885"
+    Height="729.885"
     Icon="{StaticResource PackageFileIcon}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
