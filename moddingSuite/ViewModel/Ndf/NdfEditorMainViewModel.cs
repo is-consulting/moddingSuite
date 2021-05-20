@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -19,6 +20,9 @@ using moddingSuite.Model.Ndfbin.Types.AllTypes;
 using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Edata;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
+using Microsoft.Win32;
 
 namespace moddingSuite.ViewModel.Ndf
 {
@@ -96,6 +100,8 @@ namespace moddingSuite.ViewModel.Ndf
             FindAllReferencesCommand = new ActionCommand(FindAllReferencesExecute);
             CopyInstanceCommand = new ActionCommand(CopyInstanceExecute);
             MakeTopObjectCommand = new ActionCommand(MakeTopObjectExecute);
+
+            RunPythonScriptCommand = new ActionCommand(RunPythonScript);
         }
 
         private void MakeTopObjectExecute(object obj)
@@ -279,6 +285,32 @@ namespace moddingSuite.ViewModel.Ndf
             }
         }
 
+        private void RunPythonScript(object _)
+        {
+            var scriptDlg = new OpenFileDialog
+            {
+                DefaultExt = ".py",
+                Filter = "Python script (.py)|*.py|All Files|*.*"
+            };
+
+            if (scriptDlg.ShowDialog().Value)
+            {
+                var engine = Python.CreateEngine();
+                engine.Runtime.LoadAssembly(Assembly.GetExecutingAssembly());
+                var scope = engine.CreateScope();
+                scope.SetVariable("NdfBinary", NdfBinary);
+                try
+                {
+                    engine.ExecuteFile(scriptDlg.FileName, scope);
+                }
+                catch (Exception e)
+                {
+                    var exceptionOps = engine.GetService<ExceptionOperations>();
+                    MessageBox.Show(exceptionOps.FormatException(e));
+                }
+            }
+        }
+
         public NdfBinary NdfBinary { get; protected set; }
 
         protected EdataFileViewModel EdataFileViewModel { get; set; }
@@ -291,6 +323,7 @@ namespace moddingSuite.ViewModel.Ndf
         public ICommand FindAllReferencesCommand { get; set; }
         public ICommand CopyInstanceCommand { get; set; }
         public ICommand MakeTopObjectCommand { get; set; }
+        public ICommand RunPythonScriptCommand { get; set; }
 
         public string Title
         {

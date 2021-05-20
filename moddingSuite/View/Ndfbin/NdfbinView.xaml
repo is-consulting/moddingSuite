@@ -49,6 +49,15 @@
                     ToolTip="View pending changes">
                     <Image Source="{StaticResource ViewChanges}" />
                 </ToggleButton>
+                <Button
+                    Command="{Binding RunPythonScriptCommand}"
+                    Style="{StaticResource ButtonStyle1}"
+                    ToolTip="Run Python script">
+                    <Image
+                        Source="{StaticResource PythonIcon}"
+                        Width="26"
+                        Height="26" />
+                </Button>
             </ToolBar>
             <Popup
                 AllowsTransparency="True"

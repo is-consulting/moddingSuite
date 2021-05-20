@@ -66,6 +66,8 @@
 
         <BitmapImage x:Key="OpenEdataPackageIcon" UriSource="View\Images\UnloadedProject_8303.png" />
 
+        <BitmapImage x:Key="PythonIcon" UriSource="View\Images\python-26.png" />
+
         <!--  Thanks to Mitchellnolte!!!  -->
         <ImageBrush x:Key="SplashScreenArt" ImageSource="View\Images\about.jpg" />
 
