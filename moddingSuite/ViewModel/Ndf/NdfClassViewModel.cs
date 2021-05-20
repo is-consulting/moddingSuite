@@ -125,25 +125,39 @@ namespace moddingSuite.ViewModel.Ndf
 
                 if (propVal == null)
                 {
-                    ret = false;
-                    continue;
+                    return false;
                 }
 
-                if (propVal.Value == null)
+                if (propVal.Value == null || propVal.Value.ToString().ToLower().Equals("null"))
                 {
                     if (expr.Value.Length > 0)
-                        ret = false;
-
-                    continue;
+                        return false;
                 }
 
-                if (propVal.Value.ToString().Contains(expr.Value))
-                    continue;
+                int compare = String.Compare(propVal.Value.ToString(), expr.Value);
 
-                return false;
+                if (expr.Discriminator == FilterDiscriminator.Equals)
+                    if (compare == 0)
+                        continue;
+                    else
+                        return false;
+
+                else if (expr.Discriminator == FilterDiscriminator.Smaller)
+                    if (compare < 0)
+                        continue;
+                    else
+                        return false;
+
+                else if (expr.Discriminator == FilterDiscriminator.Greater)
+                    if (compare > 0)
+                        continue;
+                    else 
+                        return false;
+                else
+                    return false;
             }
 
-            return ret;
+            return true;
         }
 
         protected void InstancesCollectionViewCurrentChanged(object sender, EventArgs e)
