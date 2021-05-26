@@ -308,7 +308,9 @@ namespace moddingSuite.ViewModel.Ndf
                 {
                     var exceptionOps = engine.GetService<ExceptionOperations>();
                     MessageBox.Show(exceptionOps.FormatException(e));
+                    return;
                 }
+                MessageBox.Show("Script successfully executed!");
             }
         }
 
