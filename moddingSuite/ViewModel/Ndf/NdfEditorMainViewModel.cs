@@ -299,6 +299,7 @@ namespace moddingSuite.ViewModel.Ndf
                 engine.Runtime.LoadAssembly(Assembly.GetExecutingAssembly());
                 var scope = engine.CreateScope();
                 scope.SetVariable("NdfBinary", NdfBinary);
+                scope.SetVariable("Classes", new NdfScriptableClassList(Classes));
                 try
                 {
                     engine.ExecuteFile(scriptDlg.FileName, scope);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -84,6 +85,35 @@ namespace moddingSuite.ViewModel.Ndf
             }
         }
 
+        /// <summary>
+        /// Easy instance indexing for scripts.
+        /// </summary>
+        public NdfObjectViewModel this[uint id] => Instances.FirstOrDefault(obj => obj.Id == id);
+
+        /// <summary>
+        /// Allows scripts to append a new instance.
+        /// </summary>
+        public void AddInstance(bool isTopLevelInstance)
+        {
+            NdfObject inst = Object.Manager.CreateInstanceOf(Object, isTopLevelInstance);
+
+            Object.Instances.Add(inst);
+            Instances.Add(new NdfObjectViewModel(inst, ParentVm));
+        }
+
+        /// <summary>
+        /// Allows scripts to delete an instance by ID.
+        /// </summary>
+        public void DeleteInstance(uint id)
+        {
+            NdfObjectViewModel inst = Instances.FirstOrDefault(obj => obj.Id == id);
+            if (inst == null)
+                throw new KeyNotFoundException("invalid instance");
+
+            Object.Manager.DeleteInstance(inst.Object);
+            Instances.Remove(inst);
+        }
+
         private void RemoveInstanceExecute(object obj)
         {
             var inst = InstancesCollectionView.CurrentItem as NdfObjectViewModel;
@@ -100,11 +130,7 @@ namespace moddingSuite.ViewModel.Ndf
         {
             MessageBoxResult mb = MessageBox.Show("Do you want the new instance to be top level?", "Question",
                                                   MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            NdfObject inst = Object.Manager.CreateInstanceOf(Object, mb == MessageBoxResult.Yes);
-
-            Object.Instances.Add(inst);
-            Instances.Add(new NdfObjectViewModel(inst, ParentVm));
+            AddInstance(mb == MessageBoxResult.Yes);
         }
 
         public bool FilterInstances(object o)
