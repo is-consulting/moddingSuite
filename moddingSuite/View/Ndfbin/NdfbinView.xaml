@@ -7,8 +7,8 @@
     xmlns:view="clr-namespace:moddingSuite.View"
     xmlns:viewer="clr-namespace:moddingSuite.View.Ndfbin.Viewer"
     Title="{Binding Path=Title}"
-    Width="1000"
-    Height="500"
+    Width="1050"
+    Height="900"
     Icon="{StaticResource ScriptIcon}">
     <Grid>
         <UniformGrid
