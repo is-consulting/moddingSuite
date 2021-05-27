@@ -49,6 +49,26 @@ namespace moddingSuite.ViewModel.Ndf
         public ICommand RemovePropertyCommand { get; protected set; }
         public ICommand CopyToInstancesCommand { get; protected set; }
 
+        /// <summary>
+        /// Easy property indexing by name for scripts.
+        /// </summary>
+        public NdfValueWrapper this[string property]
+        {
+            get => GetPropertyValueByName(property)?.Value;
+            set
+            {
+                NdfPropertyValue prop = GetPropertyValueByName(property);
+                if (prop == null)
+                    throw new KeyNotFoundException("unknown property");
+
+                prop.BeginEdit();
+                prop.Value = value;
+                prop.EndEdit();
+            }
+        }
+
+        private NdfPropertyValue GetPropertyValueByName(string name) => PropertyValues.FirstOrDefault(pv => pv.Property.Name == name);
+
         private void AddPropertyExecute(object obj)
         {
             var cv = CollectionViewSource.GetDefaultView(PropertyValues);
