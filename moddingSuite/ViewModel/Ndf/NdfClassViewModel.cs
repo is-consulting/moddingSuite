@@ -114,8 +114,6 @@ namespace moddingSuite.ViewModel.Ndf
             if (obj == null)
                 return false;
 
-            bool ret = true;
-
             foreach (PropertyFilterExpression expr in PropertyFilterExpressions)
             {
                 if (expr.PropertyName == null)
@@ -143,13 +141,13 @@ namespace moddingSuite.ViewModel.Ndf
                         return false;
 
                 else if (expr.Discriminator == FilterDiscriminator.Smaller)
-                    if (compare < 0)
+                    if (propVal.Value.ToString().Length < expr.Value.Length || (propVal.Value.ToString().Length == expr.Value.Length && compare < 0))
                         continue;
                     else
                         return false;
 
                 else if (expr.Discriminator == FilterDiscriminator.Greater)
-                    if (compare > 0)
+                    if (propVal.Value.ToString().Length > expr.Value.Length || (propVal.Value.ToString().Length == expr.Value.Length && compare > 0))
                         continue;
                     else 
                         return false;
