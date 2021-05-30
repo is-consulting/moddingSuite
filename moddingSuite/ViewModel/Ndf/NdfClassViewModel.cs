@@ -140,8 +140,6 @@ namespace moddingSuite.ViewModel.Ndf
             if (obj == null)
                 return false;
 
-            bool ret = true;
-
             foreach (PropertyFilterExpression expr in PropertyFilterExpressions)
             {
                 if (expr.PropertyName == null)
@@ -151,25 +149,39 @@ namespace moddingSuite.ViewModel.Ndf
 
                 if (propVal == null)
                 {
-                    ret = false;
-                    continue;
+                    return false;
                 }
 
-                if (propVal.Value == null)
+                if (propVal.Value == null || propVal.Value.ToString().ToLower().Equals("null"))
                 {
                     if (expr.Value.Length > 0)
-                        ret = false;
-
-                    continue;
+                        return false;
                 }
 
-                if (propVal.Value.ToString().Contains(expr.Value))
-                    continue;
+                int compare = String.Compare(propVal.Value.ToString(), expr.Value);
 
-                return false;
+                if (expr.Discriminator == FilterDiscriminator.Equals)
+                    if (compare == 0)
+                        continue;
+                    else
+                        return false;
+
+                else if (expr.Discriminator == FilterDiscriminator.Smaller)
+                    if (propVal.Value.ToString().Length < expr.Value.Length || (propVal.Value.ToString().Length == expr.Value.Length && compare < 0))
+                        continue;
+                    else
+                        return false;
+
+                else if (expr.Discriminator == FilterDiscriminator.Greater)
+                    if (propVal.Value.ToString().Length > expr.Value.Length || (propVal.Value.ToString().Length == expr.Value.Length && compare > 0))
+                        continue;
+                    else 
+                        return false;
+                else
+                    return false;
             }
 
-            return ret;
+            return true;
         }
 
         protected void InstancesCollectionViewCurrentChanged(object sender, EventArgs e)
