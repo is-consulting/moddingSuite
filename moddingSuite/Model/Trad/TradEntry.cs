@@ -18,7 +18,7 @@ namespace moddingSuite.Model.Trad
         public string HashView
         {
             get { return _hashView; }
-            protected set
+            set
             {
                 _hashView = value;
                 OnPropertyChanged(() => HashView);
