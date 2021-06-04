@@ -13,4 +13,4 @@ https://dotnet.microsoft.com/download/dotnet-framework/net472
 License
 ============
 
-The Wargame modding suite is released under the GPL 3.0 license.
+The Wargame modding suite is released under the MIT license.
