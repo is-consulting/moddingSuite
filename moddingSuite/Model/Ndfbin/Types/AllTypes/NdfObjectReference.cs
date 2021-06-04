@@ -22,7 +22,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         public NdfClass Class
         {
             get { return _class; }
-            protected set
+            set
             {
                 _class = value;
                 OnPropertyChanged("Class");
