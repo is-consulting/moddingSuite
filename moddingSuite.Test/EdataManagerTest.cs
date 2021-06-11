@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using moddingSuite.BL;
+using moddingSuite.Model.Edata;
 using System.IO;
 using System.Linq;
 
@@ -41,6 +42,7 @@ namespace moddingSuite.Test
             manager.ParseEdataFile();
 
             var config = manager.Files.First(f => f.Path == @"pc\ndf\nonpatchable\config.ndfbin");
+            config.FileType.Should().Be(EdataFileType.Ndfbin);
             var bytes = manager.GetRawData(config);
             bytes.Should().NotBeEmpty();
         }
