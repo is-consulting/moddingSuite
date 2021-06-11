@@ -10,7 +10,8 @@ using moddingSuite.Model.Scenario;
 using moddingSuite.Util;
 using moddingSuite.Model;
 using moddingSuite.Model.Settings;
-
+using moddingSuite.BL.Utils;
+using moddingSuite.Util;
 
 namespace moddingSuite.BL.Scenario
 {
@@ -29,7 +30,7 @@ namespace moddingSuite.BL.Scenario
             var buffer = new byte[10];
             s.Read(buffer, 0, buffer.Length);
 
-            if (!Utils.ByteArrayCompare(Encoding.ASCII.GetBytes("SCENARIO\r\n"), buffer))
+            if (!StdUtils.ByteArrayCompare(Encoding.ASCII.GetBytes("SCENARIO\r\n"), buffer))
                 throw new InvalidDataException("Wrong scenario header magic!");
 
             buffer = new byte[16];
@@ -118,7 +119,7 @@ namespace moddingSuite.BL.Scenario
 
             ms.Read(buffer, 0, buffer.Length);
             int idStrLen = BitConverter.ToInt32(buffer, 0);
-            var idStrBuffer = new byte[Utils.RoundToNextDivBy4(idStrLen)];
+            var idStrBuffer = new byte[StdUtils.RoundToNextDivBy4(idStrLen)];
             ms.Read(idStrBuffer, 0, idStrBuffer.Length);
             currentZone.Name = Encoding.UTF8.GetString(idStrBuffer).TrimEnd('\0');
 

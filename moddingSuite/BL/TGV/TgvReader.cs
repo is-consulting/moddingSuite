@@ -1,5 +1,6 @@
 ﻿using moddingSuite.BL.Compressing;
 using moddingSuite.BL.DDS;
+using moddingSuite.BL.Utils;
 using moddingSuite.Model.Textures;
 using moddingSuite.Util;
 using System;
@@ -45,7 +46,7 @@ namespace moddingSuite.BL.TGV
             ms.Read(buffer, 0, buffer.Length);
             file.PixelFormatStr = Encoding.ASCII.GetString(buffer);
 
-            ms.Seek(Utils.RoundToNextDivBy4(pixelFormatLen) - pixelFormatLen, SeekOrigin.Current);
+            ms.Seek(StdUtils.RoundToNextDivBy4(pixelFormatLen) - pixelFormatLen, SeekOrigin.Current);
 
             buffer = new byte[16];
             ms.Read(buffer, 0, buffer.Length);
@@ -179,7 +180,7 @@ namespace moddingSuite.BL.TGV
                 buffer = new byte[4];
 
                 ms.Read(buffer, 0, buffer.Length);
-                if (!Utils.ByteArrayCompare(buffer, zipo))
+                if (!StdUtils.ByteArrayCompare(buffer, zipo))
                     throw new InvalidDataException("Mipmap has to start with \"ZIPO\"!");
 
                 ms.Read(buffer, 0, buffer.Length);
@@ -192,7 +193,7 @@ namespace moddingSuite.BL.TGV
 
             ms.Read(buffer, 0, buffer.Length);
 
-            ms.Seek(Utils.RoundToNextDivBy4((int)mipMap.Size)-mipMap.Size, SeekOrigin.Current);
+            ms.Seek(StdUtils.RoundToNextDivBy4((int)mipMap.Size)-mipMap.Size, SeekOrigin.Current);
 
             if (file.IsCompressed)
                 buffer = Compressor.Decomp(buffer);

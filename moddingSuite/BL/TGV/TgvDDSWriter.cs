@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using moddingSuite.BL.Utils;
 using moddingSuite.Model.Textures;
 using moddingSuite.Util;
 
@@ -61,7 +62,7 @@ namespace moddingSuite.BL.TGV
 
             hd.PixelFormat = ddpf;
 
-            return Utils.StructToBytes(hd);
+            return StdUtils.StructToBytes(hd);
         }
     }
 }

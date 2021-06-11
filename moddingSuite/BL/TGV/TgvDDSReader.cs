@@ -1,9 +1,9 @@
-﻿using System;
+﻿using moddingSuite.BL.DDS;
+using moddingSuite.BL.Utils;
+using moddingSuite.Model.Textures;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using moddingSuite.BL.DDS;
-using moddingSuite.Model.Textures;
-using moddingSuite.Util;
 
 namespace moddingSuite.BL.TGV
 {
@@ -26,7 +26,7 @@ namespace moddingSuite.BL.TGV
                 buffer = new byte[Marshal.SizeOf(typeof(DDS.DDS.Header))];
                 ms.Read(buffer, 0, buffer.Length);
 
-                var header = Utils.ByteArrayToStructure<DDS.DDS.Header>(buffer);
+                var header = StdUtils.ByteArrayToStructure<DDS.DDS.Header>(buffer);
 
                 int mipSize = contentSize;
 

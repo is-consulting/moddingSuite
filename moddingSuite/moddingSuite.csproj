@@ -292,4 +292,7 @@
     <EmbeddedResource Remove="ZoneEditor\ZoneEditor.resx" />
     <Page Remove="View\Ndfbin\Viewer\DamageTableView.xaml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\moddingSuite.BL\moddingSuite.BL.csproj" />
+  </ItemGroup>
 </Project>

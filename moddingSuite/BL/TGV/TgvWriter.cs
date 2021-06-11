@@ -1,5 +1,6 @@
 ﻿using moddingSuite.BL.Compressing;
 using moddingSuite.BL.DDS;
+using moddingSuite.BL.Utils;
 using moddingSuite.Model.Textures;
 using moddingSuite.Util;
 using System;
@@ -48,7 +49,7 @@ namespace moddingSuite.BL.TGV
 
             buffer = Encoding.ASCII.GetBytes(sourceFile.PixelFormatStr);
             destStream.Write(buffer, 0, buffer.Length);
-            destStream.Seek(Utils.RoundToNextDivBy4(fmtLen) - fmtLen, SeekOrigin.Current);
+            destStream.Seek(StdUtils.RoundToNextDivBy4(fmtLen) - fmtLen, SeekOrigin.Current);
 
             destStream.Write(sourceChecksum, 0, sourceChecksum.Length);
 

@@ -8,25 +8,6 @@ namespace moddingSuite.Util
 {
     public static class Utils
     {
-        public static string ReadString(Stream fs)
-        {
-            var b = new StringBuilder();
-            int c;
-
-            do
-            {
-                c = fs.ReadByte();
-                b.Append((char)c);
-            } while (c != '\0');
-
-            return StripString(b.ToString());
-        }
-
-        public static string StripString(string s)
-        {
-            return s.Split('\0')[0].TrimEnd();
-        }
-
         public static string Int32ToBigEndianHexByteString(Int32 i)
         {
             byte[] bytes = BitConverter.GetBytes(i);
@@ -73,16 +54,6 @@ namespace moddingSuite.Util
             //return val - (val < 58 ? 48 : 87);
             //Or the two combined, but a bit slower:
             return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
-        }
-
-        [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int memcmp(byte[] b1, byte[] b2, long count);
-
-        public static bool ByteArrayCompare(byte[] b1, byte[] b2)
-        {
-            // Validate buffers are the same length.
-            // This also ensures that the count does not exceed the length of either buffer.  
-            return b1.Length == b2.Length && memcmp(b1, b2, b1.Length) == 0;
         }
 
         public static void SaveDebug(string fileName, byte[] contentData)
@@ -135,51 +106,6 @@ namespace moddingSuite.Util
             }
 
             return BitConverter.GetBytes(hash);
-        }
-
-        public static bool IsValueType(object obj)
-        {
-            return obj != null && obj.GetType().IsValueType;
-        }
-
-        public static byte[] StructToBytes(object str)
-        {
-            if (!IsValueType(str))
-                throw new ArgumentException("str");
-
-            int size = Marshal.SizeOf(str);
-            byte[] arr = new byte[size];
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-
-            Marshal.StructureToPtr(str, ptr, true);
-            Marshal.Copy(ptr, arr, 0, size);
-            Marshal.FreeHGlobal(ptr);
-
-            return arr;
-        }
-
-        public static T ByteArrayToStructure<T>(byte[] bytes) where T : struct
-        {
-            GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-            var stuff = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
-            handle.Free();
-
-            return stuff;
-        }
-
-        public static int RoundToNextDivBy4(int number)
-        {
-            while (number % 4 != 0)
-                number++;
-
-            return number;
-        }
-
-        public static void Swap<T>(T a, T b)
-        {
-            T temp = a;
-            a = b;
-            b = temp;
         }
     }
 }
