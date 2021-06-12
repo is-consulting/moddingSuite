@@ -111,23 +111,7 @@ namespace moddingSuite.ViewModel.Trad
             if (item == null || !item.UserCreated)
                 return;
 
-            CalculateHash(item);
-        }
-
-        public static void CalculateHash(TradEntry item)
-        {
-            const string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            var allowedChars = characters.ToCharArray().ToList();
-
-            var wordToHash = new StringBuilder();
-
-            foreach (char t in item.Content)
-                if (allowedChars.Contains(t))
-                    wordToHash.Append(t);
-
-            var word = wordToHash.ToString();
-
-            item.Hash = Utils.CreateLocalisationHash(word, word.Length);
+            TradEntry.CalculateHash(item);
         }
 
         private void SaveCommandExecute(object obj)

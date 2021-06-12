@@ -1,5 +1,5 @@
 ﻿using System;
-using moddingSuite.Util;
+using moddingSuite.BL.Utils;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
@@ -27,7 +27,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override string ToString()
         {
-            return Utils.ByteArrayToBigEndianHexByteString(Value);
+            return StdUtils.ByteArrayToBigEndianHexByteString(Value);
         }
 
         public override byte[] GetNdfText()

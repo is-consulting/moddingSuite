@@ -129,16 +129,6 @@ namespace moddingSuite.Test
                 mreader.Read(fs);
         }
 
-        [TestMethod]
-        public void TestHash()
-        {
-            const string toHash = "Leopard2A6";
-
-            var hash = Utils.CreateLocalisationHash(toHash, toHash.Length);
-
-            Console.WriteLine("{0}", Utils.ByteArrayToBigEndianHexByteString(hash));
-        }
-
         //[TestMethod]
         public void ExportAreaVerteces()
         {

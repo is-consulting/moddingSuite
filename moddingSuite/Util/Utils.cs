@@ -17,21 +17,6 @@ namespace moddingSuite.Util
             return String.Format(format, bytes[0], bytes[1], bytes[2], bytes[3]);
         }
 
-        public static string ByteArrayToBigEndianHexByteString(byte[] data)
-        {
-            if (data == null)
-                return string.Empty;
-
-            var stringBuilderb = new StringBuilder();
-
-            stringBuilderb.Append(string.Empty);
-
-            foreach (var b in data)
-                stringBuilderb.Append(string.Format("{0:X2}", b));
-
-            return stringBuilderb.ToString();
-        }
-
         public static byte[] StringToByteArrayFastest(string hex)
         {
             if (hex.Length % 2 == 1)
@@ -78,34 +63,6 @@ namespace moddingSuite.Util
                 result.Append(characters[random.Next(characters.Length)]);
 
             return result.ToString();
-        }
-
-        public static byte[] CreateLocalisationHash(string text, int maxSize = 8)
-        {
-            long hash = 0;
-            for (int i = 0; i < maxSize; ++i)
-            {
-                int value;
-                ushort chr = text[i];
-
-                if (chr == 0)
-                    break;
-
-                if ('0' <= chr && chr <= '9')
-                    value = 1 + chr - '0';
-                else if ('A' <= chr && chr <= 'Z')
-                    value = 2 + '9' - '0' + chr - 'A';
-                else if (chr == '_')
-                    value = 3 + '9' - '0' + 'Z' - 'A';
-                else if ('a' <= chr && chr <= 'z')
-                    value = 4 + '9' - '0' + 'Z' - 'A' + chr - 'a';
-                else
-                    throw new InvalidDataException("");
-
-                hash = (hash << 6) | value;
-            }
-
-            return BitConverter.GetBytes(hash);
         }
     }
 }
