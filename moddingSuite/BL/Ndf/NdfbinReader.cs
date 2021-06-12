@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
+using System.Diagnostics;
 
 namespace moddingSuite.BL.Ndf
 {
@@ -44,6 +45,7 @@ namespace moddingSuite.BL.Ndf
 
                         data = uncompStream.ToArray();
                     }
+                    Debug.Assert((ulong)data.Length == ndf.Header.FullFileSizeUncomp);
                 }
             }
 
@@ -128,7 +130,7 @@ namespace moddingSuite.BL.Ndf
                 throw new InvalidDataException("No CNDF (Compiled NDF)!");
 
             ms.Read(buffer, 0, buffer.Length);
-            header.IsCompressedBody = BitConverter.ToInt32(buffer, 0) == 128;
+            header.CompressionMethod = BitConverter.ToUInt32(buffer, 0);
 
             buffer = new byte[8];
 
