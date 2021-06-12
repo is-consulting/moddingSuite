@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tgvExporter", "tgvExporter\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moddingSuite.BL", "moddingSuite.BL\moddingSuite.BL.csproj", "{5719A530-3B69-4A61-9FE8-B2CD106ACA2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moddingSuite.BL.Test", "moddingSuite.BL.Test\moddingSuite.BL.Test.csproj", "{87F3A5AE-DF8F-4AD4-BFA8-8C99048A9347}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{5719A530-3B69-4A61-9FE8-B2CD106ACA2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5719A530-3B69-4A61-9FE8-B2CD106ACA2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5719A530-3B69-4A61-9FE8-B2CD106ACA2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F3A5AE-DF8F-4AD4-BFA8-8C99048A9347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F3A5AE-DF8F-4AD4-BFA8-8C99048A9347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F3A5AE-DF8F-4AD4-BFA8-8C99048A9347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F3A5AE-DF8F-4AD4-BFA8-8C99048A9347}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
