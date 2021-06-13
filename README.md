@@ -6,9 +6,8 @@ This software brings modding to R.U.S.E, Wargame: European Escalation, Wargame: 
 System Requirements
 ============
 
-You need to have the .net 4.7.2 Framework installed you can download it here:
-https://dotnet.microsoft.com/download/dotnet-framework/net472
-
+You need to have the .NET Desktop Runtime you can download it here:
+https://dotnet.microsoft.com/download/dotnet/5.0
 
 License
 ============

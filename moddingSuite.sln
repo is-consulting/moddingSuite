@@ -1,13 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moddingSuite", "moddingSuite\moddingSuite.csproj", "{ED8773BC-C0F3-45E2-A182-07A06260F1F7}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moddingSuite", "moddingSuite\moddingSuite.csproj", "{ED8773BC-C0F3-45E2-A182-07A06260F1F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moddingSuite.Test", "moddingSuite.Test\moddingSuite.Test.csproj", "{BC9ABC10-E5C5-4A7C-894B-6BDCC826E8E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moddingSuite.Test", "moddingSuite.Test\moddingSuite.Test.csproj", "{BC9ABC10-E5C5-4A7C-894B-6BDCC826E8E7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{66C08E0F-9595-4099-B2BC-9D0BD7162BBA}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tgvExporter", "tgvExporter\tgvExporter.csproj", "{24E89F60-73BD-4AF3-A27F-06ED5AC496AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tgvExporter", "tgvExporter\tgvExporter.csproj", "{24E89F60-73BD-4AF3-A27F-06ED5AC496AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +36,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF68FC7F-1C1F-4E44-A627-F07C08225561}
 	EndGlobalSection
 EndGlobal

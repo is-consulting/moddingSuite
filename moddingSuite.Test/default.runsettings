@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <TestRunParameters>
+    <Parameter name="airlandUserPath" value="C:\Games\Steam\userdata\-1\222750" />
+    <Parameter name="reddragonData" value="C:\Games\Steam\SteamApps\common\Wargame Red Dragon\Data\WarGame\PC" />
+    <Parameter name="airlandData" value="C:\Games\Steam\SteamApps\common\Wargame Airland Battle\Data\wargame\PC" />
+  </TestRunParameters>
+</RunSettings>

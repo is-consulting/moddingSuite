@@ -20,7 +20,7 @@ namespace moddingSuite.Test
             return b1 * 16777216 + b2 * 65536 + b3 * 256 + b4;
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestWriter()
         {
             var file = @"C:\Users\enohka\Desktop\teststuff\beep.ess.wav";

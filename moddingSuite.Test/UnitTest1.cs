@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using moddingSuite.BL;
 using moddingSuite.BL.Compressing;
@@ -14,25 +15,27 @@ using moddingSuite.Util;
 namespace moddingSuite.Test
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTest1: BaseTests
     {
+        
         [TestMethod]
         public void TestMethod1()
         {
             SavManager mgr = new SavManager();
 
-            using (var fs = new FileStream(@"D:\Programme\Steam\userdata\2346410\58610\remote\profile.wargame", FileMode.Open))
+            using (var fs = new FileStream($@"{AirLandUserDataPath}\remote\profile.wargame", FileMode.Open))
             {
                 using (var ms = new MemoryStream())
                 {
                     fs.CopyTo(ms);
 
-                    mgr.Read(ms.ToArray());
+                    var save = mgr.Read(ms.ToArray());
+                    save.Checksum.Should().NotBeEmpty();
                 }
             }
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void RepackIt()
         {
             var inpath = @"C:\Users\enohka\Desktop\teststuff\leopard2\blob";
@@ -51,7 +54,7 @@ namespace moddingSuite.Test
                 fs.Write(outData, 0, outData.Length);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void ExportTmsTest()
         {
             var inpath = @"C:\Users\Anders\wargameexport\r2";
@@ -115,7 +118,7 @@ namespace moddingSuite.Test
 
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestMeshReader()
         {
             var file = Path.Combine(@"C:\Users\enohka\Desktop\teststuff", "mesh_all.spk");
@@ -136,7 +139,7 @@ namespace moddingSuite.Test
             Console.WriteLine("{0}", Utils.ByteArrayToBigEndianHexByteString(hash));
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void ExportAreaVerteces()
         {
             string input = Path.Combine(@"C:\Users\enohka\Desktop\teststuff\scen", "zone_test");
