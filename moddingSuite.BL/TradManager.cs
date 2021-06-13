@@ -10,14 +10,34 @@ using moddingSuite.Model.Trad;
 
 namespace moddingSuite.BL
 {
+    public enum StringType
+    {
+        Default,
+        Utf32
+    }
+
     public class TradManager
     {
         private ObservableCollection<TradEntry> _entries = new ObservableCollection<TradEntry>();
+        private readonly StringType _stringType;
+        private readonly Encoding _encoder;
 
         private const ulong GlyphHash = (ulong)0x1 << 63;
         private int _totalRead;
-        public TradManager(byte[] data)
+
+        public StringType StringType => _stringType;
+        public TradManager(byte[] data, StringType stringType)
         {
+            _stringType = stringType;
+
+            if (_stringType == StringType.Utf32)
+            {
+                /* Linux file support */
+                _encoder = Encoding.UTF32;
+            } else
+            {
+                _encoder = Encoding.Unicode;
+            }
             _totalRead = 0;
             ParseTradFile(data);
 
@@ -51,14 +71,16 @@ namespace moddingSuite.BL
 
         private void GetEntryContents(MemoryStream ms)
         {
+            int charSize = _stringType == StringType.Utf32 ? 4 : 2;
+
             foreach (TradEntry entry in Entries)
             {
                 ms.Seek(entry.OffsetCont, SeekOrigin.Begin);
 
-                var buffer = new byte[entry.ContLen * 2];
+                var buffer = new byte[entry.ContLen * charSize];
 
                 _totalRead += ms.Read(buffer, 0, buffer.Length);
-                entry.Content = Encoding.Unicode.GetString(buffer);
+                entry.Content = _encoder.GetString(buffer);
             }
         }
 
@@ -146,7 +168,7 @@ namespace moddingSuite.BL
                 foreach (TradEntry entry in orderedEntried)
                 {
                     entry.OffsetCont = (uint)ms.Position;
-                    buffer = Encoding.Unicode.GetBytes(entry.Content);
+                    buffer = _encoder.GetBytes(entry.Content);
                     ms.Write(buffer, 0, buffer.Length);
                 }
 
