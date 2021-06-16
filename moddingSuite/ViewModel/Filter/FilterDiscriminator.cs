@@ -4,6 +4,7 @@
     {
         Equals,
         Smaller,
-        Greater
+        Greater,
+        Contains
     }
 }
