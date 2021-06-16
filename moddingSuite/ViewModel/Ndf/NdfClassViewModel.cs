@@ -149,7 +149,12 @@ namespace moddingSuite.ViewModel.Ndf
                 else if (expr.Discriminator == FilterDiscriminator.Greater)
                     if (propVal.Value.ToString().Length > expr.Value.Length || (propVal.Value.ToString().Length == expr.Value.Length && compare > 0))
                         continue;
-                    else 
+                    else
+                        return false;
+                else if (expr.Discriminator == FilterDiscriminator.Contains)
+                    if (propVal.Value.ToString().Contains(expr.Value))
+                        continue;
+                    else
                         return false;
                 else
                     return false;
