@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="About the Modding suite"
     Width="800"
-    Height="550"
+    Height="580"
     Background="{StaticResource SplashScreenArt}"
     Icon="{StaticResource AboutIcon}"
     ResizeMode="NoResize"
