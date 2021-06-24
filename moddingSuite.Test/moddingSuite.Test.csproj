@@ -13,6 +13,7 @@
     <PackageReference Include="MSTest.TestFramework" Version="2.2.4" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\moddingSuite.BL.Test\moddingSuite.BL.Test.csproj" />
     <ProjectReference Include="..\moddingSuite\moddingSuite.csproj" />
   </ItemGroup>
 </Project>

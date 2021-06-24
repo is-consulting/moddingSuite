@@ -18,7 +18,7 @@ namespace moddingSuite.Model.Trad
 
         private bool _userCreated = false;
 
-        private static HashSet<char> s_allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        private readonly static HashSet<char> s_allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
             .ToCharArray()
             .ToHashSet();
 

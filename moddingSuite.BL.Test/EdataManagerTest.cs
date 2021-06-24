@@ -41,7 +41,7 @@ namespace moddingSuite.Test
             var manager = new EdataManager($"{RedDragonGameDataPath}{path}.dat");
             manager.ParseEdataFile();
 
-            var config = manager.Files.First(f => f.Path == @"pc\ndf\nonpatchable\config.ndfbin");
+            var config = manager.Files.First(f => f.Path == EdataManager.KnownLocation.Config);
             config.FileType.Should().Be(EdataFileType.Ndfbin);
             var bytes = manager.GetRawData(config);
             bytes.Should().NotBeEmpty();

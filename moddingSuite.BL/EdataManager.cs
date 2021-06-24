@@ -12,12 +12,22 @@ using BLUtils = moddingSuite.BL.Utils.StdUtils;
 
 namespace moddingSuite.BL
 {
+
     /// <summary>
     /// Thanks to Giovanni Condello. He created the "WargameEE DAT unpacker" which is the base for my EdataManager.
     /// TODO: implement virtual packages.
     /// </summary>
     public class EdataManager : ViewModelBase
     {
+
+        public static class KnownLocation
+        {
+
+            public const string Unites = @"pc\localisation\us\localisation\unites.dic";
+            public const string Config = @"pc\ndf\nonpatchable\config.ndfbin";
+
+        }
+
         public static readonly byte[] EdataMagic = { 0x65, 0x64, 0x61, 0x74 };
 
         /// <summary>
