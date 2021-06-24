@@ -31,7 +31,9 @@ namespace moddingSuite.ViewModel.Trad
             OwnerFile = owner;
             OwnerVm = contentFile;
 
-            Manager = new TradManager(OwnerVm.EdataManager.GetRawData(OwnerFile), StringType.Default);
+            var stringType = OwnerVm.Platform == OSPlatform.Linux ? StringType.Utf32 : StringType.Default;
+
+            Manager = new TradManager(OwnerVm.EdataManager.GetRawData(OwnerFile), stringType);
 
             Entries = Manager.Entries;
 

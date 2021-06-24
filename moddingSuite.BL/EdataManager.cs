@@ -13,6 +13,13 @@ using BLUtils = moddingSuite.BL.Utils.StdUtils;
 namespace moddingSuite.BL
 {
 
+    public enum OSPlatform
+    {
+        Generic,
+        Windows,
+        Linux
+    }
+
     /// <summary>
     /// Thanks to Giovanni Condello. He created the "WargameEE DAT unpacker" which is the base for my EdataManager.
     /// TODO: implement virtual packages.
@@ -30,6 +37,8 @@ namespace moddingSuite.BL
 
         public static readonly byte[] EdataMagic = { 0x65, 0x64, 0x61, 0x74 };
 
+        public OSPlatform Platform { get; private set; }
+
         /// <summary>
         /// Creates a new Instance of a EdataManager.
         /// </summary>
@@ -37,6 +46,16 @@ namespace moddingSuite.BL
         public EdataManager(string filePath)
         {
             FilePath = filePath;
+            Platform = DetectOSSpecificString(FilePath);
+        }
+
+        private static OSPlatform DetectOSSpecificString(string filePath)
+        {
+            var name = Path.GetFileNameWithoutExtension(filePath);
+            if (name == "ZZ_Linux") return OSPlatform.Linux;
+            else if (name == "ZZ_Win") return OSPlatform.Windows;
+            else return OSPlatform.Generic;
+
         }
 
         static EdataManager()

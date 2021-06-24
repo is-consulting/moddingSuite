@@ -9,6 +9,7 @@ using System.Windows.Input;
 
 namespace moddingSuite.ViewModel.Edata
 {
+
     public class EdataFileViewModel : ViewModelBase
     {
         private ObservableCollection<EdataContentFile> _files;
@@ -18,6 +19,8 @@ namespace moddingSuite.ViewModel.Edata
         private EdataManagerViewModel _parentVm;
 
         public EdataManager EdataManager { get; protected set; }
+
+        public OSPlatform Platform => EdataManager.Platform;
 
         public ICommand CloseCommand { get; set; }
 
