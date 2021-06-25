@@ -291,14 +291,14 @@ namespace ZoneEditor
         }
         private void addLandSpawn(object obj, EventArgs e)
         {
-            var spawn = new Spawn(PanAndZoom.fromLocalToGlobal(editor.LeftClickPoint), spawnNumber, SpawnType.Land);
+            var spawn = new Spawn(PanAndZoom.fromLocalToGlobal(editor.LeftClickPoint), spawnNumber++, SpawnType.Land);
             scenarioItems.Add(spawn);
             editor.addScenarioItem(spawn, true);
             //Console.WriteLine("add land spawn");
         }
         private void addAirSpawn(object obj, EventArgs e)
         {
-            var spawn = new Spawn(PanAndZoom.fromLocalToGlobal(editor.LeftClickPoint), spawnNumber, SpawnType.Air);
+            var spawn = new Spawn(PanAndZoom.fromLocalToGlobal(editor.LeftClickPoint), spawnNumber++, SpawnType.Air);
             scenarioItems.Add(spawn);
             editor.addScenarioItem(spawn, true);
 
