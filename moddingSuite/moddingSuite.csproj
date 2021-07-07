@@ -292,4 +292,10 @@
     <EmbeddedResource Remove="ZoneEditor\ZoneEditor.resx" />
     <Page Remove="View\Ndfbin\Viewer\DamageTableView.xaml" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.220">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
