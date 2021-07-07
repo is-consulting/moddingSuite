@@ -112,4 +112,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Application
-        path: $env.WPF_Project_Directory
+        path: moddingsuite/$env.WPF_Project_Directory
