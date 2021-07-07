@@ -36,7 +36,7 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
-name: .NET Core Desktop
+name: moddingSuite CD
 
 on: 
   push:
@@ -94,19 +94,19 @@ jobs:
 
     # Archive the package
     - name: Create archive
-      run: Compress-Archive -Path Publish\* -DestinationPath application.zip
+      run: Compress-Archive -Path Publish\* -DestinationPath moddingSuite.zip
 
     # Create the release:  https://github.com/actions/create-release
-    - name: Release
+    - name: Create Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Release
+    - name: Upload Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: application.zip
+        files: moddingSuite.zip
       env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
