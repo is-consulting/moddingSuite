@@ -41,7 +41,7 @@
             <Label
                 Grid.Column="1"
                 VerticalAlignment="Center"
-                Content="version 0.8.4"
+                Content="{Binding Version}"
                 FontSize="16" />
 
             <Image
