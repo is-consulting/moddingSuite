@@ -58,7 +58,7 @@ jobs:
     env:
       Solution_Name: moddingSuite.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
       Test_Project_Path: moddingSuite.Test\moddingSuite.Test.csproj                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
-      WPF_Project_Directory: Publish    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
+      #WPF_Project_Directory: Publish    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       WPF_Project_Path: moddingSuite\moddingSuite.csproj                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
     steps:
@@ -83,7 +83,7 @@ jobs:
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Publish the application
-      run: dotnet publish moddingSuite\moddingSuite.csproj --self-contained false --output $env:WPF_Project_Directory -f net5.0-windows /p:Configuration=$env:Configuration
+      run: dotnet publish moddingSuite\moddingSuite.csproj --self-contained false --output Publish -f net5.0-windows /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
 
@@ -112,4 +112,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Application
-        path: moddingsuite/$env.WPF_Project_Directory
+        path: moddingsuite/Publish
