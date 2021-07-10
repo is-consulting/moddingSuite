@@ -81,7 +81,6 @@ jobs:
       uses: aarnott/nbgv@v0.4
       with:
         setAllVars: true
-        stamp: version.json
 
     # Execute all unit tests in the solution
     #- name: Execute unit tests
