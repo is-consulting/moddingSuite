@@ -93,12 +93,14 @@ namespace moddingSuite.ViewModel.Ndf
         /// <summary>
         /// Allows scripts to append a new instance.
         /// </summary>
-        public void AddInstance(bool isTopLevelInstance)
+        public NdfObjectViewModel AddInstance(bool isTopLevelInstance)
         {
             NdfObject inst = Object.Manager.CreateInstanceOf(Object, isTopLevelInstance);
-
             Object.Instances.Add(inst);
-            Instances.Add(new NdfObjectViewModel(inst, ParentVm));
+
+            var instModel = new NdfObjectViewModel(inst, ParentVm);
+            Instances.Add(instModel);
+            return instModel;
         }
 
         /// <summary>
