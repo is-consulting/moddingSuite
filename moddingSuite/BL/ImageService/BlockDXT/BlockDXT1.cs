@@ -1,4 +1,5 @@
-﻿using moddingSuite.Util;
+﻿using moddingSuite.BL.Utils;
+using moddingSuite.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -203,14 +204,14 @@ namespace moddingSuite.BL.ImageService.BlockDXT
         /// Flip DXT1 block vertically.
         public void flip4()
         {
-            Utils.Swap(row(0), row(3));
-            Utils.Swap(row(1), row(2));
+            StdUtils.Swap(row(0), row(3));
+            StdUtils.Swap(row(1), row(2));
         }
 
         /// Flip half DXT1 block vertically.
         public void flip2()
         {
-            Utils.Swap(row(0), row(1));
+            StdUtils.Swap(row(0), row(1));
         }
     }
 }

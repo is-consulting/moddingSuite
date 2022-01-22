@@ -31,7 +31,9 @@ namespace moddingSuite.ViewModel.Trad
             OwnerFile = owner;
             OwnerVm = contentFile;
 
-            Manager = new TradManager(OwnerVm.EdataManager.GetRawData(OwnerFile));
+            var stringType = OwnerVm.Platform == OSPlatform.Linux ? StringType.Utf32 : StringType.Default;
+
+            Manager = new TradManager(OwnerVm.EdataManager.GetRawData(OwnerFile), stringType);
 
             Entries = Manager.Entries;
 
@@ -111,23 +113,7 @@ namespace moddingSuite.ViewModel.Trad
             if (item == null || !item.UserCreated)
                 return;
 
-            CalculateHash(item);
-        }
-
-        public static void CalculateHash(TradEntry item)
-        {
-            const string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            var allowedChars = characters.ToCharArray().ToList();
-
-            var wordToHash = new StringBuilder();
-
-            foreach (char t in item.Content)
-                if (allowedChars.Contains(t))
-                    wordToHash.Append(t);
-
-            var word = wordToHash.ToString();
-
-            item.Hash = Utils.CreateLocalisationHash(word, word.Length);
+            TradEntry.CalculateHash(item);
         }
 
         private void SaveCommandExecute(object obj)

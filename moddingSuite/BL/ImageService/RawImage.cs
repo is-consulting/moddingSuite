@@ -1,4 +1,5 @@
-﻿using moddingSuite.Util;
+﻿using moddingSuite.BL.Utils;
+using moddingSuite.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +80,7 @@ namespace moddingSuite.BL.ImageService
             var ret = new List<byte>();
 
             foreach (var col in Data)
-                ret.AddRange(Utils.StructToBytes(col));
+                ret.AddRange(StdUtils.StructToBytes(col));
 
             return ret.ToArray();
         }

@@ -1,6 +1,9 @@
-﻿using moddingSuite.Util;
+﻿using moddingSuite.BL.Utils;
 using moddingSuite.ViewModel.Base;
-using moddingSuite.ViewModel.Trad;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace moddingSuite.Model.Trad
 {
@@ -14,6 +17,10 @@ namespace moddingSuite.Model.Trad
         private uint _offsetDic;
 
         private bool _userCreated = false;
+
+        private readonly static HashSet<char> s_allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            .ToCharArray()
+            .ToHashSet();
 
         public string HashView
         {
@@ -32,7 +39,7 @@ namespace moddingSuite.Model.Trad
             {
                 _hash = value;
 
-                HashView = Utils.ByteArrayToBigEndianHexByteString(_hash);
+                HashView = StdUtils.ByteArrayToBigEndianHexByteString(_hash);
 
                 OnPropertyChanged(() => Hash);
             }
@@ -76,7 +83,7 @@ namespace moddingSuite.Model.Trad
                 _content = value;
 
                 if (UserCreated)
-                    TradFileViewModel.CalculateHash(this);
+                    CalculateHash(this);
 
                 OnPropertyChanged(() => Content);
             }
@@ -90,6 +97,19 @@ namespace moddingSuite.Model.Trad
                 _userCreated = value;
                 OnPropertyChanged(() => UserCreated);
             }
+        }
+
+        public static void CalculateHash(TradEntry item)
+        {
+            var wordToHash = new StringBuilder();
+
+            foreach (char t in item.Content)
+                if (s_allowedChars.Contains(t))
+                    wordToHash.Append(t);
+
+            var word = wordToHash.ToString();
+
+            item.Hash = StdUtils.CreateLocalisationHash(word, word.Length);
         }
     }
 }

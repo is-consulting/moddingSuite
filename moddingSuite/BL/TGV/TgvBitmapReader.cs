@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using moddingSuite.Util;
 using System.Runtime.InteropServices;
+using moddingSuite.BL.Utils;
 
 namespace moddingSuite.BL.TGV
 {
@@ -69,7 +70,7 @@ namespace moddingSuite.BL.TGV
 
             ms.Read(blockBuffer, 0, blockBuffer.Length);
 
-            var blockdxt5 = Utils.ByteArrayToStructure<BlockDXT5>(blockBuffer);
+            var blockdxt5 = StdUtils.ByteArrayToStructure<BlockDXT5>(blockBuffer);
 
             blockdxt5.decodeBlock(ref rgba);
         }

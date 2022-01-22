@@ -1,5 +1,5 @@
 ﻿using System;
-using moddingSuite.Util;
+using moddingSuite.BL.Utils;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
@@ -22,7 +22,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override string ToString()
         {
-            return string.Format("{0}", Utils.ByteArrayToBigEndianHexByteString((byte[]) Value));
+            return string.Format("{0}", StdUtils.ByteArrayToBigEndianHexByteString((byte[]) Value));
         }
     }
 }

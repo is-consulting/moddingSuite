@@ -6,19 +6,38 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using moddingSuite.Model.Edata;
-using moddingSuite.Util;
 using System.Runtime.InteropServices;
 using moddingSuite.ViewModel.Base;
+using BLUtils = moddingSuite.BL.Utils.StdUtils;
 
 namespace moddingSuite.BL
 {
+
+    public enum OSPlatform
+    {
+        Generic,
+        Windows,
+        Linux
+    }
+
     /// <summary>
     /// Thanks to Giovanni Condello. He created the "WargameEE DAT unpacker" which is the base for my EdataManager.
     /// TODO: implement virtual packages.
     /// </summary>
     public class EdataManager : ViewModelBase
     {
+
+        public static class KnownLocation
+        {
+
+            public const string Unites = @"pc\localisation\us\localisation\unites.dic";
+            public const string Config = @"pc\ndf\nonpatchable\config.ndfbin";
+
+        }
+
         public static readonly byte[] EdataMagic = { 0x65, 0x64, 0x61, 0x74 };
+
+        public OSPlatform Platform { get; private set; }
 
         /// <summary>
         /// Creates a new Instance of a EdataManager.
@@ -27,6 +46,16 @@ namespace moddingSuite.BL
         public EdataManager(string filePath)
         {
             FilePath = filePath;
+            Platform = DetectOSSpecificString(FilePath);
+        }
+
+        private static OSPlatform DetectOSSpecificString(string filePath)
+        {
+            var name = Path.GetFileNameWithoutExtension(filePath);
+            if (name == "ZZ_Linux") return OSPlatform.Linux;
+            else if (name == "ZZ_Win") return OSPlatform.Windows;
+            else return OSPlatform.Generic;
+
         }
 
         static EdataManager()
@@ -123,7 +152,7 @@ namespace moddingSuite.BL
             using (var fs = File.Open(FilePath, FileMode.Open))
                 fs.Read(buffer, 0, buffer.Length);
 
-            header = Utils.ByteArrayToStructure<EdataHeader>(buffer);
+            header = Utils.StdUtils.ByteArrayToStructure<EdataHeader>(buffer);
 
             if (header.Version > 2)
                 throw new NotSupportedException(string.Format("Edata version {0} not supported", header.Version));
@@ -171,7 +200,7 @@ namespace moddingSuite.BL
                         fileStream.Read(checkSum, 0, checkSum.Length);
                         file.Checksum = checkSum;
 
-                        file.Name = Utils.ReadString(fileStream);
+                        file.Name = BLUtils.ReadString(fileStream);
                         file.Path = MergePath(dirs, file.Name);
 
                         if (file.Name.Length % 2 == 0)
@@ -202,7 +231,7 @@ namespace moddingSuite.BL
                         else if (endings.Count > 0)
                             endings.Add(endings.Last());
 
-                        dir.Name = Utils.ReadString(fileStream);
+                        dir.Name = BLUtils.ReadString(fileStream);
 
                         if (dir.Name.Length % 2 == 0)
                             fileStream.Seek(1, SeekOrigin.Current);
@@ -251,7 +280,7 @@ namespace moddingSuite.BL
                         //file.Checksum = checkSum;
                         fileStream.Seek(1, SeekOrigin.Current);  //instead, skip 1 byte - as in WEE DAT unpacker
 
-                        file.Name = Utils.ReadString(fileStream);
+                        file.Name = Utils.StdUtils.ReadString(fileStream);
                         file.Path = MergePath(dirs, file.Name);
 
                         if ((file.Name.Length + 1) % 2 == 0)
@@ -282,7 +311,7 @@ namespace moddingSuite.BL
                         else if (endings.Count > 0)
                             endings.Add(endings.Last());
 
-                        dir.Name = Utils.ReadString(fileStream);
+                        dir.Name = BLUtils.ReadString(fileStream);
 
                         if ((dir.Name.Length + 1) % 2 == 1)
                             fileStream.Seek(1, SeekOrigin.Current);
@@ -397,7 +426,7 @@ namespace moddingSuite.BL
                             byte[] checkSum = curFile.Checksum;
                             newFile.Write(checkSum, 0, checkSum.Length);
 
-                            string name = Utils.ReadString(newFile);
+                            string name = BLUtils.ReadString(newFile);
 
                             if ((name.Length + 1) % 2 == 1)
                                 newFile.Seek(1, SeekOrigin.Current);
@@ -407,7 +436,7 @@ namespace moddingSuite.BL
                         else if (fileGroupId > 0)
                         {
                             newFile.Seek(4, SeekOrigin.Current);
-                            string name = Utils.ReadString(newFile);
+                            string name = BLUtils.ReadString(newFile);
 
                             if ((name.Length + 1) % 2 == 1)
                                 newFile.Seek(1, SeekOrigin.Current);
@@ -501,7 +530,7 @@ namespace moddingSuite.BL
 
                             newFile.Seek(1, SeekOrigin.Current);
 
-                            string name = Utils.ReadString(newFile);
+                            string name = BLUtils.ReadString(newFile);
 
                             if ((name.Length + 1) % 2 == 0)
                                 newFile.Seek(1, SeekOrigin.Current);
@@ -511,7 +540,7 @@ namespace moddingSuite.BL
                         else if (fileGroupId > 0)
                         {
                             newFile.Seek(4, SeekOrigin.Current);
-                            string name = Utils.ReadString(newFile);
+                            string name = BLUtils.ReadString(newFile);
 
                             if ((name.Length + 1) % 2 == 1)
                                 newFile.Seek(1, SeekOrigin.Current);
@@ -604,11 +633,11 @@ namespace moddingSuite.BL
                     Array.Copy(headerData, tmp, knownHeader.Value.Length);
                     //headerData = tmp;
 
-                    if (Utils.ByteArrayCompare(tmp, knownHeader.Value))
+                    if (BLUtils.ByteArrayCompare(tmp, knownHeader.Value))
                         return knownHeader.Key;
                 }
                 else
-                    if (Utils.ByteArrayCompare(headerData, knownHeader.Value))
+                    if (BLUtils.ByteArrayCompare(headerData, knownHeader.Value))
                         return knownHeader.Key;
             }
 

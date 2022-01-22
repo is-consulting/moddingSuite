@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using moddingSuite.BL.Ndf;
+using moddingSuite.BL.Utils;
 using moddingSuite.Model.Scenario;
 using moddingSuite.Util;
 
@@ -33,7 +34,7 @@ namespace moddingSuite.BL.Scenario
 
             foreach (var contentFile in file.ContentFiles)
             {
-                int padding = Utils.RoundToNextDivBy4(contentFile.Length) - contentFile.Length;
+                int padding = StdUtils.RoundToNextDivBy4(contentFile.Length) - contentFile.Length;
 
                 scenarioData.AddRange(BitConverter.GetBytes(contentFile.Length + padding));
                 scenarioData.AddRange(contentFile);
@@ -77,7 +78,7 @@ namespace moddingSuite.BL.Scenario
                         ms.Write(BitConverter.GetBytes(area.Name.Length), 0, 4);
                         var nameBuffer = Encoding.UTF8.GetBytes(area.Name);
                         ms.Write(nameBuffer, 0, nameBuffer.Length);
-                        ms.Seek(Util.Utils.RoundToNextDivBy4(nameBuffer.Length) - nameBuffer.Length, SeekOrigin.Current);
+                        ms.Seek(StdUtils.RoundToNextDivBy4(nameBuffer.Length) - nameBuffer.Length, SeekOrigin.Current);
 
                         ms.WriteAreaMagic();
                         ms.Write(BitConverter.GetBytes((float)area.AttachmentPoint.X), 0, 4);

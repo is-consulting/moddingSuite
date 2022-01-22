@@ -1,5 +1,5 @@
 ﻿using System;
-using moddingSuite.Util;
+using moddingSuite.BL.Utils;
 
 namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 {
@@ -26,7 +26,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override string ToString()
         {
-            return string.Format("Vec4: {0}", Utils.ByteArrayToBigEndianHexByteString(Value));
+            return string.Format("Vec4: {0}", StdUtils.ByteArrayToBigEndianHexByteString(Value));
         }
 
 

@@ -11,6 +11,7 @@ using moddingSuite.Model.Edata;
 using moddingSuite.Model.Mesh;
 using System.Runtime.InteropServices;
 using moddingSuite.Util;
+using moddingSuite.BL.Utils;
 
 namespace moddingSuite.BL.Mesh
 {
@@ -198,7 +199,7 @@ namespace moddingSuite.BL.Mesh
                     s.Read(buffer, 0, buffer.Length);
                     file.HierarchicalAseModelSkeletonIndex = BitConverter.ToUInt16(buffer, 0);
 
-                    file.Name = Utils.ReadString(s);
+                    file.Name = StdUtils.ReadString(s);
                     file.Path = MergePath(dirs, file.Name);
 
                     if (file.Name.Length % 2 == 0)
@@ -224,7 +225,7 @@ namespace moddingSuite.BL.Mesh
                     else if (endings.Count > 0)
                         endings.Add(endings.Last());
 
-                    dir.Name = Utils.ReadString(s);
+                    dir.Name = StdUtils.ReadString(s);
 
                     if (dir.Name.Length % 2 == 0)
                         s.Seek(1, SeekOrigin.Current);

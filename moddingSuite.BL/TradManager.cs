@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,14 +10,35 @@ using moddingSuite.Model.Trad;
 
 namespace moddingSuite.BL
 {
+    public enum StringType
+    {
+        Default,
+        Utf32
+    }
+
     public class TradManager
     {
         private ObservableCollection<TradEntry> _entries = new ObservableCollection<TradEntry>();
+        private readonly StringType _stringType;
+        private readonly Encoding _encoder;
 
         private const ulong GlyphHash = (ulong)0x1 << 63;
+        private int _totalRead;
 
-        public TradManager(byte[] data)
+        public StringType StringType => _stringType;
+        public TradManager(byte[] data, StringType stringType)
         {
+            _stringType = stringType;
+
+            if (_stringType == StringType.Utf32)
+            {
+                /* Linux file support */
+                _encoder = Encoding.UTF32;
+            } else
+            {
+                _encoder = Encoding.Unicode;
+            }
+            _totalRead = 0;
             ParseTradFile(data);
 
             _entries.CollectionChanged += EntriesCollectionChanged;
@@ -35,7 +57,7 @@ namespace moddingSuite.BL
                     ((TradEntry)tradEntry).UserCreated = true;
         }
 
-        protected void ParseTradFile(byte[] data)
+        private void ParseTradFile(byte[] data)
         {
             using (var ms = new MemoryStream(data))
             {
@@ -43,24 +65,26 @@ namespace moddingSuite.BL
                 Entries = ReadDictionary(entryCount, ms);
 
                 GetEntryContents(ms);
+                Debug.Assert(ms.Capacity == _totalRead);
             }
         }
 
-        protected void GetEntryContents(MemoryStream ms)
+        private void GetEntryContents(MemoryStream ms)
         {
+            int charSize = _stringType == StringType.Utf32 ? 4 : 2;
+
             foreach (TradEntry entry in Entries)
             {
                 ms.Seek(entry.OffsetCont, SeekOrigin.Begin);
 
-                var buffer = new byte[entry.ContLen * 2];
+                var buffer = new byte[entry.ContLen * charSize];
 
-                ms.Read(buffer, 0, buffer.Length);
-
-                entry.Content = Encoding.Unicode.GetString(buffer);
+                _totalRead += ms.Read(buffer, 0, buffer.Length);
+                entry.Content = _encoder.GetString(buffer);
             }
         }
 
-        protected ObservableCollection<TradEntry> ReadDictionary(uint entryCount, MemoryStream ms)
+        private ObservableCollection<TradEntry> ReadDictionary(uint entryCount, MemoryStream ms)
         {
             var entries = new ObservableCollection<TradEntry>();
 
@@ -72,13 +96,13 @@ namespace moddingSuite.BL
 
                 var hashBuffer = new byte[8];
 
-                ms.Read(hashBuffer, 0, hashBuffer.Length);
+                _totalRead += ms.Read(hashBuffer, 0, hashBuffer.Length);
                 entry.Hash = hashBuffer;
 
-                ms.Read(buffer, 0, buffer.Length);
+                _totalRead += ms.Read(buffer, 0, buffer.Length);
                 entry.OffsetCont = BitConverter.ToUInt32(buffer, 0);
 
-                ms.Read(buffer, 0, buffer.Length);
+                _totalRead += ms.Read(buffer, 0, buffer.Length);
                 entry.ContLen = BitConverter.ToUInt32(buffer, 0);
 
                 entries.Add(entry);
@@ -87,16 +111,16 @@ namespace moddingSuite.BL
             return entries;
         }
 
-        protected uint ReadHeader(MemoryStream ms)
+        private uint ReadHeader(MemoryStream ms)
         {
             var buffer = new byte[4];
 
-            ms.Read(buffer, 0, buffer.Length);
+            _totalRead += ms.Read(buffer, 0, buffer.Length);
 
             if (Encoding.ASCII.GetString(buffer) != "TRAD")
                 throw new ArgumentException("No valid Eugen Systems TRAD (*.dic) file.");
 
-            ms.Read(buffer, 0, buffer.Length);
+            _totalRead += ms.Read(buffer, 0, buffer.Length);
 
             return BitConverter.ToUInt32(buffer, 0);
         }
@@ -144,7 +168,7 @@ namespace moddingSuite.BL
                 foreach (TradEntry entry in orderedEntried)
                 {
                     entry.OffsetCont = (uint)ms.Position;
-                    buffer = Encoding.Unicode.GetBytes(entry.Content);
+                    buffer = _encoder.GetBytes(entry.Content);
                     ms.Write(buffer, 0, buffer.Length);
                 }
 

@@ -11,6 +11,7 @@ using moddingSuite.View.DialogProvider;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Ndf;
 using System.Diagnostics;
+using moddingSuite.BL.Utils;
 
 namespace moddingSuite.Model.Ndfbin
 {
@@ -180,7 +181,7 @@ namespace moddingSuite.Model.Ndfbin
 
             var newVal = Value.GetBytes();
 
-            if (newVal != null && _oldVal != null && Utils.ByteArrayCompare(newVal, _oldVal))
+            if (newVal != null && _oldVal != null && StdUtils.ByteArrayCompare(newVal, _oldVal))
                 return;
 
             ChangeEntryBase change = null;
