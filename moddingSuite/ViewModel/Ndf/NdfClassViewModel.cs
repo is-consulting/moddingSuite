@@ -93,12 +93,14 @@ namespace moddingSuite.ViewModel.Ndf
         /// <summary>
         /// Allows scripts to append a new instance.
         /// </summary>
-        public void AddInstance(bool isTopLevelInstance)
+        public NdfObjectViewModel AddInstance(bool isTopLevelInstance)
         {
             NdfObject inst = Object.Manager.CreateInstanceOf(Object, isTopLevelInstance);
-
             Object.Instances.Add(inst);
-            Instances.Add(new NdfObjectViewModel(inst, ParentVm));
+
+            var instModel = new NdfObjectViewModel(inst, ParentVm);
+            Instances.Add(instModel);
+            return instModel;
         }
 
         /// <summary>
@@ -149,7 +151,10 @@ namespace moddingSuite.ViewModel.Ndf
 
                 if (propVal == null)
                 {
-                    return false;
+                    if (expr.Value.Equals("\\0"))
+                        continue;
+                    else
+                        return false;
                 }
 
                 if (propVal.Value == null || propVal.Value.ToString().ToLower().Equals("null"))
@@ -162,7 +167,10 @@ namespace moddingSuite.ViewModel.Ndf
 
                 if (expr.Discriminator == FilterDiscriminator.Equals)
                     if (compare == 0)
-                        continue;
+                        if (expr.Discriminator == FilterDiscriminator.Excludes)
+                            return false;
+                            else   
+                                continue;
                     else
                         return false;
 
