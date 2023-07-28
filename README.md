@@ -13,3 +13,8 @@ License
 ============
 
 The Wargame modding suite is released under the MIT license.
+
+
+
+**Simple guide**:
+https://docs.google.com/document/d/1l2vut_I3q-TI-VGy777rl_Fw9RP6Ook9hjOF8qIyZXM/edit?usp=sharing 
