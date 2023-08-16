@@ -166,13 +166,19 @@ namespace moddingSuite.ViewModel.Ndf
                 int compare = String.Compare(propVal.Value.ToString(), expr.Value);
 
                 if (expr.Discriminator == FilterDiscriminator.Equals)
-                    if (compare == 0)
-                        if (expr.Discriminator == FilterDiscriminator.Excludes)
-                            return false;
-                            else   
-                                continue;
+                {
+                    if (compare == 0)//means equal
+                    {
+                        continue;
+                    }                
                     else
                         return false;
+                }
+                else if (expr.Discriminator == FilterDiscriminator.Excludes)
+                    if (propVal.Value.ToString().Contains(expr.Value))
+                        return false; 
+                    else
+                        continue;
 
                 else if (expr.Discriminator == FilterDiscriminator.Smaller)
                     if (propVal.Value.ToString().Length < expr.Value.Length || (propVal.Value.ToString().Length == expr.Value.Length && compare < 0))
