@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using moddingSuite.Model.Ndfbin;
+using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Filter;
 
@@ -148,6 +149,12 @@ namespace moddingSuite.ViewModel.Ndf
                     continue;
 
                 NdfPropertyValue propVal = obj.PropertyValues.SingleOrDefault(x => x.Property.Name == expr.PropertyName);
+                if (string.IsNullOrEmpty(expr.Value))
+                    //expr.Value is the thing on right side of the little filter box
+                    continue;
+
+
+
 
                 if (propVal == null)
                 {
@@ -157,10 +164,20 @@ namespace moddingSuite.ViewModel.Ndf
                         return false;
                 }
 
+                if (expr.Discriminator == FilterDiscriminator.Equals)
+                {
+                    if ((propVal.Value == null) && expr.Value.Equals("null"))
+                    //filter by null
+                    {
+                        continue;
+                    }
+                }
+
+                //propVal.Value.ToString() is the actual value of the property for an instance
                 if (propVal.Value == null || propVal.Value.ToString().ToLower().Equals("null"))
                 {
-                    if (expr.Value.Length > 0)
-                        return false;
+                    //if (expr.Value.Length > 0)
+                        //return false; this line stop filter by null from working
                 }
 
                 int compare = String.Compare(propVal.Value.ToString(), expr.Value);
@@ -170,7 +187,12 @@ namespace moddingSuite.ViewModel.Ndf
                     if (compare == 0)//means equal
                     {
                         continue;
-                    }                
+                    } 
+                    else if ((propVal.Value == null  )&& expr.Value.Equals("null"))
+                        //filter by null
+                    {
+                        continue;
+                    }
                     else
                         return false;
                 }
