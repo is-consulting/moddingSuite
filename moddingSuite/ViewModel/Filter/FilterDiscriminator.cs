@@ -5,6 +5,7 @@
         Equals,
         Smaller,
         Greater,
-        Contains
+        Contains,
+        Excludes
     }
 }
