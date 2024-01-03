@@ -192,12 +192,27 @@ namespace moddingSuite.ViewModel.Ndf
 
                     break;
                 case NdfType.List:
-                case NdfType.MapList:
                     var copiedItems = new List<CollectionItemValueHolder>();
                     var collection = toCopy.Value as NdfCollection;
                     if (collection != null)
+                    {
                         copiedItems.AddRange(collection.Select(entry => new CollectionItemValueHolder(GetCopiedValue(entry), toCopy.Manager)));
+                    }
+
                     copiedValue = new NdfCollection(copiedItems);
+                    break;
+                case NdfType.MapList:
+                    // creates Maplist type copy as NdfMaplist:Collection, written by Reros
+                    var copiedMapItems = new NdfMapList();
+                    var collectionMap = toCopy.Value as NdfCollection;
+                    if (collectionMap != null)
+                    {
+                        foreach (var item in collectionMap)
+                        {
+                            copiedMapItems.Add(new CollectionItemValueHolder(GetCopiedValue(item), toCopy.Manager));
+                        }
+                    }
+                    copiedValue = copiedMapItems;
                     break;
 
                 case NdfType.Map:
