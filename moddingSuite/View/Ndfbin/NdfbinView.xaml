@@ -126,7 +126,8 @@
                                     Width="150"
                                     Margin="5"
                                     VerticalAlignment="Top"
-                                    Text="{Binding Path=ClassesFilterExpression, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Path=ClassesFilterExpression, UpdateSourceTrigger=PropertyChanged}"
+                                    TextChanged="TextBox_TextChanged"/>
 
                                 <Button Command="{Binding MakeTopObjectCommand}" ToolTip="Make top object">
                                     <Image SnapsToDevicePixels="True" Source="{StaticResource ImportIcon}" />
@@ -181,7 +182,8 @@
                                 IsSynchronizedWithCurrentItem="True"
                                 ItemsSource="{Binding Path=ClassesCollectionView}"
                                 SelectionMode="Extended"
-                                SelectionUnit="FullRow">
+                                SelectionUnit="FullRow"
+                                SelectionChanged="classGrid_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn
                                         Width="40"
