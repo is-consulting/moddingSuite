@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using IronPython.Runtime.Operations;
 using moddingSuite.Model.Ndfbin;
 using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.Model.Ndfbin.Types.AllTypes;
@@ -139,14 +140,20 @@ namespace moddingSuite.ViewModel.Ndf
         private void CopyToInstancesExecute(object obj)
         {
             var cv = CollectionViewSource.GetDefaultView(PropertyValues);
+            var result = MessageBox.Show("Do you want to copy this instance value to ALL other instances? If unsure, press no", "Confirmation",
+                MessageBoxButton.YesNo, MessageBoxImage.Question,defaultResult: MessageBoxResult.No);
 
-            var item = cv.CurrentItem as NdfPropertyValue;
-            foreach (var instance in item.Instance.Class.Instances)
+            if (result == MessageBoxResult.Yes)
             {
-                var property = instance.PropertyValues.First(x => x.Property == item.Property);
-                property.BeginEdit();
-                property.Value = item.Value;
-                property.EndEdit();
+                var item = cv.CurrentItem as NdfPropertyValue;
+
+                foreach (var instance in item.Instance.Class.Instances)
+                {
+                    var property = instance.PropertyValues.First(x => x.Property == item.Property);
+                    property.BeginEdit();
+                    property.Value = item.Value;
+                    property.EndEdit();
+                }
             }
         }
 

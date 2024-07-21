@@ -95,24 +95,24 @@ namespace moddingSuite.ViewModel.Ndf
 
             if (cv == null)
                 return;
+            
+            if (cv.CurrentItem == null)
+                return;
 
             NdfType type =
                 Value.GroupBy(x => x.Value.Type).OrderByDescending(gp => gp.Count()).Select(x => x.First().Value.Type).
                     Single();
+            var val = cv.CurrentItem as CollectionItemValueHolder;
+            
+            //old method
+            //var wrapper =
+               // new CollectionItemValueHolder(NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, NdfbinManager), NdfbinManager);
 
             var wrapper =
-                new CollectionItemValueHolder(NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, NdfbinManager), NdfbinManager);
+                new CollectionItemValueHolder(val.Value, NdfbinManager);
 
             if (IsInsertMode)
             {
-                if (cv.CurrentItem == null)
-                    return;
-
-                var val = cv.CurrentItem as CollectionItemValueHolder;
-
-                if (val == null)
-                    return;
-
                 Value.Insert(cv.CurrentPosition + 1, wrapper);
             }
             else

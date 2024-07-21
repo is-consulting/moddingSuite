@@ -25,7 +25,11 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             set
             {
                 _class = value;
-                OnPropertyChanged("Class");
+
+                if (value != null)
+                {
+                    OnPropertyChanged("Class");
+                }
             }
         }
 
@@ -70,6 +74,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         public override byte[] GetBytes()
         {
             var refereceData = new List<byte>();
+
+            if (Class == null) { return null; }
 
             refereceData.AddRange(BitConverter.GetBytes(InstanceId));
 

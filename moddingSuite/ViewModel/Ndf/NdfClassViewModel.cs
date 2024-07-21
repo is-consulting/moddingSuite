@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using moddingSuite.Model.Ndfbin;
+using moddingSuite.Model.Ndfbin.Types;
 using moddingSuite.ViewModel.Base;
 using moddingSuite.ViewModel.Filter;
 
@@ -93,12 +94,14 @@ namespace moddingSuite.ViewModel.Ndf
         /// <summary>
         /// Allows scripts to append a new instance.
         /// </summary>
-        public void AddInstance(bool isTopLevelInstance)
+        public NdfObjectViewModel AddInstance(bool isTopLevelInstance)
         {
             NdfObject inst = Object.Manager.CreateInstanceOf(Object, isTopLevelInstance);
-
             Object.Instances.Add(inst);
-            Instances.Add(new NdfObjectViewModel(inst, ParentVm));
+
+            var instModel = new NdfObjectViewModel(inst, ParentVm);
+            Instances.Add(instModel);
+            return instModel;
         }
 
         /// <summary>
@@ -146,25 +149,58 @@ namespace moddingSuite.ViewModel.Ndf
                     continue;
 
                 NdfPropertyValue propVal = obj.PropertyValues.SingleOrDefault(x => x.Property.Name == expr.PropertyName);
+                if (string.IsNullOrEmpty(expr.Value))
+                    //expr.Value is the thing on right side of the little filter box
+                    continue;
+
+
+
 
                 if (propVal == null)
                 {
-                    return false;
+                    if (expr.Value.Equals("\\0"))
+                        continue;
+                    else
+                        return false;
                 }
 
+                if (expr.Discriminator == FilterDiscriminator.Equals)
+                {
+                    if ((propVal.Value == null) && expr.Value.Equals("null"))
+                    //filter by null
+                    {
+                        continue;
+                    }
+                }
+
+                //propVal.Value.ToString() is the actual value of the property for an instance
                 if (propVal.Value == null || propVal.Value.ToString().ToLower().Equals("null"))
                 {
-                    if (expr.Value.Length > 0)
-                        return false;
+                    //if (expr.Value.Length > 0)
+                        //return false; this line stop filter by null from working
                 }
 
                 int compare = String.Compare(propVal.Value.ToString(), expr.Value);
 
                 if (expr.Discriminator == FilterDiscriminator.Equals)
-                    if (compare == 0)
+                {
+                    if (compare == 0)//means equal
+                    {
                         continue;
+                    } 
+                    else if ((propVal.Value == null  )&& expr.Value.Equals("null"))
+                        //filter by null
+                    {
+                        continue;
+                    }
                     else
                         return false;
+                }
+                else if (expr.Discriminator == FilterDiscriminator.Excludes)
+                    if (propVal.Value.ToString().Contains(expr.Value))
+                        return false; 
+                    else
+                        continue;
 
                 else if (expr.Discriminator == FilterDiscriminator.Smaller)
                     if (propVal.Value.ToString().Length < expr.Value.Length || (propVal.Value.ToString().Length == expr.Value.Length && compare < 0))
