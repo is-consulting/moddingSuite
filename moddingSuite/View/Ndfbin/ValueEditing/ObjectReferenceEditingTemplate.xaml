@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:components="clr-namespace:moddingSuite.Components"
+             xmlns:local="clr-namespace:moddingSuite.Components"
              mc:Ignorable="d" 
              d:DesignHeight="22" d:DesignWidth="300">
              
@@ -12,14 +13,14 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <!--<Label Content="{Binding Path=Class.Name}" />-->
-        <ComboBox Grid.Column="0" ItemsSource="{Binding Class.Manager.Classes}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Class}" IsEditable="True">
-            <ComboBox.ItemsPanel>
+        <local:FilteredComboBox x:Name="ComboBoxClass" Grid.Column="0" ItemsSource="{Binding Class.Manager.Classes}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Class}" IsEditable="True" IsTextSearchEnabled="false">
+            <local:FilteredComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />
                 </ItemsPanelTemplate>
-            </ComboBox.ItemsPanel>
-        </ComboBox>
-        <ComboBox Grid.Column="1" ItemsSource="{Binding Class.Instances}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Instance}" IsEditable="True">
+            </local:FilteredComboBox.ItemsPanel>
+        </local:FilteredComboBox>
+        <ComboBox Name="ComboBoxInstance" Grid.Column="1" ItemsSource="{Binding Class.Instances}" DisplayMemberPath="Name" SelectedItem="{Binding Path=Instance}" IsEditable="True">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />

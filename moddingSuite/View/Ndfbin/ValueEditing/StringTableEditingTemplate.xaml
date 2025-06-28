@@ -3,15 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:moddingSuite.Components"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ComboBox ItemsSource="{Binding Manager.Strings}" SelectedItem="{Binding Path=Value.Value}" >
-            <ComboBox.ItemsPanel>
+        <local:FilteredComboBox x:Name="comboBox1" IsTextSearchEnabled="false"  ItemsSource="{Binding Manager.Strings}" SelectedItem="{Binding Path=Value.Value}" IsEditable="True">
+            <local:FilteredComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />
                 </ItemsPanelTemplate>
-            </ComboBox.ItemsPanel>
-        </ComboBox>
+            </local:FilteredComboBox.ItemsPanel>
+        </local:FilteredComboBox>
     </Grid>
 </UserControl>
