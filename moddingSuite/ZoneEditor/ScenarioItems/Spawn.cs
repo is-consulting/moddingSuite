@@ -25,7 +25,7 @@ namespace moddingSuite.ZoneEditor.ScenarioItems
             set{
                 _type=value;
                 try { head.Parent.Refresh(); }
-                catch (NullReferenceException e) { }
+                catch (NullReferenceException) { }
                 if (_type == SpawnType.Sea)
                 {
                     arrowLength = 350000;

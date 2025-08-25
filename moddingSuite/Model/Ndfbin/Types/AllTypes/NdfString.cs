@@ -1,4 +1,5 @@
 ﻿using System;
+using IronPython.Compiler.Ast;
 using moddingSuite.BL;
 using moddingSuite.BL.Ndf;
 
@@ -13,7 +14,10 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override byte[] GetBytes()
         {
-            return BitConverter.GetBytes(((NdfStringReference)Value).Id);
+            if (Value==null){
+                return null;
+            }
+                return BitConverter.GetBytes(((NdfStringReference)Value).Id);
         }
 
         public override byte[] GetNdfText()

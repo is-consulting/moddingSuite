@@ -180,9 +180,11 @@ namespace moddingSuite.Model.Ndfbin
 
             var newVal = Value.GetBytes();
 
+            if (newVal == null) return;
+
             if (newVal != null && _oldVal != null && Utils.ByteArrayCompare(newVal, _oldVal))
                 return;
-
+            
             ChangeEntryBase change = null;
 
             switch (Value.Type)

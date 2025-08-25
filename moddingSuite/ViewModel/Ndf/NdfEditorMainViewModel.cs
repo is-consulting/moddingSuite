@@ -154,7 +154,7 @@ namespace moddingSuite.ViewModel.Ndf
         private NdfObject CopyInstance(NdfObject instToCopy)
         {
             NdfObject newInst = instToCopy.Class.Manager.CreateInstanceOf(instToCopy.Class, instToCopy.IsTopObject);
-            
+
             _copyInstanceResults.Add(newInst);
 
             foreach (var propertyValue in instToCopy.PropertyValues)
@@ -192,12 +192,27 @@ namespace moddingSuite.ViewModel.Ndf
 
                     break;
                 case NdfType.List:
-                case NdfType.MapList:
                     var copiedItems = new List<CollectionItemValueHolder>();
                     var collection = toCopy.Value as NdfCollection;
                     if (collection != null)
+                    {
                         copiedItems.AddRange(collection.Select(entry => new CollectionItemValueHolder(GetCopiedValue(entry), toCopy.Manager)));
+                    }
+
                     copiedValue = new NdfCollection(copiedItems);
+                    break;
+                case NdfType.MapList:
+                    // creates Maplist type copy as NdfMaplist:Collection, written by Reros
+                    var copiedMapItems = new NdfMapList();
+                    var collectionMap = toCopy.Value as NdfCollection;
+                    if (collectionMap != null)
+                    {
+                        foreach (var item in collectionMap)
+                        {
+                            copiedMapItems.Add(new CollectionItemValueHolder(GetCopiedValue(item), toCopy.Manager));
+                        }
+                    }
+                    copiedValue = copiedMapItems;
                     break;
 
                 case NdfType.Map:
@@ -393,7 +408,6 @@ namespace moddingSuite.ViewModel.Ndf
                 {
                     BuildClassesCollectionView();
                 }
-
                 return _classesCollectionView;
             }
         }
@@ -483,12 +497,25 @@ namespace moddingSuite.ViewModel.Ndf
             string[] parts = ClassesFilterExpression.Split(new[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
 
             int cls;
-
+            
             if (parts.Length > 1 && Int32.TryParse(parts[0], out cls) && (clas.Id == cls || clas.Name == parts[0]))
             {
+                // filters like this 26:2556 with Classnumber:Instancenumber, could be removed?
                 int inst;
                 if (Int32.TryParse(parts[1], out inst))
                 {
+                    NdfObjectViewModel instObj = clas.Instances.SingleOrDefault(x => x.Id == inst);
+
+                    if (instObj != null)
+                        clas.InstancesCollectionView.MoveCurrentTo(instObj);
+                }
+            }
+            else
+            {
+                int inst;
+                if (Int32.TryParse(parts[0], out inst))
+                {
+                    // selects instance searched for added by Reros
                     NdfObjectViewModel instObj = clas.Instances.SingleOrDefault(x => x.Id == inst);
 
                     if (instObj != null)
@@ -571,13 +598,14 @@ namespace moddingSuite.ViewModel.Ndf
             var vm = new NdfClassViewModel(cls.Object.Class, this);
             NdfObjectViewModel inst = vm.Instances.SingleOrDefault(x => x.Id == cls.Id);
             ViewModelBase baseViewModel;
-            switch (cls.Object.Class.Name) {
+            switch (cls.Object.Class.Name)
+            {
                 case "TGameplayArmeArmureContainer":
                 case "TGameplayDamageResistanceContainer":
                     baseViewModel = new ArmourDamageViewModel(inst.Object, this);
                     break;
                 default:
-                     if (inst == null)
+                    if (inst == null)
                         return;
                     vm.InstancesCollectionView.MoveCurrentTo(inst);
                     baseViewModel = vm;

@@ -14,7 +14,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
         {
             var col = (Color) Value;
 
-            var colorArray = new[] { col.R, col.G, col.B, col.A};
+            var colorArray = new[] { col.B, col.G, col.R, col.A};
 
             return colorArray;
         }

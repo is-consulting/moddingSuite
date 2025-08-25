@@ -6,12 +6,17 @@ using moddingSuite.View.DialogProvider;
 using moddingSuite.View.Ndfbin.Viewer;
 using moddingSuite.ViewModel.Base;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
+using static IronPython.Modules._ast;
 
 namespace moddingSuite.ViewModel.Ndf
 {
@@ -88,31 +93,71 @@ namespace moddingSuite.ViewModel.Ndf
 
             Value.Remove(val);
         }
-
+        
         private void AddRowOfCommonTypeExecute(object obj)
         {
             var cv = CollectionViewSource.GetDefaultView(Value);
 
             if (cv == null)
                 return;
+            
+            if (cv.CurrentItem == null)
+                return;
 
             NdfType type =
                 Value.GroupBy(x => x.Value.Type).OrderByDescending(gp => gp.Count()).Select(x => x.First().Value.Type).
                     Single();
+            var val = cv.CurrentItem as CollectionItemValueHolder;
+            if (val == null)
+                return;
 
-            var wrapper =
-                new CollectionItemValueHolder(NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(type)], type, NdfbinManager), NdfbinManager);
+
+            CollectionItemValueHolder wrapper = null;
+            switch (type)
+            {
+                case NdfType.Map:
+                    var map = val.Value as NdfMap;
+                    MapValueHolder key = null;
+                    MapValueHolder value = null;
+                    var tempvalue = map.Value as MapValueHolder;
+                    switch (map.Key.Value.Type)
+                    {
+                        case NdfType.List:
+                            var newlist = new List<CollectionItemValueHolder>();
+                            var list = map.Key.Value as NdfCollection;
+                            newlist.AddRange(list.Select(entry => new CollectionItemValueHolder(CloneObject(entry.Value), NdfbinManager)));
+                            key= new MapValueHolder(new NdfCollection(newlist),NdfbinManager);
+                            break;
+
+                        default:
+                            key = new MapValueHolder(CloneObject(map.Key.Value), NdfbinManager);
+                            break;
+
+                    }
+                    switch (tempvalue.Value.Type)
+                    {
+                        case NdfType.List:
+                            var newlist = new List<CollectionItemValueHolder>();
+                            var list = tempvalue.Value as NdfCollection;
+                            newlist.AddRange(list.Select(entry => new CollectionItemValueHolder(CloneObject(entry), NdfbinManager)));
+                            value = new MapValueHolder(new NdfCollection(newlist), NdfbinManager);
+                            break;
+                        
+                        default:
+                            value = new MapValueHolder(CloneObject(tempvalue.Value), NdfbinManager);
+                            break;
+                    }
+                    
+                    wrapper = new CollectionItemValueHolder(new NdfMap(key, value, NdfbinManager),NdfbinManager);
+                    break;
+
+                default:
+                    wrapper = new CollectionItemValueHolder(CloneObject(val.Value), NdfbinManager);
+                    break;
+            }
 
             if (IsInsertMode)
             {
-                if (cv.CurrentItem == null)
-                    return;
-
-                var val = cv.CurrentItem as CollectionItemValueHolder;
-
-                if (val == null)
-                    return;
-
                 Value.Insert(cv.CurrentPosition + 1, wrapper);
             }
             else
@@ -121,6 +166,53 @@ namespace moddingSuite.ViewModel.Ndf
             cv.MoveCurrentTo(wrapper);
         }
 
+        private NdfValueWrapper CloneObject(object obj)
+        {
+            var value = obj as NdfValueWrapper;
+            NdfValueWrapper clonedValue = null;
+            switch (value.Type)
+            {
+                case NdfType.UInt32:
+                    clonedValue = new NdfUInt32(BitConverter.ToUInt32(value.GetBytes(), 0));
+                    break;
+
+                case NdfType.Int32:
+                    clonedValue = new NdfInt32(BitConverter.ToInt32(value.GetBytes(), 0));
+                    break;
+
+                case NdfType.Int16:
+                    clonedValue = new NdfInt16(BitConverter.ToInt16(value.GetBytes(), 0));
+                    break;
+
+                case NdfType.UInt16:
+                    clonedValue = new NdfUInt16(BitConverter.ToUInt16(value.GetBytes(), 0));
+                    break;
+
+                case NdfType.Float32:
+                    clonedValue  = new NdfSingle(BitConverter.ToSingle(value.GetBytes(), 0));
+                    break;
+
+                case NdfType.LocalisationHash:
+                    clonedValue = new NdfLocalisationHash(value.GetBytes());
+                    break;
+
+                case NdfType.TableString:
+                    var tblstr = value as NdfString;
+                    var strvl = tblstr.Value as NdfStringReference;
+                    clonedValue = new NdfString(strvl);
+                    break;
+
+                case NdfType.ObjectReference:
+                    var objref = value as NdfObjectReference;
+                    clonedValue = new NdfObjectReference(objref.Class, objref.InstanceId);
+                    break;
+
+                default:
+                    clonedValue = NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(value.Type)], value.Type, NdfbinManager);
+                    break;
+            }
+            return clonedValue;
+        }
         private void AddRowExecute(object obj)
         {
             ICollectionView cv = CollectionViewSource.GetDefaultView(Value);

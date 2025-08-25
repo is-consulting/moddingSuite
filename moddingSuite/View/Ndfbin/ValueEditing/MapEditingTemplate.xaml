@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding Path=Value}" Margin="2">
+    <Grid Margin="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -17,16 +17,16 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label Content="Key type:" Visibility="{Binding IsKeyNull, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding TypeSelection}" SelectedItem="{Binding KeyType}" Margin="5" Width="120" Grid.Column="1" Visibility="{Binding IsKeyNull, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <Label Content="Key type:" Visibility="{Binding Value.IsKeyNull, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Value.TypeSelection}" SelectedItem="{Binding Value.KeyType}" Margin="5" Width="120" Grid.Column="1" Visibility="{Binding Value.IsKeyNull, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-        <Label Content="Value type:" Grid.Row="1" Visibility="{Binding IsValueNull, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding TypeSelection}" SelectedItem="{Binding ValueType}" Margin="5" Width="120" Grid.Row="1" Grid.Column="1" Visibility="{Binding IsValueNull, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <Label Content="Value type:" Grid.Row="1" Visibility="{Binding Value.IsValueNull, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Value.TypeSelection}" SelectedItem="{Binding Value.ValueType}" Margin="5" Width="120" Grid.Row="1" Grid.Column="1" Visibility="{Binding Value.IsValueNull, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-        <TextBlock Text="{Binding Key.Value.Type}" Grid.Row="2" Margin="0 0 3 0" VerticalAlignment="Center" />
-        <TextBlock Text="{Binding Value.Value.Type}" Grid.Row="3" Margin="0 0 3 0" VerticalAlignment="Center" />
+        <TextBlock Text="{Binding Value.Key.Value.Type}" Grid.Row="2" Margin="0 0 3 0" VerticalAlignment="Center" />
+        <TextBlock Text="{Binding Value.Value.Value.Type}" Grid.Row="3" Margin="0 0 3 0" VerticalAlignment="Center" />
 
-        <ContentControl Grid.Column="1" ContentTemplateSelector="{StaticResource editingControlTemplateSelector}"  Content="{Binding Path=Key}" Grid.Row="2" VerticalAlignment="Center" />
-        <ContentControl Grid.Column="1" ContentTemplateSelector="{StaticResource editingControlTemplateSelector}"  Content="{Binding Path=Value}" Grid.Row="3" VerticalAlignment="Center" />
+        <ContentControl Grid.Column="1" ContentTemplateSelector="{StaticResource editingControlTemplateSelector}"  Content="{Binding Path=Value.Key}" Grid.Row="2" VerticalAlignment="Center" />
+        <ContentControl Grid.Column="1" ContentTemplateSelector="{StaticResource editingControlTemplateSelector}"  Content="{Binding Path=Value.Value}" Grid.Row="3" VerticalAlignment="Center" />
     </Grid>
 </UserControl>

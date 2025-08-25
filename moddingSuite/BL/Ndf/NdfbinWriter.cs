@@ -43,7 +43,7 @@ namespace moddingSuite.BL.Ndf
 
                 var da = Compressor.Comp(data);
 
-                outStream.Write(da,0,da.Length);
+                outStream.Write(da, 0, da.Length);
             }
             else
                 outStream.Write(data, 0, data.Length);

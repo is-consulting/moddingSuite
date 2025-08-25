@@ -2,9 +2,10 @@
 {
     public enum FilterDiscriminator
     {
+        Contains,
         Equals,
         Smaller,
         Greater,
-        Contains
+        Excludes
     }
 }

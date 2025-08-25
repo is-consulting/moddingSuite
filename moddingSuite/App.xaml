@@ -99,6 +99,9 @@
         <DataTemplate x:Key="GuidEditingTemplate">
             <ValueEditing:GuidEditingTemplate />
         </DataTemplate>
+        <DataTemplate x:Key="WideStringEditingTemplate">
+            <ValueEditing:WideStringEditingTemplate />
+        </DataTemplate>
         <DataTemplate x:Key="BooleanEditingTemplate">
             <ValueEditing:BooleanEditingTemplate />
         </DataTemplate>
@@ -110,7 +113,6 @@
         <DataTemplate x:Key="MapEditingTemplate">
             <ValueEditing:MapEditingTemplate />
         </DataTemplate>
-
 
         <DataTemplate x:Key="StringTableEditingTemplate">
             <ValueEditing:StringTableEditingTemplate />

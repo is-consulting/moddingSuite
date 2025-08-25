@@ -215,6 +215,11 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
                     data.AddRange(BitConverter.GetBytes((uint) NdfType.Reference));
 
                 data.AddRange(BitConverter.GetBytes((uint) valueHolder.Value.Type));
+                if (valueDat == null)
+                {
+                    var test = new byte[0];
+                }
+
                 data.AddRange(valueDat);
             }
 

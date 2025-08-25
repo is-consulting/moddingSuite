@@ -69,7 +69,7 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
             set
             {
                 _key = value;
-                OnPropertyChanged("Key");
+                OnPropertyChanged(() => Key);
             }
         }
 
@@ -84,8 +84,8 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
                     new MapValueHolder(
                         NdfTypeManager.GetValue(new byte[NdfTypeManager.SizeofType(ValueType)], ValueType, Manager), Manager);
 
-            OnPropertyChanged("IsKeyNull");
-            OnPropertyChanged("IsValueNull");
+            OnPropertyChanged(() => IsKeyNull);
+            OnPropertyChanged(() => IsValueNull);
         }
 
         public override byte[] GetBytes()

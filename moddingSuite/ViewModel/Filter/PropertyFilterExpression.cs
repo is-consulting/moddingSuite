@@ -7,7 +7,7 @@ namespace moddingSuite.ViewModel.Filter
         private string _propertyName;
         private string _value;
 
-        private FilterDiscriminator _discriminator = FilterDiscriminator.Equals;
+        private FilterDiscriminator _discriminator = FilterDiscriminator.Contains;
 
         public string PropertyName
         {

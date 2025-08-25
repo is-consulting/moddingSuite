@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "moddingSuite": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}

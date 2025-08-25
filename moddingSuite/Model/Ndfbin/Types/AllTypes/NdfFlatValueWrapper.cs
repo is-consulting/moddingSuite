@@ -24,7 +24,11 @@ namespace moddingSuite.Model.Ndfbin.Types.AllTypes
 
         public override string ToString()
         {
-            return Value.ToString();
+            if (Value == null)
+            {
+                return string.Format("String does not exist");
+            }
+                return Value.ToString();
         }
     }
 }
